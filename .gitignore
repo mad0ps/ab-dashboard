@@ -1,0 +1,9 @@
+client_data/
+additional_research/
+ready_docs/
+*.xlsx
+*.xls
+*.pdf
+.superpowers/
+__pycache__/
+.DS_Store
