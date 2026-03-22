@@ -1,0 +1,109 @@
+[32m[+][0m URL: https://alessandroborelli.ru/ [45.130.41.252]
+[32m[+][0m Started: Sun Mar 22 16:12:32 2026
+
+Interesting Finding(s):
+
+[32m[+][0m Headers
+ | Interesting Entry: server: nginx-reuseport/1.21.1
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[32m[+][0m robots.txt found: https://alessandroborelli.ru/robots.txt
+ | Found By: Robots Txt (Aggressive Detection)
+ | Confidence: 100%
+
+[32m[+][0m WordPress readme found: https://alessandroborelli.ru/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[32m[+][0m Debug Log found: https://alessandroborelli.ru/wp-content/debug.log
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | Reference: https://codex.wordpress.org/Debugging_in_WordPress
+
+[32m[+][0m This site has 'Must Use Plugins': https://alessandroborelli.ru/wp-content/mu-plugins/
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 80%
+ | Reference: http://codex.wordpress.org/Must_Use_Plugins
+
+[32m[+][0m WordPress version 6.8.3 identified (Insecure, released on 2025-09-30).
+ | Found By: Common Wp Includes Query Parameter In Homepage (Passive Detection)
+ |  - https://alessandroborelli.ru/wp-includes/js/wp-util.min.js?ver=6.8.3
+ | Confirmed By:
+ |  Opml Generator (Aggressive Detection)
+ |   - https://alessandroborelli.ru/wp-links-opml.php, Match: 'generator="WordPress/6.8.3"'
+ |  Query Parameter In Install Page (Aggressive Detection)
+ |   - https://alessandroborelli.ru/wp-includes/css/dashicons.min.css?ver=6.8.3
+ |   - https://alessandroborelli.ru/wp-includes/css/buttons.min.css?ver=6.8.3
+ |   - https://alessandroborelli.ru/wp-admin/css/forms.min.css?ver=6.8.3
+ |   - https://alessandroborelli.ru/wp-admin/css/l10n.min.css?ver=6.8.3
+ |   - https://alessandroborelli.ru/wp-admin/css/install.min.css?ver=6.8.3
+
+[32m[+][0m WordPress theme in use: borelli
+ | Location: https://alessandroborelli.ru/wp-content/themes/borelli/
+ | Style URL: https://alessandroborelli.ru/wp-content/themes/borelli/style.css
+ | Style Name: Borelli
+ | Style URI: ---
+ | Description: Multi-Purpose WordPress Theme...
+ | Author: Roma Murzinov
+ | Author URI: https://themeforest.net/user/mrmurza/
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 0.0.88 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - https://alessandroborelli.ru/wp-content/themes/borelli/style.css, Match: 'Version: 0.0.88'
+
+[32m[+][0m Enumerating Vulnerable Plugins (via Passive Methods)
+[32m[+][0m Checking Plugin Versions (via Passive and Aggressive Methods)
+
+[34m[i][0m No plugins Found.
+
+[32m[+][0m Enumerating Vulnerable Themes (via Passive and Aggressive Methods)
+
+ Checking Known Locations -: |=================================================|
+[32m[+][0m Checking Theme Versions (via Passive and Aggressive Methods)
+
+[34m[i][0m No themes Found.
+
+[32m[+][0m Enumerating DB Exports (via Passive and Aggressive Methods)
+
+ Checking DB Exports -: |======================================================|
+
+[34m[i][0m No DB Exports Found.
+
+[32m[+][0m Enumerating Users (via Passive and Aggressive Methods)
+
+ Brute Forcing Author IDs -: |=================================================|
+
+[34m[i][0m User(s) Identified:
+
+[32m[+][0m admin_tmp
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.ru/wp-json/wp/v2/users/?per_page=100&page=1
+ | Confirmed By: Oembed API - Author URL (Aggressive Detection)
+ |  - https://alessandroborelli.ru/wp-json/oembed/1.0/embed?url=https://alessandroborelli.ru/&format=json
+
+[32m[+][0m romadev
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.ru/wp-json/wp/v2/users/?per_page=100&page=1
+
+[32m[+][0m ekaterinap
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.ru/wp-json/wp/v2/users/?per_page=100&page=1
+
+[32m[+][0m emilimp
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.ru/wp-json/wp/v2/users/?per_page=100&page=1
+
+[33m[!][0m No WPScan API Token given, as a result vulnerability data has not been output.
+[33m[!][0m You can get a free API token with 25 daily requests by registering at https://wpscan.com/register
+
+[32m[+][0m Finished: Sun Mar 22 16:17:35 2026
+[32m[+][0m Requests Done: 847
+[32m[+][0m Cached Requests: 14
+[32m[+][0m Data Sent: 409.39 KB
+[32m[+][0m Data Received: 5.347 MB
+[32m[+][0m Memory used: 304.422 MB
+[32m[+][0m Elapsed time: 00:05:03

@@ -1,0 +1,129 @@
+[32m[+][0m URL: https://alessandroborelli.com/ [45.130.41.252]
+[32m[+][0m Started: Sun Mar 22 16:12:30 2026
+
+Interesting Finding(s):
+
+[32m[+][0m Headers
+ | Interesting Entries:
+ |  - server: nginx-reuseport/1.21.1
+ |  - x-powered-by: PHP/8.2.28
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[32m[+][0m WordPress readme found: https://alessandroborelli.com/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[32m[+][0m The external WP-Cron seems to be enabled: https://alessandroborelli.com/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+[32m[+][0m WordPress version 6.9 identified (Insecure, released on 2025-12-02).
+ | Found By: Rss Generator (Passive Detection)
+ |  - https://alessandroborelli.com/feed/, <generator>https://wordpress.org/?v=6.9</generator>
+ |  - https://alessandroborelli.com/comments/feed/, <generator>https://wordpress.org/?v=6.9</generator>
+
+[32m[+][0m WordPress theme in use: borelli
+ | Location: https://alessandroborelli.com/wp-content/themes/borelli/
+ | Style URL: https://alessandroborelli.com/wp-content/themes/borelli/style.css
+ | Style Name: Borelli
+ | Style URI: ---
+ | Description: Multi-Purpose WordPress Theme...
+ | Author: Roma Murzinov
+ | Author URI: https://themeforest.net/user/mrmurza/
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ | Confirmed By: Urls In 404 Page (Passive Detection)
+ |
+ | Version: 0.0.88 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - https://alessandroborelli.com/wp-content/themes/borelli/style.css, Match: 'Version: 0.0.88'
+
+[32m[+][0m Enumerating Vulnerable Plugins (via Passive Methods)
+[32m[+][0m Checking Plugin Versions (via Passive and Aggressive Methods)
+
+[34m[i][0m No plugins Found.
+
+[32m[+][0m Enumerating Vulnerable Themes (via Passive and Aggressive Methods)
+
+ Checking Known Locations -: |=================================================|
+[32m[+][0m Checking Theme Versions (via Passive and Aggressive Methods)
+
+[34m[i][0m No themes Found.
+
+[32m[+][0m Enumerating DB Exports (via Passive and Aggressive Methods)
+
+ Checking DB Exports -: |======================================================|
+
+[34m[i][0m No DB Exports Found.
+
+[32m[+][0m Enumerating Users (via Passive and Aggressive Methods)
+
+ Brute Forcing Author IDs -: |=================================================|
+
+[34m[i][0m User(s) Identified:
+
+[32m[+][0m Popovaekaterina
+ | Found By: Rss Generator (Passive Detection)
+ | Confirmed By:
+ |  Rss Generator (Aggressive Detection)
+ |  Login Error Messages (Aggressive Detection)
+
+[32m[+][0m admin
+ | Found By: Rss Generator (Passive Detection)
+ | Confirmed By:
+ |  Wp Json Api (Aggressive Detection)
+ |   - https://alessandroborelli.com/wp-json/wp/v2/users/?per_page=100&page=1
+ |  Oembed API - Author URL (Aggressive Detection)
+ |   - https://alessandroborelli.com/wp-json/oembed/1.0/embed?url=https://alessandroborelli.com/&format=json
+ |  Rss Generator (Aggressive Detection)
+ |  Author Sitemap (Aggressive Detection)
+ |   - https://alessandroborelli.com/wp-sitemap-users-1.xml
+ |  Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+ |  Login Error Messages (Aggressive Detection)
+
+[32m[+][0m admin_tmp
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.com/wp-json/wp/v2/users/?per_page=100&page=1
+ | Confirmed By:
+ |  Author Sitemap (Aggressive Detection)
+ |   - https://alessandroborelli.com/wp-sitemap-users-1.xml
+ |  Login Error Messages (Aggressive Detection)
+
+[32m[+][0m administrator
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.com/wp-json/wp/v2/users/?per_page=100&page=1
+ | Confirmed By:
+ |  Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+ |  Login Error Messages (Aggressive Detection)
+
+[32m[+][0m mrmurza
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.com/wp-json/wp/v2/users/?per_page=100&page=1
+ | Confirmed By:
+ |  Author Sitemap (Aggressive Detection)
+ |   - https://alessandroborelli.com/wp-sitemap-users-1.xml
+ |  Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+ |  Login Error Messages (Aggressive Detection)
+
+[32m[+][0m popovaekaterina
+ | Found By: Wp Json Api (Aggressive Detection)
+ |  - https://alessandroborelli.com/wp-json/wp/v2/users/?per_page=100&page=1
+ | Confirmed By:
+ |  Author Sitemap (Aggressive Detection)
+ |   - https://alessandroborelli.com/wp-sitemap-users-1.xml
+ |  Login Error Messages (Aggressive Detection)
+
+[33m[!][0m No WPScan API Token given, as a result vulnerability data has not been output.
+[33m[!][0m You can get a free API token with 25 daily requests by registering at https://wpscan.com/register
+
+[32m[+][0m Finished: Sun Mar 22 16:14:59 2026
+[32m[+][0m Requests Done: 805
+[32m[+][0m Cached Requests: 10
+[32m[+][0m Data Sent: 226.343 KB
+[32m[+][0m Data Received: 3.385 MB
+[32m[+][0m Memory used: 327.293 MB
+[32m[+][0m Elapsed time: 00:02:28
