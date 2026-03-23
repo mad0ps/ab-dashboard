@@ -5867,7 +5867,11 @@ table tbody td.amount {
 
   function getActiveNotifications() {
     var dismissed = getNotifDismissed();
-    return NOTIFICATIONS.filter(function(n) { return dismissed.indexOf(n.id) === -1; });
+    return NOTIFICATIONS.filter(function(n) {
+      // Critical notifications CANNOT be dismissed — always shown
+      if (n.type === 'critical') return true;
+      return dismissed.indexOf(n.id) === -1;
+    });
   }
 
   function updateNotifBadge() {
@@ -5904,7 +5908,17 @@ table tbody td.amount {
     // Sort by priority: critical first, then warning, then info, then success
     active.sort(function(a, b) { return (NOTIF_PRIORITY[a.type] || 99) - (NOTIF_PRIORITY[b.type] || 99); });
 
-    var visible = notifShowAll ? active : active.slice(0, notifMaxVisible);
+    // Always show ALL critical, then fill up to notifMaxVisible with others
+    var critical = active.filter(function(n) { return n.type === 'critical'; });
+    var others = active.filter(function(n) { return n.type !== 'critical'; });
+    var visible;
+    if (notifShowAll) {
+      visible = active;
+    } else {
+      // Show all critical + fill remaining slots with next priority items
+      var remaining = Math.max(0, notifMaxVisible - critical.length);
+      visible = critical.concat(others.slice(0, remaining));
+    }
     var html = '';
 
     visible.forEach(function(n) {
@@ -5914,7 +5928,10 @@ table tbody td.amount {
       if (n.actionText) {
         html += '<button class="notification-action" onclick="notifNavigate(\'' + n.action + '\')">' + n.actionText + '</button>';
       }
-      html += '<button class="notification-dismiss" onclick="dismissNotification(\'' + n.id + '\')" title="\u0421\u043A\u0440\u044B\u0442\u044C">&times;</button>';
+      // Critical notifications cannot be dismissed
+      if (n.type !== 'critical') {
+        html += '<button class="notification-dismiss" onclick="dismissNotification(\'' + n.id + '\')" title="\u0421\u043A\u0440\u044B\u0442\u044C">&times;</button>';
+      }
       html += '</div>';
     });
 
