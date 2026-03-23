@@ -1543,6 +1543,419 @@ table tbody td.amount {
 }
 
 /* ============================================================
+   CHANNELS SCREEN (Онлайн-каналы)
+   ============================================================ */
+#screen-channels {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0;
+  min-height: auto;
+}
+#screen-channels.active { display: block; opacity: 1; transform: none; }
+
+.scr-channels .channels-wrapper {
+  padding: 24px 0;
+  animation: cardIn 400ms var(--ease-out) forwards;
+}
+
+/* KPI row */
+.scr-channels .ch-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.scr-channels .ch-kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 200ms var(--ease-out);
+}
+.scr-channels .ch-kpi-card:hover {
+  border-color: var(--n300);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.scr-channels .ch-kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.scr-channels .ch-kpi-value {
+  font-family: var(--f-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scr-channels .ch-kpi-trend {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--f-mono);
+}
+.scr-channels .ch-kpi-trend.up { color: var(--success); }
+.scr-channels .ch-kpi-trend.down { color: var(--danger); }
+.scr-channels .ch-kpi-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  font-family: var(--f-body);
+  background: var(--info-light);
+  color: var(--info);
+  border: 1px solid var(--info-muted);
+}
+
+/* Channel list */
+.scr-channels .channel-list-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.scr-channels .channel-list-header {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr 0.8fr 0.8fr;
+  gap: 0;
+  padding: 10px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.scr-channels .channel-list-header span {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color 150ms;
+}
+.scr-channels .channel-list-header span:hover {
+  color: var(--text-primary);
+}
+.scr-channels .channel-list-header span:last-child {
+  text-align: right;
+}
+.scr-channels .channel-list-header span.sorted {
+  color: var(--brand-gold);
+}
+
+/* Channel row */
+.scr-channels .channel-row {
+  border-bottom: 1px solid var(--separator);
+  cursor: pointer;
+  transition: background 120ms;
+  border-left: 3px solid transparent;
+}
+.scr-channels .channel-row:last-child { border-bottom: none; }
+.scr-channels .channel-row:hover { background: var(--table-row-hover); }
+.scr-channels .channel-row[data-status="green"] { border-left-color: var(--success); }
+.scr-channels .channel-row[data-status="red"] { border-left-color: var(--danger); }
+.scr-channels .channel-row[data-status="gold"] { border-left-color: var(--brand-gold); }
+
+/* Row header (collapsed view) */
+.scr-channels .channel-row-header {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr 0.8fr 0.8fr;
+  gap: 0;
+  padding: 14px 20px;
+  align-items: center;
+}
+.scr-channels .channel-row-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.scr-channels .channel-row-name .name {
+  font-family: var(--f-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scr-channels .channel-row-name .ch-type {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.scr-channels .channel-row-cell {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.scr-channels .channel-row-cell.margin-positive { color: var(--success); }
+.scr-channels .channel-row-cell.margin-negative { color: var(--danger); }
+.scr-channels .channel-row-cell.status-cell { text-align: center; }
+.scr-channels .channel-row-cell.trend-cell {
+  text-align: right;
+  font-weight: 600;
+}
+.scr-channels .channel-row-cell.trend-cell.up { color: var(--success); }
+.scr-channels .channel-row-cell.trend-cell.down { color: var(--danger); }
+
+/* Mobile-only elements */
+.scr-channels .channel-row-label { display: none; }
+.scr-channels .channel-row-mobile-metrics { display: none; }
+.scr-channels .mobile-ch-status { display: none; }
+
+/* Expanded detail */
+.scr-channels .channel-row-detail {
+  display: none;
+  padding: 0 20px 16px 20px;
+  animation: storeDetailSlide 200ms var(--ease-out);
+}
+.scr-channels .channel-row.expanded .channel-row-detail { display: block; }
+.scr-channels .channel-detail-inner {
+  padding: 16px 20px;
+  background: var(--n50);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--brand-gold);
+}
+.scr-channels .channel-detail-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.scr-channels .channel-detail-metrics span { white-space: nowrap; }
+.scr-channels .channel-detail-metrics strong { color: var(--text-primary); font-weight: 600; }
+.scr-channels .channel-detail-separator { color: var(--text-muted); margin: 0 2px; }
+.scr-channels .channel-detail-row { margin-bottom: 8px; }
+.scr-channels .channel-detail-row:last-child { margin-bottom: 0; }
+.scr-channels .channel-recommendation {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--card-bg);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.scr-channels .channel-recommendation strong {
+  color: var(--brand-gold);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.scr-channels .channel-warning {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: var(--warning-light);
+  border: 1px solid var(--warning-muted);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+[data-theme="dark"] .scr-channels .channel-warning {
+  background: rgba(245,158,11,.08);
+  border-color: rgba(245,158,11,.2);
+}
+
+/* Comparison table */
+.scr-channels .ch-compare-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.scr-channels .ch-compare-title {
+  font-family: var(--f-display);
+  font-size: 18px;
+  color: var(--text-primary);
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--separator);
+}
+.scr-channels .ch-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.scr-channels .ch-compare-table thead th {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 10px 16px;
+  text-align: left;
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 150ms;
+}
+.scr-channels .ch-compare-table thead th:hover {
+  color: var(--text-primary);
+}
+.scr-channels .ch-compare-table thead th.sorted {
+  color: var(--brand-gold);
+}
+.scr-channels .ch-compare-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--separator);
+  color: var(--text-primary);
+  font-family: var(--f-mono);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.scr-channels .ch-compare-table tbody td:first-child {
+  font-family: var(--f-body);
+  font-weight: 600;
+}
+.scr-channels .ch-compare-table tbody tr:last-child td { border-bottom: none; }
+.scr-channels .ch-compare-table tbody tr:hover { background: var(--table-row-hover); }
+.scr-channels .ch-compare-table .td-green { color: var(--success); font-weight: 600; }
+.scr-channels .ch-compare-table .td-red { color: var(--danger); font-weight: 600; }
+
+/* Insight card */
+.scr-channels .ch-insight-card {
+  background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-gold-hover) 100%);
+  border-radius: var(--r-lg);
+  padding: 24px 28px;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: var(--shadow-gold);
+}
+.scr-channels .ch-insight-card strong {
+  font-weight: 700;
+}
+
+[data-theme="dark"] .scr-channels .channel-detail-inner {
+  background: #1a1a1e;
+}
+[data-theme="dark"] .scr-channels .channel-recommendation {
+  background: var(--n100);
+}
+
+/* Channels mobile */
+@media (max-width: 768px) {
+  .scr-channels .ch-kpi-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .scr-channels .ch-kpi-value { font-size: 18px; }
+
+  .scr-channels .channel-list-header { display: none; }
+
+  .scr-channels .channel-row-header {
+    display: block;
+    padding: 14px 16px;
+  }
+  .scr-channels .channel-row-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+  .scr-channels .channel-row-name .ch-type {
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .scr-channels .mobile-ch-status {
+    display: inline;
+    margin-left: 4px;
+  }
+  .scr-channels .channel-row-cell { display: none; }
+  .scr-channels .channel-row-mobile-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .scr-channels .channel-row-mobile-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .scr-channels .channel-row-label {
+    display: inline;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .scr-channels .channel-row-mobile-value {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .scr-channels .channel-row-mobile-value.up { color: var(--success); }
+  .scr-channels .channel-row-mobile-value.down { color: var(--danger); }
+  .scr-channels .channel-row-detail { padding: 0 16px 14px 16px; }
+  .scr-channels .channel-detail-inner { padding: 14px 16px; }
+  .scr-channels .channel-detail-metrics { gap: 4px 16px; font-size: 12px; }
+
+  /* Comparison table → card view on mobile */
+  .scr-channels .ch-compare-table thead { display: none; }
+  .scr-channels .ch-compare-table,
+  .scr-channels .ch-compare-table tbody,
+  .scr-channels .ch-compare-table tr,
+  .scr-channels .ch-compare-table td { display: block; }
+  .scr-channels .ch-compare-table tr {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--separator);
+  }
+  .scr-channels .ch-compare-table tr:last-child { border-bottom: none; }
+  .scr-channels .ch-compare-table td {
+    padding: 3px 0;
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .scr-channels .ch-compare-table td::before {
+    content: attr(data-label);
+    font-family: var(--f-body);
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .scr-channels .ch-compare-table td:first-child {
+    font-size: 14px;
+    padding-bottom: 4px;
+  }
+  .scr-channels .ch-compare-table td:first-child::before { content: none; }
+}
+
+@media (max-width: 380px) {
+  .scr-channels .ch-kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .scr-channels .ch-kpi-card { padding: 12px 14px; }
+  .scr-channels .ch-kpi-value { font-size: 16px; }
+  .scr-channels .ch-insight-card { padding: 18px 20px; font-size: 13px; }
+}
+
+/* ============================================================
    FINANCE SCREEN
    ============================================================ */
 #screen-finance {
@@ -3294,10 +3707,70 @@ table tbody td.amount {
         <div class="orders-pagination" id="ordersPagination"></div>
       </div>
     </div>
-    <div class="placeholder-screen" id="screen-channels">
-      <div class="placeholder-icon">&#x1F310;</div>
-      <div class="placeholder-title">Онлайн-каналы</div>
-      <div class="placeholder-desc">Этот раздел в разработке. WB, Ozon, собственный сайт — аналитика по каждому каналу.</div>
+    <div class="placeholder-screen scr-channels" id="screen-channels">
+      <div class="channels-wrapper">
+        <!-- KPI summary -->
+        <div class="ch-kpi-row">
+          <div class="ch-kpi-card">
+            <div class="ch-kpi-label">Онлайн-выручка</div>
+            <div class="ch-kpi-value" id="chKpiRevenue">25.5M &#8381;/год</div>
+            <div class="ch-kpi-trend up" id="chKpiRevTrend">+11%</div>
+          </div>
+          <div class="ch-kpi-card">
+            <div class="ch-kpi-label">Заказов онлайн</div>
+            <div class="ch-kpi-value" id="chKpiOrders">5 200/год</div>
+            <div class="ch-kpi-trend up" id="chKpiOrdTrend">+9%</div>
+          </div>
+          <div class="ch-kpi-card">
+            <div class="ch-kpi-label">Средний чек</div>
+            <div class="ch-kpi-value" id="chKpiCheck">4 900 &#8381;</div>
+            <div class="ch-kpi-trend up" id="chKpiCheckTrend">+2%</div>
+          </div>
+          <div class="ch-kpi-card">
+            <div class="ch-kpi-label">Доля онлайн</div>
+            <div class="ch-kpi-value" id="chKpiShare">3.5% <span class="ch-kpi-badge">&#9889; Точка роста</span></div>
+            <div class="ch-kpi-trend up" id="chKpiShareTrend">+0.3%</div>
+          </div>
+        </div>
+
+        <!-- Channel cards list -->
+        <div class="channel-list-container">
+          <div class="channel-list-header" id="channelListHeader">
+            <span data-sort="name">Канал</span>
+            <span data-sort="revenue" class="sorted">Выручка/мес &#8595;</span>
+            <span data-sort="orders">Заказы</span>
+            <span data-sort="commission">Комиссия</span>
+            <span data-sort="margin">Маржа</span>
+            <span data-sort="status">Статус</span>
+            <span data-sort="trend">Тренд</span>
+          </div>
+          <div id="channelCardsContainer"></div>
+        </div>
+
+        <!-- Comparison table -->
+        <div class="ch-compare-card">
+          <div class="ch-compare-title">Сравнение каналов</div>
+          <table class="ch-compare-table" id="chCompareTable">
+            <thead>
+              <tr>
+                <th data-col="name">Канал</th>
+                <th data-col="revenue">Выручка/мес</th>
+                <th data-col="orders">Заказы</th>
+                <th data-col="check">Ср.чек</th>
+                <th data-col="commission">Комиссия</th>
+                <th data-col="margin">Маржа</th>
+                <th data-col="status">Статус</th>
+              </tr>
+            </thead>
+            <tbody id="chCompareBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Insight card -->
+        <div class="ch-insight-card">
+          Собственные сайты приносят в <strong>6 раз больше прибыли</strong> на каждый рубль продаж. При переводе 10% покупателей с маркетплейсов на сайт — дополнительная маржа <strong>&#8381;18M/год</strong>.
+        </div>
+      </div>
     </div>
     <div class="placeholder-screen" id="screen-marketing">
       <div class="placeholder-icon">&#x1F4C8;</div>
@@ -3450,6 +3923,11 @@ table tbody td.amount {
         total: '47', revenue: '2.1M', check: '44 700', returns: '3.2%',
         totalTrend: '+8%', revTrend: '+12%', checkTrend: '+3%', returnsTrend: '-0.5%',
         totalUp: true, revUp: true, checkUp: true, returnsUp: false
+      },
+      channels: {
+        onlineRevenue: '70K', onlineOrders: '14', avgCheck: '4 900', onlineShare: '3.5%',
+        revTrend: '+5%', ordTrend: '+4%', checkTrend: '+1%', shareTrend: '+0.1%',
+        revUp: true, ordUp: true, checkUp: true, shareUp: true
       }
     },
     '7д': {
@@ -3479,6 +3957,11 @@ table tbody td.amount {
         total: '312', revenue: '14.8M', check: '47 400', returns: '2.8%',
         totalTrend: '+6.2%', revTrend: '+8.7%', checkTrend: '+2.1%', returnsTrend: '-0.3%',
         totalUp: true, revUp: true, checkUp: true, returnsUp: false
+      },
+      channels: {
+        onlineRevenue: '490K', onlineOrders: '100', avgCheck: '4 900', onlineShare: '3.5%',
+        revTrend: '+7%', ordTrend: '+6%', checkTrend: '+1%', shareTrend: '+0.1%',
+        revUp: true, ordUp: true, checkUp: true, shareUp: true
       }
     },
     '15д': {
@@ -3508,6 +3991,11 @@ table tbody td.amount {
         total: '634', revenue: '30.2M', check: '47 600', returns: '3.0%',
         totalTrend: '+7.8%', revTrend: '+10.1%', checkTrend: '+2.9%', returnsTrend: '-0.4%',
         totalUp: true, revUp: true, checkUp: true, returnsUp: false
+      },
+      channels: {
+        onlineRevenue: '980K', onlineOrders: '200', avgCheck: '4 900', onlineShare: '3.5%',
+        revTrend: '+8%', ordTrend: '+7%', checkTrend: '+1.5%', shareTrend: '+0.2%',
+        revUp: true, ordUp: true, checkUp: true, shareUp: true
       }
     },
     '30д': {
@@ -3537,6 +4025,11 @@ table tbody td.amount {
         total: '1 247', revenue: '61.4M', check: '49 200', returns: '3.2%',
         totalTrend: '+8.1%', revTrend: '+12.3%', checkTrend: '+3.4%', returnsTrend: '-0.5%',
         totalUp: true, revUp: true, checkUp: true, returnsUp: false
+      },
+      channels: {
+        onlineRevenue: '2.1M', onlineOrders: '430', avgCheck: '4 900', onlineShare: '3.5%',
+        revTrend: '+11%', ordTrend: '+9%', checkTrend: '+2%', shareTrend: '+0.3%',
+        revUp: true, ordUp: true, checkUp: true, shareUp: true
       }
     },
     '90д': {
@@ -3566,6 +4059,11 @@ table tbody td.amount {
         total: '3 741', revenue: '184.2M', check: '49 200', returns: '2.9%',
         totalTrend: '+11.2%', revTrend: '+14.5%', checkTrend: '+4.1%', returnsTrend: '-0.6%',
         totalUp: true, revUp: true, checkUp: true, returnsUp: false
+      },
+      channels: {
+        onlineRevenue: '6.4M', onlineOrders: '1 300', avgCheck: '4 900', onlineShare: '3.5%',
+        revTrend: '+13%', ordTrend: '+10%', checkTrend: '+2%', shareTrend: '+0.3%',
+        revUp: true, ordUp: true, checkUp: true, shareUp: true
       }
     },
     '\u0413\u043E\u0434': {
@@ -3595,6 +4093,11 @@ table tbody td.amount {
         total: '15 024', revenue: '737M', check: '49 100', returns: '3.1%',
         totalTrend: '+7.3%', revTrend: '+9.8%', checkTrend: '+2.8%', returnsTrend: '-0.7%',
         totalUp: true, revUp: true, checkUp: true, returnsUp: false
+      },
+      channels: {
+        onlineRevenue: '25.5M', onlineOrders: '5 200', avgCheck: '4 900', onlineShare: '3.5%',
+        revTrend: '+11%', ordTrend: '+9%', checkTrend: '+2%', shareTrend: '+0.3%',
+        revUp: true, ordUp: true, checkUp: true, shareUp: true
       }
     }
   };
@@ -3644,6 +4147,12 @@ table tbody td.amount {
         initOrdersScreen();
         var od = PERIOD_DATA[currentPeriod];
         if (od && od.orders) updateOrdersKpi(od.orders);
+      }
+      // Lazy-init channels screen
+      if (screen === 'channels') {
+        initChannelsScreen();
+        var cd = PERIOD_DATA[currentPeriod];
+        if (cd && cd.channels) updateChannelsData(cd.channels);
       }
     }
 
@@ -3836,6 +4345,9 @@ table tbody td.amount {
 
     // Update Orders
     updateOrdersKpi(data.orders);
+
+    // Update Channels
+    updateChannelsData(data.channels);
   }
 
   /* ── Period selector ── */
@@ -4116,6 +4628,7 @@ table tbody td.amount {
   function getStatusIcon(status) {
     if (status === 'green') return '\uD83D\uDFE2';
     if (status === 'yellow') return '\uD83D\uDFE1';
+    if (status === 'gold') return '\u2B50';
     return '\uD83D\uDD34';
   }
 
@@ -4876,6 +5389,273 @@ table tbody td.amount {
     ordersPerPage = window.innerWidth <= 768 ? 10 : 15;
     var filtered = getFilteredOrders();
     renderOrders(filtered, 1);
+  }
+
+  /* ── Channels Screen ── */
+  var channelsInitialized = false;
+  var channelSortField = 'revenue';
+  var channelSortAsc = false;
+
+  var channelsData = [
+    {
+      id: 'site', name: 'alessandroborelli.ru', type: '\u0421\u0430\u0439\u0442', icon: '\uD83C\uDF10',
+      revenue: 2.5, revenueDisplay: '2.5M', orders: 580, commission: '3%', commissionNum: 3,
+      marginPct: 22, marginDisplay: '+22%', status: 'green', trend: '+15%', trendUp: true,
+      avgCheck: '4 300 \u20BD', acquiring: '3% (Cloudpayments)', delivery: '~350 \u20BD/\u0437\u0430\u043A\u0430\u0437 (\u0421\u0414\u042D\u041A)',
+      cac: '650 \u20BD', ltv: '5 800 \u20BD', ltvCac: '8.9x \uD83D\uDFE2',
+      conversionDisplay: '2.8%',
+      rec: '\u0413\u043B\u0430\u0432\u043D\u044B\u0439 \u043A\u0430\u043D\u0430\u043B \u043F\u0440\u0438\u0431\u044B\u043B\u0438. \u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0440\u0435\u043A\u043B\u0430\u043C\u043D\u044B\u0439 \u0431\u044E\u0434\u0436\u0435\u0442 \u043D\u0430 \u0441\u0430\u0439\u0442 \u2014 \u043A\u0430\u0436\u0434\u044B\u0439 \u0432\u043B\u043E\u0436\u0435\u043D\u043D\u044B\u0439 \u0440\u0443\u0431\u043B\u044C \u043F\u0440\u0438\u043D\u043E\u0441\u0438\u0442 3.5\u20BD \u0432\u044B\u0440\u0443\u0447\u043A\u0438',
+      warning: null,
+      extraMetrics: [
+        {label: '\u0421\u0440\u0435\u0434\u043D\u0438\u0439 \u0447\u0435\u043A', value: '4 300 \u20BD'},
+        {label: '\u042D\u043A\u0432\u0430\u0439\u0440\u0438\u043D\u0433', value: '3% (Cloudpayments)'},
+        {label: '\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430', value: '~350 \u20BD/\u0437\u0430\u043A\u0430\u0437 (\u0421\u0414\u042D\u041A)'},
+        {label: 'CAC', value: '650 \u20BD'},
+        {label: 'LTV', value: '5 800 \u20BD'},
+        {label: 'LTV/CAC', value: '8.9x \uD83D\uDFE2'}
+      ]
+    },
+    {
+      id: 'multi', name: 'imperiya-detstva.ru', type: '\u041C\u0443\u043B\u044C\u0442\u0438\u0431\u0440\u0435\u043D\u0434', icon: '\uD83D\uDED2',
+      revenue: 1.2, revenueDisplay: '1.2M', orders: 310, commission: '3%', commissionNum: 3,
+      marginPct: 18, marginDisplay: '+18%', status: 'green', trend: '+8%', trendUp: true,
+      conversionDisplay: '2.1%',
+      rec: '\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0442\u044C \u0434\u043E\u043B\u044E \u0441\u043E\u0431\u0441\u0442\u0432\u0435\u043D\u043D\u043E\u0433\u043E \u0431\u0440\u0435\u043D\u0434\u0430 \u0434\u043E 50% \u2014 \u0432\u044B\u0448\u0435 \u043C\u0430\u0440\u0436\u0430',
+      warning: null,
+      extraMetrics: [
+        {label: '\u0421\u0440\u0435\u0434\u043D\u0438\u0439 \u0447\u0435\u043A', value: '3 870 \u20BD'},
+        {label: '\u0410\u0441\u0441\u043E\u0440\u0442\u0438\u043C\u0435\u043D\u0442', value: '20+ \u0431\u0440\u0435\u043D\u0434\u043E\u0432'},
+        {label: '\u0414\u043E\u043B\u044F AB \u0432 \u043F\u0440\u043E\u0434\u0430\u0436\u0430\u0445', value: '35%'}
+      ]
+    },
+    {
+      id: 'wb', name: 'Wildberries', type: 'WB', icon: '\uD83D\uDFE3',
+      revenue: 1.8, revenueDisplay: '1.8M', orders: 940, commission: '34.5%', commissionNum: 34.5,
+      marginPct: -2.1, marginDisplay: '-2.1%', status: 'red', trend: '-3%', trendUp: false,
+      conversionDisplay: '\u2014',
+      rec: 'WB \u2014 \u0432\u0438\u0442\u0440\u0438\u043D\u0430, \u043D\u0435 \u043A\u0430\u043D\u0430\u043B \u043F\u0440\u0438\u0431\u044B\u043B\u0438. \u0417\u0430\u0434\u0430\u0447\u0430: \u0443\u0437\u043D\u0430\u0432\u0430\u0435\u043C\u043E\u0441\u0442\u044C \u0431\u0440\u0435\u043D\u0434\u0430 + \u043F\u0435\u0440\u0435\u0432\u043E\u0434 \u043A\u043B\u0438\u0435\u043D\u0442\u043E\u0432 \u043D\u0430 \u0441\u043E\u0431\u0441\u0442\u0432\u0435\u043D\u043D\u044B\u0439 \u0441\u0430\u0439\u0442',
+      warning: '\u0421\u0440\u0435\u0434\u043D\u044F\u044F \u0446\u0435\u043D\u0430: 5 000 \u20BD \u2192 \u0423\u0411\u042B\u0422\u041E\u041A 1 370 \u20BD \u043D\u0430 \u043A\u0430\u0436\u0434\u043E\u0439 \u043F\u0440\u043E\u0434\u0430\u0436\u0435. \u0422\u043E\u0447\u043A\u0430 \u0431\u0435\u0437\u0443\u0431\u044B\u0442\u043E\u0447\u043D\u043E\u0441\u0442\u0438: 7 713 \u20BD \u0437\u0430 \u0435\u0434\u0438\u043D\u0438\u0446\u0443.',
+      extraMetrics: [
+        {label: '\u0421\u0440\u0435\u0434\u043D\u0438\u0439 \u0447\u0435\u043A', value: '1 910 \u20BD'},
+        {label: '\u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F', value: '34.5% (\u0437\u0430\u0444\u0438\u043A\u0441\u0438\u0440\u043E\u0432\u0430\u043D\u0430 \u0434\u043E \u0430\u043F\u0440\u0435\u043B\u044F 2026)'},
+        {label: '\u041B\u043E\u0433\u0438\u0441\u0442\u0438\u043A\u0430', value: '~200 \u20BD/\u0437\u0430\u043A\u0430\u0437'},
+        {label: '\u0420\u0435\u043A\u043B\u0430\u043C\u0430 \u0432\u043D\u0443\u0442\u0440\u0438 WB', value: '15% \u043E\u0442 \u0432\u044B\u0440\u0443\u0447\u043A\u0438'},
+        {label: '\u0412\u043E\u0437\u0432\u0440\u0430\u0442\u044B', value: '18%'},
+        {label: '\u0422\u043E\u0447\u043A\u0430 \u0431\u0435\u0437\u0443\u0431\u044B\u0442\u043E\u0447\u043D\u043E\u0441\u0442\u0438', value: '7 713 \u20BD'}
+      ]
+    },
+    {
+      id: 'ozon', name: 'Ozon', type: 'Ozon', icon: '\uD83D\uDD35',
+      revenue: 0.9, revenueDisplay: '0.9M', orders: 380, commission: '42%\u219250%', commissionNum: 42,
+      marginPct: -8.3, marginDisplay: '-8.3%', status: 'red', trend: '-12%', trendUp: false,
+      conversionDisplay: '\u2014',
+      rec: '\u0421 \u0430\u043F\u0440\u0435\u043B\u044F 2026 \u043A\u043E\u043C\u0438\u0441\u0441\u0438\u044F \u043F\u043E\u0434\u043D\u0438\u043C\u0430\u0435\u0442\u0441\u044F \u0434\u043E ~50%. \u0420\u0430\u0441\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C \u0441\u043E\u043A\u0440\u0430\u0449\u0435\u043D\u0438\u0435 \u0430\u0441\u0441\u043E\u0440\u0442\u0438\u043C\u0435\u043D\u0442\u0430 \u0434\u043E \u0442\u043E\u043B\u044C\u043A\u043E high-margin \u043F\u043E\u0437\u0438\u0446\u0438\u0439 (8 000\u20BD+)',
+      warning: '\u2757 \u0421 \u0430\u043F\u0440\u0435\u043B\u044F 2026 \u043A\u043E\u043C\u0438\u0441\u0441\u0438\u044F \u043F\u043E\u0434\u043D\u0438\u043C\u0430\u0435\u0442\u0441\u044F \u0434\u043E ~50%!',
+      extraMetrics: [
+        {label: '\u0421\u0440\u0435\u0434\u043D\u0438\u0439 \u0447\u0435\u043A', value: '2 370 \u20BD'},
+        {label: '\u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F', value: '42% (\u0440\u0430\u0441\u0442\u0451\u0442 \u0434\u043E ~50% \u0441 \u0430\u043F\u0440\u0435\u043B\u044F 2026!)'}
+      ]
+    },
+    {
+      id: 'gcc', name: '\u041C\u0435\u0436\u0434\u0443\u043D\u0430\u0440\u043E\u0434\u043D\u044B\u0435 (GCC)', type: 'GCC', icon: '\uD83C\uDF1F',
+      revenue: 0.4, revenueDisplay: '0.4M', orders: 45, commission: '15-17%', commissionNum: 16,
+      marginPct: 17, marginDisplay: '+17%', status: 'gold', trend: '\u041D\u043E\u0432\u044B\u0439', trendUp: true,
+      conversionDisplay: '\u2014',
+      rec: '\u041F\u0440\u0438 \u043F\u0440\u0435\u043C\u0438\u0443\u043C-\u043F\u043E\u0437\u0438\u0446\u0438\u043E\u043D\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0438 (350 AED) \u2014 \u043C\u0430\u0440\u0436\u0430 17-19%. \u0426\u0435\u043D\u043E\u0432\u043E\u0439 \u0441\u0435\u0433\u043C\u0435\u043D\u0442 AB \u0438\u0434\u0435\u0430\u043B\u044C\u043D\u043E \u043F\u043E\u0434\u0445\u043E\u0434\u0438\u0442 \u0434\u043B\u044F GCC',
+      warning: null,
+      extraMetrics: [
+        {label: '\u0421\u0440\u0435\u0434\u043D\u0438\u0439 \u0447\u0435\u043A', value: '8 500 \u20BD (\u2191+40% vs \u0420\u043E\u0441\u0441\u0438\u044F!)'},
+        {label: '\u041F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u044B', value: 'Noon 15%, Amazon.ae 17%'},
+        {label: '\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u0438\u0437 \u0414\u0443\u0431\u0430\u044F', value: '2-3 \u0434\u043D\u044F \u043F\u043E GCC'},
+        {label: '\u041F\u043E\u0442\u0435\u043D\u0446\u0438\u0430\u043B', value: '\u0420\u044B\u043D\u043E\u043A $33 \u043C\u043B\u0440\u0434'}
+      ]
+    }
+  ];
+
+  function buildChannelRow(ch) {
+    var marginCls = ch.marginPct >= 0 ? 'margin-positive' : 'margin-negative';
+    var trendCls = ch.trendUp ? 'up' : 'down';
+    var trendArrow = ch.trendUp ? '\u2191' : '\u2193';
+    if (ch.trend === '\u041D\u043E\u0432\u044B\u0439') { trendCls = 'up'; trendArrow = ''; }
+
+    var metricsHtml = '';
+    if (ch.extraMetrics) {
+      ch.extraMetrics.forEach(function(m) {
+        metricsHtml += '<span>' + m.label + ': <strong>' + m.value + '</strong></span><span class="channel-detail-separator">\u00B7</span>';
+      });
+    }
+
+    var warningHtml = '';
+    if (ch.warning) {
+      warningHtml = '<div class="channel-warning">\u26A0\uFE0F ' + ch.warning + '</div>';
+    }
+
+    return '<div class="channel-row" data-status="' + ch.status + '" onclick="toggleChannelDetail(this)">' +
+      '<div class="channel-row-header">' +
+        '<div class="channel-row-name">' +
+          '<span class="name">' + ch.icon + ' ' + ch.name + '</span>' +
+          '<span class="ch-type">' + ch.type + ' <span class="mobile-ch-status">' + getStatusIcon(ch.status) + '</span></span>' +
+        '</div>' +
+        '<span class="channel-row-cell">' + ch.revenueDisplay + '/\u043C\u0435\u0441</span>' +
+        '<span class="channel-row-cell">' + ch.orders + '</span>' +
+        '<span class="channel-row-cell">' + ch.commission + '</span>' +
+        '<span class="channel-row-cell ' + marginCls + '">' + ch.marginDisplay + '</span>' +
+        '<span class="channel-row-cell status-cell">' + getStatusIcon(ch.status) + '</span>' +
+        '<span class="channel-row-cell trend-cell ' + trendCls + '">' + trendArrow + ch.trend + '</span>' +
+        '<div class="channel-row-mobile-metrics">' +
+          '<div class="channel-row-mobile-line"><span class="channel-row-label">\u0412\u044B\u0440\u0443\u0447\u043A\u0430</span><span class="channel-row-mobile-value">' + ch.revenueDisplay + '/\u043C\u0435\u0441</span></div>' +
+          '<div class="channel-row-mobile-line"><span class="channel-row-label">\u0417\u0430\u043A\u0430\u0437\u044B</span><span class="channel-row-mobile-value">' + ch.orders + '</span></div>' +
+          '<div class="channel-row-mobile-line"><span class="channel-row-label">\u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F</span><span class="channel-row-mobile-value">' + ch.commission + '</span></div>' +
+          '<div class="channel-row-mobile-line"><span class="channel-row-label">\u041C\u0430\u0440\u0436\u0430</span><span class="channel-row-mobile-value ' + (ch.marginPct < 0 ? 'down' : 'up') + '">' + ch.marginDisplay + '</span></div>' +
+          '<div class="channel-row-mobile-line"><span class="channel-row-label">\u0422\u0440\u0435\u043D\u0434</span><span class="channel-row-mobile-value ' + trendCls + '">' + trendArrow + ch.trend + '</span></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="channel-row-detail">' +
+        '<div class="channel-detail-inner">' +
+          '<div class="channel-detail-row channel-detail-metrics">' + metricsHtml + '</div>' +
+          (ch.conversionDisplay !== '\u2014' ? '<div class="channel-detail-row channel-detail-metrics"><span>\u041A\u043E\u043D\u0432\u0435\u0440\u0441\u0438\u044F: <strong>' + ch.conversionDisplay + '</strong></span></div>' : '') +
+          warningHtml +
+          '<div class="channel-recommendation"><strong>\uD83D\uDCA1 \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0430\u0446\u0438\u044F:</strong> <span>' + ch.rec + '</span></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderChannelCards() {
+    var sorted = channelsData.slice();
+    var field = channelSortField;
+    var asc = channelSortAsc;
+    sorted.sort(function(a, b) {
+      var va, vb;
+      if (field === 'name') { va = a.name; vb = b.name; return asc ? va.localeCompare(vb) : vb.localeCompare(va); }
+      if (field === 'revenue') { va = a.revenue; vb = b.revenue; }
+      else if (field === 'orders') { va = a.orders; vb = b.orders; }
+      else if (field === 'commission') { va = a.commissionNum; vb = b.commissionNum; }
+      else if (field === 'margin') { va = a.marginPct; vb = b.marginPct; }
+      else if (field === 'status') { va = a.status; vb = b.status; return asc ? va.localeCompare(vb) : vb.localeCompare(va); }
+      else if (field === 'trend') { va = a.trendUp ? 1 : 0; vb = b.trendUp ? 1 : 0; }
+      else { va = a.revenue; vb = b.revenue; }
+      return asc ? va - vb : vb - va;
+    });
+    var container = document.getElementById('channelCardsContainer');
+    if (container) container.innerHTML = sorted.map(buildChannelRow).join('');
+  }
+
+  function renderCompareTable() {
+    var body = document.getElementById('chCompareBody');
+    if (!body) return;
+    var compareData = [
+      { name: 'alessandroborelli.ru', revenue: '2.5M', orders: '580', check: '4 300', commission: '3%', margin: '+22%', status: '\uD83D\uDFE2', marginPct: 22 },
+      { name: 'imperiya-detstva.ru', revenue: '1.2M', orders: '310', check: '3 870', commission: '3%', margin: '+18%', status: '\uD83D\uDFE2', marginPct: 18 },
+      { name: 'Wildberries', revenue: '1.8M', orders: '940', check: '1 910', commission: '34.5%', margin: '-2.1%', status: '\uD83D\uDD34', marginPct: -2.1 },
+      { name: 'Ozon', revenue: '0.9M', orders: '380', check: '2 370', commission: '42%', margin: '-8.3%', status: '\uD83D\uDD34', marginPct: -8.3 },
+      { name: '\u041C\u0435\u0436\u0434\u0443\u043D\u0430\u0440\u043E\u0434\u043D\u044B\u0435', revenue: '0.4M', orders: '45', check: '8 500', commission: '15-17%', margin: '+17%', status: '\uD83D\uDFE2', marginPct: 17 }
+    ];
+    var html = '';
+    compareData.forEach(function(r) {
+      var mCls = r.marginPct >= 0 ? 'td-green' : 'td-red';
+      html += '<tr>' +
+        '<td data-label="">' + r.name + '</td>' +
+        '<td data-label="\u0412\u044B\u0440\u0443\u0447\u043A\u0430/\u043C\u0435\u0441">' + r.revenue + '</td>' +
+        '<td data-label="\u0417\u0430\u043A\u0430\u0437\u044B">' + r.orders + '</td>' +
+        '<td data-label="\u0421\u0440.\u0447\u0435\u043A">' + r.check + '</td>' +
+        '<td data-label="\u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F">' + r.commission + '</td>' +
+        '<td data-label="\u041C\u0430\u0440\u0436\u0430" class="' + mCls + '">' + r.margin + '</td>' +
+        '<td data-label="\u0421\u0442\u0430\u0442\u0443\u0441">' + r.status + '</td>' +
+      '</tr>';
+    });
+    body.innerHTML = html;
+  }
+
+  window.toggleChannelDetail = function(row) {
+    var wasExpanded = row.classList.contains('expanded');
+    document.querySelectorAll('.channel-row.expanded').forEach(function(c) { c.classList.remove('expanded'); });
+    if (!wasExpanded) row.classList.add('expanded');
+  };
+
+  window.sortChannels = function(field) {
+    if (channelSortField === field) {
+      channelSortAsc = !channelSortAsc;
+    } else {
+      channelSortField = field;
+      channelSortAsc = false;
+    }
+    // Update header sorted class
+    document.querySelectorAll('#channelListHeader span').forEach(function(s) {
+      s.classList.remove('sorted');
+      s.innerHTML = s.textContent;
+    });
+    var activeSpan = document.querySelector('#channelListHeader span[data-sort="' + field + '"]');
+    if (activeSpan) {
+      activeSpan.classList.add('sorted');
+      activeSpan.innerHTML = activeSpan.textContent + ' ' + (channelSortAsc ? '\u2191' : '\u2193');
+    }
+    renderChannelCards();
+  };
+
+  function updateChannelsData(data) {
+    if (!data) return;
+    var el;
+    el = document.getElementById('chKpiRevenue');
+    if (el) animateValue(el, data.onlineRevenue + ' \u20BD');
+    el = document.getElementById('chKpiOrders');
+    if (el) animateValue(el, data.onlineOrders);
+    el = document.getElementById('chKpiCheck');
+    if (el) animateValue(el, data.avgCheck + ' \u20BD');
+    el = document.getElementById('chKpiShare');
+    if (el) el.innerHTML = data.onlineShare + ' <span class="ch-kpi-badge">\u26A1 \u0422\u043E\u0447\u043A\u0430 \u0440\u043E\u0441\u0442\u0430</span>';
+
+    el = document.getElementById('chKpiRevTrend');
+    if (el) { el.textContent = data.revTrend; el.className = 'ch-kpi-trend ' + (data.revUp ? 'up' : 'down'); }
+    el = document.getElementById('chKpiOrdTrend');
+    if (el) { el.textContent = data.ordTrend; el.className = 'ch-kpi-trend ' + (data.ordUp ? 'up' : 'down'); }
+    el = document.getElementById('chKpiCheckTrend');
+    if (el) { el.textContent = data.checkTrend; el.className = 'ch-kpi-trend ' + (data.checkUp ? 'up' : 'down'); }
+    el = document.getElementById('chKpiShareTrend');
+    if (el) { el.textContent = data.shareTrend; el.className = 'ch-kpi-trend ' + (data.shareUp ? 'up' : 'down'); }
+  }
+
+  function initChannelsScreen() {
+    if (channelsInitialized) return;
+    channelsInitialized = true;
+    renderChannelCards();
+    renderCompareTable();
+
+    // Attach sort handlers to channel list header
+    document.querySelectorAll('#channelListHeader span[data-sort]').forEach(function(span) {
+      span.addEventListener('click', function() {
+        sortChannels(span.getAttribute('data-sort'));
+      });
+    });
+
+    // Attach sort handlers to comparison table headers
+    document.querySelectorAll('#chCompareTable thead th[data-col]').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var col = th.getAttribute('data-col');
+        // Simple inline sort for comparison table
+        var tbody = document.getElementById('chCompareBody');
+        if (!tbody) return;
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        var asc = th.classList.contains('sorted-asc');
+        document.querySelectorAll('#chCompareTable thead th').forEach(function(t) {
+          t.classList.remove('sorted', 'sorted-asc');
+        });
+        th.classList.add('sorted');
+        if (!asc) th.classList.add('sorted-asc');
+        rows.sort(function(a, b) {
+          var colIdx = Array.from(th.parentNode.children).indexOf(th);
+          var va = a.children[colIdx].textContent.trim();
+          var vb = b.children[colIdx].textContent.trim();
+          var na = parseFloat(va.replace(/[^\d.\-]/g, ''));
+          var nb = parseFloat(vb.replace(/[^\d.\-]/g, ''));
+          if (!isNaN(na) && !isNaN(nb)) {
+            return asc ? nb - na : na - nb;
+          }
+          return asc ? vb.localeCompare(va) : va.localeCompare(vb);
+        });
+        rows.forEach(function(r) { tbody.appendChild(r); });
+      });
+    });
   }
 
   /* ── Init ── */
