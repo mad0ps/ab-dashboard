@@ -2688,33 +2688,36 @@ table tbody td.amount {
 
   .hamburger { display: flex; width: 44px; height: 44px; }
 
-  .topbar { padding: 0 16px; height: 52px; }
+  .topbar {
+    padding: 0 16px;
+    height: auto;
+    min-height: 52px;
+    flex-wrap: wrap;
+  }
   .topbar-subtitle, .topbar-search { display: none; }
   .topbar-title { font-size: 18px; }
 
   .topbar-center {
-    position: fixed;
-    top: 52px;
-    left: 0; right: 0;
-    padding: 8px 16px;
-    background: var(--topbar-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    z-index: 29;
+    /* Second row inside topbar — normal flow, not fixed */
+    position: relative;
+    top: auto;
+    left: auto; right: auto;
+    width: 100%;
+    order: 10;
+    padding: 6px 0 8px;
     justify-content: center;
-    border-bottom: 1px solid var(--topbar-border);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    /* Scroll snap for period selector on mobile */
     scroll-snap-type: x mandatory;
+    border-top: 1px solid var(--topbar-border);
   }
   .topbar-center::-webkit-scrollbar { display: none; }
   .topbar-center .period-pill {
     scroll-snap-align: center;
   }
 
-  .content { padding: 60px 16px 100px; }
+  .content { padding: 16px 16px 100px; }
 
   .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .kpi-card { padding: 16px; }
@@ -2771,17 +2774,89 @@ table tbody td.amount {
 }
 
 /* ============================================================
-   SMART NOTIFICATION SYSTEM
+   CRITICAL ALERTS BAR (always visible at top)
    ============================================================ */
-.notifications-bar {
-  position: relative;
-  z-index: 25;
+.critical-alerts-bar {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  max-width: 100%;
-  margin-bottom: 0;
-  transition: all 300ms;
+  gap: 0;
+}
+.critical-alerts-bar:empty { display: none; }
+.critical-alert {
+  display: flex;
+  align-items: center;
+  padding: 10px 24px;
+  gap: 12px;
+  font-size: 13.5px;
+  background: #FEF2F2;
+  border-left: 4px solid #EF4444;
+  color: #991B1B;
+  border-bottom: 1px solid #FECACA;
+}
+[data-theme="dark"] .critical-alert {
+  background: rgba(239,68,68,.1);
+  color: #FCA5A5;
+  border-bottom-color: rgba(239,68,68,.15);
+}
+.critical-alert .notification-text { flex: 1; }
+.critical-alert .notification-action {
+  font-size: 12px;
+  color: #991B1B;
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+[data-theme="dark"] .critical-alert .notification-action { color: #FCA5A5; }
+@media (max-width: 768px) {
+  .critical-alert { padding: 10px 16px; font-size: 13px; }
+}
+
+/* ============================================================
+   SMART NOTIFICATION DROPDOWN (from bell icon)
+   ============================================================ */
+.notifications-bar {
+  position: fixed;
+  top: 64px;
+  right: 80px;
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  width: 460px;
+  max-height: 70vh;
+  overflow-y: auto;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #E8E6E3);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.08);
+  padding: 0;
+  transition: opacity 200ms, transform 200ms;
+}
+.notifications-bar.visible {
+  display: flex;
+  animation: notifDropdown 200ms ease;
+}
+@keyframes notifDropdown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.notifications-bar .notif-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--separator, #E8E6E3);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.notifications-bar .notif-header span {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
 }
 .notifications-bar.hidden {
   display: none;
@@ -2939,8 +3014,27 @@ table tbody td.amount {
 
 /* Mobile */
 @media (max-width: 768px) {
-  .notification { padding: 10px 16px; font-size: 13px; }
-  .notifications-bar { margin-bottom: 0; }
+  .notification {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-height: 44px;
+    line-height: 1.4;
+  }
+  .notification-text {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  .notifications-bar {
+    margin-bottom: 0;
+    position: relative;
+    z-index: 24;
+    overflow: visible;
+  }
+  .notification-action {
+    font-size: 11px;
+    flex-shrink: 0;
+  }
 }
 
 /* ============================================================
@@ -4013,7 +4107,10 @@ table tbody td.amount {
     </div>
   </header>
 
-  <!-- SMART NOTIFICATIONS BAR -->
+  <!-- CRITICAL ALERTS (always visible at top) -->
+  <div class="critical-alerts-bar" id="criticalAlertsBar"></div>
+
+  <!-- NOTIFICATION DROPDOWN (from bell icon) -->
   <div class="notifications-bar" id="notificationsBar"></div>
 
   <!-- ============================================================
@@ -6409,7 +6506,7 @@ table tbody td.amount {
 
   var notifMaxVisible = 3;
   var notifShowAll = false;
-  var notifPanelVisible = true;
+  var notifPanelVisible = false;
 
   // Priority weights for sorting (lower = more important = shown first)
   var NOTIF_PRIORITY = { 'critical': 0, 'warning': 1, 'info': 2, 'success': 3 };
@@ -6442,7 +6539,10 @@ table tbody td.amount {
   }
 
   function updateNotifBadge() {
-    var count = getActiveNotifications().length;
+    var dismissed = getNotifDismissed();
+    var count = NOTIFICATIONS.filter(function(n) {
+      return n.type !== 'critical' && dismissed.indexOf(n.id) === -1;
+    }).length;
     var badge = document.getElementById('notifBellBadge');
     if (badge) {
       if (count > 0) {
@@ -6455,60 +6555,68 @@ table tbody td.amount {
   }
 
   function renderNotifications() {
-    var bar = document.getElementById('notificationsBar');
-    if (!bar) return;
+    var critBar = document.getElementById('criticalAlertsBar');
+    var dropBar = document.getElementById('notificationsBar');
+    var dismissed = getNotifDismissed();
+    var pa = {critical: 0, warning: 1, info: 2, success: 3};
 
-    if (!notifPanelVisible) {
-      bar.classList.add('hidden');
-      return;
-    }
-
-    var active = getActiveNotifications();
-    if (active.length === 0) {
-      bar.classList.add('hidden');
-      updateNotifBadge();
-      return;
-    }
-
-    bar.classList.remove('hidden');
-
-    // Sort by priority: critical first, then warning, then info, then success
-    active.sort(function(a, b) { return (NOTIF_PRIORITY[a.type] || 99) - (NOTIF_PRIORITY[b.type] || 99); });
-
-    // Always show ALL critical, then fill up to notifMaxVisible with others
-    var critical = active.filter(function(n) { return n.type === 'critical'; });
-    var others = active.filter(function(n) { return n.type !== 'critical'; });
-    var visible;
-    if (notifShowAll) {
-      visible = active;
-    } else {
-      // Show all critical + fill remaining slots with next priority items
-      var remaining = Math.max(0, notifMaxVisible - critical.length);
-      visible = critical.concat(others.slice(0, remaining));
-    }
-    var html = '';
-
-    visible.forEach(function(n) {
-      html += '<div class="notification ' + n.type + '" data-notif-id="' + n.id + '">';
-      html += '<span class="notification-icon">' + n.icon + '</span>';
-      html += '<span class="notification-text">' + n.text + '</span>';
-      if (n.actionText) {
-        html += '<button class="notification-action" onclick="notifNavigate(\'' + n.action + '\')">' + n.actionText + '</button>';
-      }
-      // Critical notifications cannot be dismissed
-      if (n.type !== 'critical') {
-        html += '<button class="notification-dismiss" onclick="dismissNotification(\'' + n.id + '\')" title="\u0421\u043A\u0440\u044B\u0442\u044C">&times;</button>';
-      }
-      html += '</div>';
+    // Split: critical go to top bar, rest go to dropdown
+    var criticals = NOTIFICATIONS.filter(function(n) { return n.type === 'critical'; });
+    var others = NOTIFICATIONS.filter(function(n) {
+      return n.type !== 'critical' && dismissed.indexOf(n.id) === -1;
     });
+    others.sort(function(a, b) { return (pa[a.type]||9) - (pa[b.type]||9); });
 
-    if (!notifShowAll && active.length > notifMaxVisible) {
-      html += '<div class="notif-show-all" onclick="expandAllNotifications()">\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0432\u0441\u0435 (' + active.length + ')</div>';
-    } else if (notifShowAll && active.length > notifMaxVisible) {
-      html += '<div class="notif-show-all" onclick="collapseNotifications()">\u0421\u0432\u0435\u0440\u043D\u0443\u0442\u044C</div>';
+    // Render CRITICAL alerts bar (always visible at top of page)
+    if (critBar) {
+      var critHtml = '';
+      criticals.forEach(function(n) {
+        critHtml += '<div class="critical-alert">';
+        critHtml += '<span class="notification-icon">' + n.icon + '</span>';
+        critHtml += '<span class="notification-text">' + n.text + '</span>';
+        if (n.actionText) {
+          critHtml += '<button class="notification-action" onclick="notifNavigate(\'' + n.action + '\')">' + n.actionText + '</button>';
+        }
+        critHtml += '</div>';
+      });
+      critBar.innerHTML = critHtml;
     }
 
-    bar.innerHTML = html;
+    // Render DROPDOWN notifications (non-critical, opened by bell)
+    if (dropBar) {
+      if (!notifPanelVisible || others.length === 0) {
+        dropBar.classList.remove('visible');
+        dropBar.classList.add('hidden');
+        updateNotifBadge();
+        return;
+      }
+
+      dropBar.classList.remove('hidden');
+      dropBar.classList.add('visible');
+
+      var visible = notifShowAll ? others : others.slice(0, notifMaxVisible);
+      var html = '<div class="notif-header">Уведомления <span>' + others.length + ' активных</span></div>';
+
+      visible.forEach(function(n) {
+        html += '<div class="notification ' + n.type + '" data-notif-id="' + n.id + '">';
+        html += '<span class="notification-icon">' + n.icon + '</span>';
+        html += '<span class="notification-text">' + n.text + '</span>';
+        if (n.actionText) {
+          html += '<a class="notification-action" onclick="notifNavigate(\'' + n.action + '\')">' + n.actionText + '</a>';
+        }
+        html += '<button class="notification-dismiss" onclick="dismissNotification(\'' + n.id + '\')">&times;</button>';
+        html += '</div>';
+      });
+
+      if (!notifShowAll && others.length > notifMaxVisible) {
+        html += '<div class="notif-show-all" onclick="expandAllNotifications()">Показать все (' + others.length + ')</div>';
+      } else if (notifShowAll && others.length > notifMaxVisible) {
+        html += '<div class="notif-show-all" onclick="collapseNotifications()">Свернуть</div>';
+      }
+
+      dropBar.innerHTML = html;
+    }
+
     updateNotifBadge();
   }
 
