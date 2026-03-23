@@ -5846,6 +5846,14 @@ table tbody td.amount {
   var notifShowAll = false;
   var notifPanelVisible = true;
 
+  // Priority weights for sorting (lower = more important = shown first)
+  var NOTIF_PRIORITY = { 'critical': 0, 'warning': 1, 'info': 2, 'success': 3 };
+
+  // Pre-sort NOTIFICATIONS by priority so critical always first
+  NOTIFICATIONS.sort(function(a, b) {
+    return (NOTIF_PRIORITY[a.type] || 99) - (NOTIF_PRIORITY[b.type] || 99);
+  });
+
   function getNotifDismissed() {
     try {
       var raw = sessionStorage.getItem('notifDismissed');
@@ -5893,9 +5901,8 @@ table tbody td.amount {
 
     bar.classList.remove('hidden');
 
-    // Sort by priority: critical > warning > info > success
-    var priorityOrder = { critical: 0, warning: 1, info: 2, success: 3 };
-    active.sort(function(a, b) { return (priorityOrder[a.type] || 99) - (priorityOrder[b.type] || 99); });
+    // Sort by priority: critical first, then warning, then info, then success
+    active.sort(function(a, b) { return (NOTIF_PRIORITY[a.type] || 99) - (NOTIF_PRIORITY[b.type] || 99); });
 
     var visible = notifShowAll ? active : active.slice(0, notifMaxVisible);
     var html = '';
