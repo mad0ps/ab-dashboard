@@ -1844,6 +1844,413 @@ table tbody td.amount {
   .scr-finance .fin-kpi-value { font-size: 18px; }
 }
 
+/* ============================================================
+   ORDERS SCREEN
+   ============================================================ */
+#screen-orders {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0;
+  min-height: auto;
+}
+#screen-orders.active { display: block; opacity: 1; transform: none; }
+
+.scr-orders .orders-wrapper {
+  padding: 24px 0;
+  animation: cardIn 400ms var(--ease-out) forwards;
+}
+
+/* KPI row */
+.scr-orders .orders-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.scr-orders .orders-kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 200ms var(--ease-out);
+}
+.scr-orders .orders-kpi-card:hover {
+  border-color: var(--n300);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.scr-orders .orders-kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.scr-orders .orders-kpi-value {
+  font-family: var(--f-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scr-orders .orders-kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+.scr-orders .orders-kpi-trend.up { color: var(--success); background: var(--success-light); }
+.scr-orders .orders-kpi-trend.down { color: var(--danger); background: var(--danger-light); }
+.scr-orders .orders-kpi-trend.good { color: var(--success); background: var(--success-light); }
+
+/* Filter bar */
+.scr-orders .orders-filter-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.scr-orders .orders-search-input {
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+  padding: 8px 12px 8px 36px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: border-color 150ms;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2378716C' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+.scr-orders .orders-search-input::placeholder { color: var(--text-muted); }
+.scr-orders .orders-search-input:hover { border-color: var(--n300); }
+.scr-orders .orders-search-input:focus {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 1px;
+}
+.scr-orders .orders-filter-bar select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  padding: 8px 32px 8px 12px;
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  min-width: 140px;
+  transition: border-color 150ms;
+}
+.scr-orders .orders-filter-bar select:hover { border-color: var(--n300); }
+.scr-orders .orders-filter-bar select:focus {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 1px;
+}
+.scr-orders .orders-count-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-left: auto;
+  font-family: var(--f-mono);
+}
+
+/* Order list container */
+.scr-orders .order-list-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* Column headers (desktop only) */
+.scr-orders .order-list-header {
+  display: grid;
+  grid-template-columns: 0.7fr 0.9fr 1.5fr 0.8fr 1fr 0.7fr 0.8fr;
+  gap: 0;
+  padding: 10px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.scr-orders .order-list-header span {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.scr-orders .order-list-header span:hover { color: var(--text-primary); }
+.scr-orders .order-list-header span .sort-arrow {
+  font-size: 10px;
+  opacity: 0.4;
+}
+.scr-orders .order-list-header span .sort-arrow.active {
+  opacity: 1;
+  color: var(--brand-gold);
+}
+
+/* Order row */
+.scr-orders .order-row {
+  border-bottom: 1px solid var(--separator);
+  cursor: pointer;
+  transition: background 120ms;
+}
+.scr-orders .order-row:last-child { border-bottom: none; }
+.scr-orders .order-row:hover { background: var(--table-row-hover); }
+
+/* Row header (collapsed) */
+.scr-orders .order-row-header {
+  display: grid;
+  grid-template-columns: 0.7fr 0.9fr 1.5fr 0.8fr 1fr 0.7fr 0.8fr;
+  gap: 0;
+  padding: 14px 20px;
+  align-items: center;
+}
+.scr-orders .order-row-num {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.scr-orders .order-row-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.scr-orders .order-row-client {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scr-orders .order-row-items {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.scr-orders .order-row-amount {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Channel badges */
+.scr-orders .ch-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  white-space: nowrap;
+}
+.scr-orders .ch-badge.ch-site { background: var(--success-light); color: var(--success); border: 1px solid var(--success-muted); }
+.scr-orders .ch-badge.ch-wb { background: rgba(168,85,247,0.1); color: #A855F7; border: 1px solid rgba(168,85,247,0.25); }
+.scr-orders .ch-badge.ch-ozon { background: var(--info-light); color: var(--info); border: 1px solid var(--info-muted); }
+.scr-orders .ch-badge.ch-id { background: rgba(20,184,166,0.1); color: #14B8A6; border: 1px solid rgba(20,184,166,0.25); }
+.scr-orders .ch-badge.ch-dubai { background: var(--warning-light); color: #D97706; border: 1px solid var(--warning-muted); }
+
+/* Status badges */
+.scr-orders .st-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  white-space: nowrap;
+}
+.scr-orders .st-badge.st-new { color: #D97706; background: transparent; border: 1.5px solid var(--warning-muted); }
+.scr-orders .st-badge.st-processing { background: var(--warning-light); color: #D97706; border: 1px solid var(--warning-muted); }
+.scr-orders .st-badge.st-shipped { background: var(--info-light); color: var(--info); border: 1px solid var(--info-muted); }
+.scr-orders .st-badge.st-delivered { background: var(--success-light); color: var(--success); border: 1px solid var(--success-muted); }
+.scr-orders .st-badge.st-return { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger-muted); }
+
+/* Expanded detail */
+.scr-orders .order-row-detail {
+  display: none;
+  padding: 0 20px 16px 20px;
+  animation: storeDetailSlide 200ms var(--ease-out);
+}
+.scr-orders .order-row.expanded .order-row-detail { display: block; }
+.scr-orders .order-detail-inner {
+  padding: 16px 20px;
+  background: var(--n50);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--brand-gold);
+}
+.scr-orders .order-detail-section {
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.scr-orders .order-detail-section:last-child { margin-bottom: 0; }
+.scr-orders .order-detail-section strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.scr-orders .order-detail-section .item-line {
+  display: block;
+  padding-left: 16px;
+  position: relative;
+}
+.scr-orders .order-detail-section .item-line::before {
+  content: '\2022';
+  position: absolute;
+  left: 4px;
+  color: var(--brand-gold);
+}
+.scr-orders .order-detail-timestamps {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--separator);
+}
+[data-theme="dark"] .scr-orders .order-detail-inner {
+  background: #1a1a1e;
+}
+
+/* No results */
+.scr-orders .order-no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Pagination */
+.scr-orders .orders-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 0;
+}
+.scr-orders .orders-pagination button {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  padding: 8px 14px;
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 150ms;
+}
+.scr-orders .orders-pagination button:hover {
+  border-color: var(--brand-gold);
+  color: var(--brand-gold);
+}
+.scr-orders .orders-pagination button.active {
+  background: var(--brand-gold);
+  color: #fff;
+  border-color: var(--brand-gold);
+}
+.scr-orders .orders-pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Mobile-only elements (hidden on desktop) */
+.scr-orders .order-row-mobile { display: none; }
+
+/* Orders mobile */
+@media (max-width: 1100px) {
+  .scr-orders .orders-kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .scr-orders .orders-kpi-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .scr-orders .orders-kpi-value { font-size: 18px; }
+  .scr-orders .orders-filter-bar { gap: 8px; }
+  .scr-orders .orders-search-input { min-width: 0; flex: 1 1 100%; max-width: none; }
+  .scr-orders .orders-filter-bar select { min-width: 0; flex: 1; font-size: 12px; padding: 7px 28px 7px 10px; }
+  .scr-orders .orders-count-label { display: none; }
+
+  /* Hide desktop table layout */
+  .scr-orders .order-list-header { display: none; }
+  .scr-orders .order-row-header { display: none; }
+  .scr-orders .order-row-mobile { display: block; }
+
+  /* Mobile card style */
+  .scr-orders .order-row-mobile {
+    padding: 14px 16px;
+  }
+  .scr-orders .order-mobile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .scr-orders .order-mobile-num-date {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .scr-orders .order-mobile-num-date span {
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .scr-orders .order-mobile-client {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .scr-orders .order-mobile-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .scr-orders .order-mobile-items-amount {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .scr-orders .order-mobile-items-amount strong {
+    color: var(--text-primary);
+    font-family: var(--f-mono);
+    font-weight: 600;
+  }
+  .scr-orders .order-row-detail { padding: 0 16px 14px 16px; }
+  .scr-orders .order-detail-inner { padding: 14px 16px; }
+}
+@media (max-width: 380px) {
+  .scr-orders .orders-kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .scr-orders .orders-kpi-card { padding: 12px 14px; }
+  .scr-orders .orders-kpi-value { font-size: 16px; }
+}
+
 /* Overview screen */
 .screen-overview { display: block; }
 .screen-overview.hidden { display: none; }
@@ -2814,10 +3221,78 @@ table tbody td.amount {
 
       </div>
     </div>
-    <div class="placeholder-screen" id="screen-orders">
-      <div class="placeholder-icon">&#x1F4CB;</div>
-      <div class="placeholder-title">Заказы</div>
-      <div class="placeholder-desc">Этот раздел в разработке. Все заказы с фильтрацией, поиском и деталями.</div>
+    <div class="placeholder-screen scr-orders" id="screen-orders">
+      <div class="orders-wrapper">
+        <!-- KPI summary -->
+        <div class="orders-kpi-row">
+          <div class="orders-kpi-card">
+            <div class="orders-kpi-label">Заказов сегодня</div>
+            <div class="orders-kpi-value" id="ordersKpiTotal">47</div>
+            <div class="orders-kpi-trend up" id="ordersKpiTotalTrend">+8%</div>
+          </div>
+          <div class="orders-kpi-card">
+            <div class="orders-kpi-label">Выручка сегодня</div>
+            <div class="orders-kpi-value" id="ordersKpiRevenue">2.1M &#8381;</div>
+            <div class="orders-kpi-trend up" id="ordersKpiRevTrend">+12%</div>
+          </div>
+          <div class="orders-kpi-card">
+            <div class="orders-kpi-label">Средний чек</div>
+            <div class="orders-kpi-value" id="ordersKpiCheck">44 700 &#8381;</div>
+            <div class="orders-kpi-trend up" id="ordersKpiCheckTrend">+3%</div>
+          </div>
+          <div class="orders-kpi-card">
+            <div class="orders-kpi-label">Возвраты</div>
+            <div class="orders-kpi-value" id="ordersKpiReturns">3.2%</div>
+            <div class="orders-kpi-trend good" id="ordersKpiReturnsTrend">-0.5%</div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="orders-filter-bar">
+          <input type="text" class="orders-search-input" id="ordersSearchInput" placeholder="Поиск по № заказа или имени клиента..." oninput="filterOrders()">
+          <select id="ordersStatusFilter" onchange="filterOrders()">
+            <option value="all">Все статусы</option>
+            <option value="Новый">Новый</option>
+            <option value="В обработке">В обработке</option>
+            <option value="Отправлен">Отправлен</option>
+            <option value="Доставлен">Доставлен</option>
+            <option value="Возврат">Возврат</option>
+          </select>
+          <select id="ordersChannelFilter" onchange="filterOrders()">
+            <option value="all">Все каналы</option>
+            <option value="alessandroborelli.ru">alessandroborelli.ru</option>
+            <option value="WB">WB</option>
+            <option value="Ozon">Ozon</option>
+            <option value="imperiya-detstva.ru">imperiya-detstva.ru</option>
+            <option value="Dubai">Dubai</option>
+          </select>
+          <select id="ordersSortSelect" onchange="filterOrders()">
+            <option value="date-desc">По дате &#8595;</option>
+            <option value="date-asc">По дате &#8593;</option>
+            <option value="amount-desc">По сумме &#8595;</option>
+            <option value="amount-asc">По сумме &#8593;</option>
+            <option value="status">По статусу</option>
+          </select>
+          <span class="orders-count-label" id="ordersCountLabel">25 из 25</span>
+        </div>
+
+        <!-- Order list -->
+        <div class="order-list-container">
+          <div class="order-list-header">
+            <span onclick="sortOrdersBy('num')">&#8470; <span class="sort-arrow" id="sortArrowNum">&#8597;</span></span>
+            <span onclick="sortOrdersBy('date')">Дата <span class="sort-arrow active" id="sortArrowDate">&#8595;</span></span>
+            <span onclick="sortOrdersBy('client')">Клиент <span class="sort-arrow" id="sortArrowClient">&#8597;</span></span>
+            <span>Товары</span>
+            <span onclick="sortOrdersBy('amount')">Сумма <span class="sort-arrow" id="sortArrowAmount">&#8597;</span></span>
+            <span>Канал</span>
+            <span onclick="sortOrdersBy('status')">Статус <span class="sort-arrow" id="sortArrowStatus">&#8597;</span></span>
+          </div>
+          <div id="orderCardsContainer"></div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="orders-pagination" id="ordersPagination"></div>
+      </div>
     </div>
     <div class="placeholder-screen" id="screen-channels">
       <div class="placeholder-icon">&#x1F310;</div>
@@ -2970,6 +3445,11 @@ table tbody td.amount {
         chartRevenue: [0.3, 0.2, 0.15, 0.4, 0.55, 0.5],
         chartExpenses: [0.25, 0.3, 0.2, 0.35, 0.45, 0.35],
         cashflowData: [0.05, -0.1, -0.05, 0.05, 0.1, 0.15]
+      },
+      orders: {
+        total: '47', revenue: '2.1M', check: '44 700', returns: '3.2%',
+        totalTrend: '+8%', revTrend: '+12%', checkTrend: '+3%', returnsTrend: '-0.5%',
+        totalUp: true, revUp: true, checkUp: true, returnsUp: false
       }
     },
     '7д': {
@@ -2994,6 +3474,11 @@ table tbody td.amount {
         chartRevenue: [1.8, 2.1, 2.3, 1.9, 2.5, 2.8, 1.4],
         chartExpenses: [1.7, 1.9, 2.0, 1.8, 2.2, 2.3, 1.3],
         cashflowData: [0.1, 0.2, 0.3, 0.1, 0.3, 0.5, 0.1]
+      },
+      orders: {
+        total: '312', revenue: '14.8M', check: '47 400', returns: '2.8%',
+        totalTrend: '+6.2%', revTrend: '+8.7%', checkTrend: '+2.1%', returnsTrend: '-0.3%',
+        totalUp: true, revUp: true, checkUp: true, returnsUp: false
       }
     },
     '15д': {
@@ -3018,6 +3503,11 @@ table tbody td.amount {
         chartRevenue: [1.8, 1.9, 2.1, 2.2, 2.0, 2.3, 2.2, 2.1],
         chartExpenses: [1.6, 1.8, 1.9, 2.0, 1.8, 2.1, 1.9, 1.9],
         cashflowData: [0.2, 0.1, 0.2, 0.2, 0.2, 0.2, 0.3, 0.2]
+      },
+      orders: {
+        total: '634', revenue: '30.2M', check: '47 600', returns: '3.0%',
+        totalTrend: '+7.8%', revTrend: '+10.1%', checkTrend: '+2.9%', returnsTrend: '-0.4%',
+        totalUp: true, revUp: true, checkUp: true, returnsUp: false
       }
     },
     '30д': {
@@ -3042,6 +3532,11 @@ table tbody td.amount {
         chartRevenue: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54],
         chartExpenses: [40, 55, 62, 56, 50, 58, 72, 120, 55, 62, 45, 58],
         cashflowData: [3, -5, 3, -2, 2, -3, -4, 17.5, 3, -3, -4, -4]
+      },
+      orders: {
+        total: '1 247', revenue: '61.4M', check: '49 200', returns: '3.2%',
+        totalTrend: '+8.1%', revTrend: '+12.3%', checkTrend: '+3.4%', returnsTrend: '-0.5%',
+        totalUp: true, revUp: true, checkUp: true, returnsUp: false
       }
     },
     '90д': {
@@ -3066,6 +3561,11 @@ table tbody td.amount {
         chartRevenue: [59, 41, 54, 43, 50, 65],
         chartExpenses: [62, 45, 58, 40, 55, 62],
         cashflowData: [-3, -4, -4, 3, -5, 3]
+      },
+      orders: {
+        total: '3 741', revenue: '184.2M', check: '49 200', returns: '2.9%',
+        totalTrend: '+11.2%', revTrend: '+14.5%', checkTrend: '+4.1%', returnsTrend: '-0.6%',
+        totalUp: true, revUp: true, checkUp: true, returnsUp: false
       }
     },
     '\u0413\u043E\u0434': {
@@ -3090,6 +3590,11 @@ table tbody td.amount {
         chartRevenue: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54],
         chartExpenses: [40, 55, 62, 56, 50, 58, 72, 120, 55, 62, 45, 58],
         cashflowData: [3, -5, 3, -2, 2, -3, -4, 17.5, 3, -3, -4, -4]
+      },
+      orders: {
+        total: '15 024', revenue: '737M', check: '49 100', returns: '3.1%',
+        totalTrend: '+7.3%', revTrend: '+9.8%', checkTrend: '+2.8%', returnsTrend: '-0.7%',
+        totalUp: true, revUp: true, checkUp: true, returnsUp: false
       }
     }
   };
@@ -3133,6 +3638,12 @@ table tbody td.amount {
         // Re-apply current period data to finance
         var fd = PERIOD_DATA[currentPeriod];
         if (fd && fd.finance) updateFinanceData(fd.finance);
+      }
+      // Lazy-init orders screen
+      if (screen === 'orders') {
+        initOrdersScreen();
+        var od = PERIOD_DATA[currentPeriod];
+        if (od && od.orders) updateOrdersKpi(od.orders);
       }
     }
 
@@ -3322,6 +3833,9 @@ table tbody td.amount {
 
     // Update Finance (always update data, charts update if initialized)
     updateFinanceData(data.finance);
+
+    // Update Orders
+    updateOrdersKpi(data.orders);
   }
 
   /* ── Period selector ── */
@@ -4017,6 +4531,351 @@ table tbody td.amount {
     renderExpenseList();
     animateFinBars();
     initFinanceCharts();
+  }
+
+  /* ── Orders Screen ── */
+  var ordersInitialized = false;
+  var ordersCurrentPage = 1;
+  var ordersPerPage = 15;
+  var ordersCurrentSort = 'date-desc';
+
+  var ordersData = [
+    { num: 4525, date: '23.03.2026', dateSort: 20260323, time: '16:45', client: 'Иванова Анна', items: [
+      { name: 'Куртка зимняя Alessandro Borelli р.140', price: '8 900' },
+      { name: 'Шапка вязаная р.54', price: '3 500' }
+    ], amount: 12400, channel: 'WB', status: 'Доставлен', delivery: 'СДЭК, Москва, ул. Ленина 42, кв. 15', tracking: 'SDEK-2847561', payment: 'Cloudpayments, карта *4521', comment: 'Подарок на день рождения', created: '23.03.2026 14:32', updated: '23.03.2026 16:45' },
+    { num: 4524, date: '23.03.2026', dateSort: 20260323, time: '15:20', client: 'Петров Дмитрий', items: [
+      { name: 'Худи oversize Alessandro Borelli р.152', price: '5 200' },
+      { name: 'Брюки школьные тёмно-синие р.146', price: '3 800' },
+      { name: 'Кроссовки спортивные р.37', price: '6 900' }
+    ], amount: 15900, channel: 'alessandroborelli.ru', status: 'Отправлен', delivery: 'СДЭК, Санкт-Петербург, Невский пр. 88, кв. 3', tracking: 'SDEK-2847602', payment: 'Cloudpayments, карта *7813', comment: 'Школьная форма + спорт', created: '23.03.2026 10:15', updated: '23.03.2026 15:20' },
+    { num: 4523, date: '23.03.2026', dateSort: 20260323, time: '14:05', client: 'Смирнова Елена', items: [
+      { name: 'Платье нарядное Alessandro Borelli р.128', price: '7 400' }
+    ], amount: 7400, channel: 'alessandroborelli.ru', status: 'В обработке', delivery: 'Почта России, Казань, ул. Баумана 31, кв. 47', tracking: '', payment: 'Cloudpayments, карта *2290', comment: '', created: '23.03.2026 14:05', updated: '23.03.2026 14:05' },
+    { num: 4522, date: '23.03.2026', dateSort: 20260323, time: '11:30', client: 'Козлова Мария', items: [
+      { name: 'Рюкзак Sprayground Galaxy', price: '9 800' },
+      { name: 'Кепка Alessandro Borelli', price: '2 400' }
+    ], amount: 12200, channel: 'Ozon', status: 'Новый', delivery: 'Ozon доставка, Москва', tracking: '', payment: 'Ozon карта', comment: 'Повторный заказ', created: '23.03.2026 11:30', updated: '23.03.2026 11:30' },
+    { num: 4521, date: '22.03.2026', dateSort: 20260322, time: '18:40', client: 'Новикова Ольга', items: [
+      { name: 'Куртка демисезонная Alessandro Borelli р.134', price: '7 200' },
+      { name: 'Брюки школьные чёрные р.134', price: '3 400' },
+      { name: 'Рубашка белая р.134', price: '2 800' },
+      { name: 'Галстук школьный', price: '1 200' }
+    ], amount: 14600, channel: 'alessandroborelli.ru', status: 'Доставлен', delivery: 'СДЭК, Москва, ул. Тверская 15, кв. 8', tracking: 'SDEK-2846912', payment: 'Cloudpayments, карта *5567', comment: 'Школьная форма — полный комплект', created: '22.03.2026 12:10', updated: '22.03.2026 18:40' },
+    { num: 4520, date: '22.03.2026', dateSort: 20260322, time: '16:15', client: 'Морозов Алексей', items: [
+      { name: 'Кроссовки Alessandro Borelli р.39', price: '7 800' }
+    ], amount: 7800, channel: 'WB', status: 'Доставлен', delivery: 'WB пункт выдачи, Москва, Кутузовский пр. 12', tracking: 'WB-98374621', payment: 'WB кошелёк', comment: '', created: '22.03.2026 09:30', updated: '22.03.2026 16:15' },
+    { num: 4519, date: '22.03.2026', dateSort: 20260322, time: '14:50', client: 'Волкова Татьяна', items: [
+      { name: 'Платье Alessandro Borelli р.140', price: '6 800' },
+      { name: 'Колготки школьные р.140', price: '890' }
+    ], amount: 7690, channel: 'imperiya-detstva.ru', status: 'Отправлен', delivery: 'Почта России, Новосибирск, ул. Красный пр. 65, кв. 112', tracking: 'PR-1847293', payment: 'Cloudpayments, карта *3344', comment: '', created: '22.03.2026 08:45', updated: '22.03.2026 14:50' },
+    { num: 4518, date: '21.03.2026', dateSort: 20260321, time: '19:20', client: 'Соколова Дарья', items: [
+      { name: 'Рюкзак Sprayground Shark', price: '11 200' },
+      { name: 'Пенал Sprayground', price: '3 200' }
+    ], amount: 14400, channel: 'alessandroborelli.ru', status: 'Доставлен', delivery: 'СДЭК, Сочи, ул. Навагинская 7, кв. 22', tracking: 'SDEK-2846701', payment: 'Cloudpayments, карта *9012', comment: 'Подарок сыну', created: '21.03.2026 11:00', updated: '21.03.2026 19:20' },
+    { num: 4517, date: '21.03.2026', dateSort: 20260321, time: '17:30', client: 'Лебедева Наталья', items: [
+      { name: 'Куртка Alessandro Borelli р.146', price: '8 400' }
+    ], amount: 8400, channel: 'WB', status: 'Возврат', delivery: 'WB пункт выдачи, Краснодар', tracking: 'WB-98371845', payment: 'WB кошелёк', comment: 'Не подошёл размер, обмен на р.152', created: '21.03.2026 07:20', updated: '21.03.2026 17:30' },
+    { num: 4516, date: '21.03.2026', dateSort: 20260321, time: '15:10', client: 'Al-Rashid Fatima', items: [
+      { name: 'Dress Alessandro Borelli р.128', price: '8 900' },
+      { name: 'Cardigan Alessandro Borelli р.128', price: '5 400' }
+    ], amount: 14300, channel: 'Dubai', status: 'Отправлен', delivery: 'DHL, Dubai, Marina Walk, Tower 4, apt 1205', tracking: 'DHL-5829471', payment: 'Stripe, карта *8821', comment: 'Gift wrapping requested', created: '21.03.2026 09:40', updated: '21.03.2026 15:10' },
+    { num: 4515, date: '21.03.2026', dateSort: 20260321, time: '12:00', client: 'Кузнецова Ирина', items: [
+      { name: 'Брюки школьные Alessandro Borelli р.140', price: '3 800' },
+      { name: 'Брюки школьные Alessandro Borelli р.146', price: '3 800' }
+    ], amount: 7600, channel: 'Ozon', status: 'Доставлен', delivery: 'Ozon доставка, Москва', tracking: 'OZ-7382945', payment: 'Ozon карта', comment: 'На двоих детей', created: '21.03.2026 06:15', updated: '21.03.2026 12:00' },
+    { num: 4514, date: '20.03.2026', dateSort: 20260320, time: '20:10', client: 'Попова Анастасия', items: [
+      { name: 'Худи Alessandro Borelli р.158', price: '5 600' },
+      { name: 'Джоггеры Alessandro Borelli р.158', price: '4 200' },
+      { name: 'Шапка бини р.56', price: '2 900' }
+    ], amount: 12700, channel: 'alessandroborelli.ru', status: 'Доставлен', delivery: 'СДЭК, Москва, ул. Арбат 20, кв. 5', tracking: 'SDEK-2846203', payment: 'Cloudpayments, карта *1156', comment: '', created: '20.03.2026 14:30', updated: '20.03.2026 20:10' },
+    { num: 4513, date: '20.03.2026', dateSort: 20260320, time: '18:00', client: 'Егоров Максим', items: [
+      { name: 'Кроссовки Alessandro Borelli р.36', price: '6 900' },
+      { name: 'Носки спортивные 3 пары', price: '1 500' }
+    ], amount: 8400, channel: 'WB', status: 'В обработке', delivery: 'WB пункт выдачи, Казань', tracking: '', payment: 'WB кошелёк', comment: '', created: '20.03.2026 15:20', updated: '20.03.2026 18:00' },
+    { num: 4512, date: '20.03.2026', dateSort: 20260320, time: '14:30', client: 'Михайлова Юлия', items: [
+      { name: 'Платье вечернее Alessandro Borelli р.134', price: '9 200' }
+    ], amount: 9200, channel: 'alessandroborelli.ru', status: 'Отправлен', delivery: 'СДЭК, Санкт-Петербург, Лиговский пр. 44, кв. 18', tracking: 'SDEK-2846115', payment: 'Cloudpayments, SBP', comment: 'На выпускной', created: '20.03.2026 09:00', updated: '20.03.2026 14:30' },
+    { num: 4511, date: '19.03.2026', dateSort: 20260319, time: '21:00', client: 'Андреева Светлана', items: [
+      { name: 'Куртка зимняя Alessandro Borelli р.152', price: '9 400' },
+      { name: 'Шарф Alessandro Borelli', price: '3 100' }
+    ], amount: 12500, channel: 'alessandroborelli.ru', status: 'Доставлен', delivery: 'Самовывоз, ТРЦ Европейский', tracking: '', payment: 'Cloudpayments, карта *6743', comment: '', created: '19.03.2026 16:00', updated: '19.03.2026 21:00' },
+    { num: 4510, date: '19.03.2026', dateSort: 20260319, time: '17:45', client: 'Фёдоров Артём', items: [
+      { name: 'Рюкзак Sprayground Money Bear', price: '12 400' }
+    ], amount: 12400, channel: 'Ozon', status: 'Возврат', delivery: 'Ozon доставка, Москва', tracking: 'OZ-7381562', payment: 'Ozon карта', comment: 'Дефект молнии', created: '19.03.2026 10:30', updated: '19.03.2026 17:45' },
+    { num: 4509, date: '19.03.2026', dateSort: 20260319, time: '15:30', client: 'Белова Екатерина', items: [
+      { name: 'Платье Alessandro Borelli р.122', price: '6 200' },
+      { name: 'Болеро Alessandro Borelli р.122', price: '3 800' }
+    ], amount: 10000, channel: 'alessandroborelli.ru', status: 'Доставлен', delivery: 'СДЭК, Краснодар, ул. Красная 176, кв. 34', tracking: 'SDEK-2845891', payment: 'Cloudpayments, карта *4478', comment: 'На утренник', created: '19.03.2026 08:20', updated: '19.03.2026 15:30' },
+    { num: 4508, date: '18.03.2026', dateSort: 20260318, time: '19:50', client: 'Al-Maktoum Sara', items: [
+      { name: 'Jacket Alessandro Borelli р.140', price: '9 800' },
+      { name: 'Trousers Alessandro Borelli р.140', price: '4 600' },
+      { name: 'Shirt white Alessandro Borelli р.140', price: '3 200' }
+    ], amount: 17600, channel: 'Dubai', status: 'В обработке', delivery: 'DHL, Dubai, JBR, Amwaj 3, apt 2104', tracking: '', payment: 'Stripe, карта *2209', comment: 'School uniform set', created: '18.03.2026 14:10', updated: '18.03.2026 19:50' },
+    { num: 4507, date: '18.03.2026', dateSort: 20260318, time: '16:20', client: 'Тихонова Валерия', items: [
+      { name: 'Худи Alessandro Borelli р.134', price: '4 800' }
+    ], amount: 4800, channel: 'WB', status: 'Доставлен', delivery: 'WB пункт выдачи, Москва, Тверская 18', tracking: 'WB-98369102', payment: 'WB кошелёк', comment: '', created: '18.03.2026 08:00', updated: '18.03.2026 16:20' },
+    { num: 4506, date: '18.03.2026', dateSort: 20260318, time: '13:40', client: 'Григорьева Полина', items: [
+      { name: 'Куртка демисезонная Alessandro Borelli р.128', price: '6 800' },
+      { name: 'Шапка Alessandro Borelli р.52', price: '2 600' }
+    ], amount: 9400, channel: 'imperiya-detstva.ru', status: 'Отправлен', delivery: 'Почта России, Новосибирск, ул. Ленина 22, кв. 76', tracking: 'PR-1846734', payment: 'Cloudpayments, карта *7756', comment: 'Демисезон на весну', created: '18.03.2026 07:30', updated: '18.03.2026 13:40' },
+    { num: 4505, date: '18.03.2026', dateSort: 20260318, time: '10:15', client: 'Романова Алиса', items: [
+      { name: 'Рюкзак Sprayground Camo', price: '10 600' },
+      { name: 'Бейсболка Sprayground', price: '3 400' },
+      { name: 'Пенал Sprayground', price: '3 200' }
+    ], amount: 17200, channel: 'alessandroborelli.ru', status: 'В обработке', delivery: 'СДЭК, Москва, Кутузовский пр. 30, кв. 45', tracking: '', payment: 'Cloudpayments, SBP', comment: 'Коллекция Sprayground', created: '18.03.2026 10:15', updated: '18.03.2026 10:15' },
+    { num: 4504, date: '17.03.2026', dateSort: 20260317, time: '20:30', client: 'Орлова Виктория', items: [
+      { name: 'Брюки школьные Alessandro Borelli р.152', price: '4 200' },
+      { name: 'Жилет школьный Alessandro Borelli р.152', price: '3 600' }
+    ], amount: 7800, channel: 'Ozon', status: 'Доставлен', delivery: 'Ozon доставка, Сочи', tracking: 'OZ-7380221', payment: 'Ozon карта', comment: '', created: '17.03.2026 13:00', updated: '17.03.2026 20:30' },
+    { num: 4503, date: '17.03.2026', dateSort: 20260317, time: '17:00', client: 'Зайцев Никита', items: [
+      { name: 'Куртка Alessandro Borelli р.164', price: '9 800' }
+    ], amount: 9800, channel: 'WB', status: 'Отправлен', delivery: 'WB пункт выдачи, Санкт-Петербург', tracking: 'WB-98367543', payment: 'WB кошелёк', comment: 'Подростковый размер', created: '17.03.2026 09:15', updated: '17.03.2026 17:00' },
+    { num: 4502, date: '17.03.2026', dateSort: 20260317, time: '14:20', client: 'Макарова Ксения', items: [
+      { name: 'Платье Alessandro Borelli р.116', price: '5 800' },
+      { name: 'Туфли Alessandro Borelli р.30', price: '4 900' }
+    ], amount: 10700, channel: 'alessandroborelli.ru', status: 'Возврат', delivery: 'Самовывоз, ТРЦ Океания', tracking: '', payment: 'Cloudpayments, карта *8834', comment: 'Обмен размера туфель на р.31', created: '17.03.2026 10:45', updated: '17.03.2026 14:20' },
+    { num: 4501, date: '17.03.2026', dateSort: 20260317, time: '11:00', client: 'Крылова Марина', items: [
+      { name: 'Куртка зимняя Alessandro Borelli р.122', price: '7 800' },
+      { name: 'Полукомбинезон Alessandro Borelli р.122', price: '5 400' },
+      { name: 'Шапка+шарф комплект р.50', price: '4 200' },
+      { name: 'Варежки р.4', price: '1 500' }
+    ], amount: 18900, channel: 'alessandroborelli.ru', status: 'Доставлен', delivery: 'СДЭК, Москва, Ленинский пр. 72, кв. 201', tracking: 'SDEK-2845102', payment: 'Cloudpayments, карта *3391', comment: 'Зимний комплект на следующий сезон (распродажа)', created: '17.03.2026 07:00', updated: '17.03.2026 11:00' }
+  ];
+
+  function getChannelBadge(channel) {
+    var map = {
+      'alessandroborelli.ru': { cls: 'ch-site', label: 'Сайт' },
+      'WB': { cls: 'ch-wb', label: 'WB' },
+      'Ozon': { cls: 'ch-ozon', label: 'Ozon' },
+      'imperiya-detstva.ru': { cls: 'ch-id', label: 'ИД' },
+      'Dubai': { cls: 'ch-dubai', label: 'Dubai' }
+    };
+    var ch = map[channel] || { cls: '', label: channel };
+    return '<span class="ch-badge ' + ch.cls + '">' + ch.label + '</span>';
+  }
+
+  function getStatusBadge(status) {
+    var map = {
+      'Новый': 'st-new',
+      'В обработке': 'st-processing',
+      'Отправлен': 'st-shipped',
+      'Доставлен': 'st-delivered',
+      'Возврат': 'st-return'
+    };
+    return '<span class="st-badge ' + (map[status] || '') + '">' + status + '</span>';
+  }
+
+  function formatAmount(amount) {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' \u20BD';
+  }
+
+  function getItemsText(items) {
+    return items.length + ' ' + (items.length === 1 ? 'товар' : (items.length < 5 ? 'товара' : 'товаров'));
+  }
+
+  function buildOrderRow(order) {
+    var itemsHtml = order.items.map(function(item) {
+      return '<span class="item-line">' + item.name + ' \u2014 ' + item.price + ' \u20BD</span>';
+    }).join('');
+
+    var trackingLine = order.tracking ? '<div><strong>Трекинг:</strong> ' + order.tracking + '</div>' : '';
+    var commentLine = order.comment ? '<div><strong>Комментарий:</strong> ' + order.comment + '</div>' : '';
+
+    return '<div class="order-row" onclick="toggleOrderRow(this)">' +
+      '<div class="order-row-header">' +
+        '<span class="order-row-num">#' + order.num + '</span>' +
+        '<span class="order-row-date">' + order.date + '</span>' +
+        '<span class="order-row-client">' + order.client + '</span>' +
+        '<span class="order-row-items">' + getItemsText(order.items) + '</span>' +
+        '<span class="order-row-amount">' + formatAmount(order.amount) + '</span>' +
+        '<span>' + getChannelBadge(order.channel) + '</span>' +
+        '<span>' + getStatusBadge(order.status) + '</span>' +
+      '</div>' +
+      '<div class="order-row-mobile">' +
+        '<div class="order-mobile-top">' +
+          '<span class="order-mobile-num-date">#' + order.num + '<span>\u00B7 ' + order.date + '</span></span>' +
+          getStatusBadge(order.status) +
+        '</div>' +
+        '<div class="order-mobile-client">' + order.client + '</div>' +
+        '<div class="order-mobile-bottom">' +
+          '<span class="order-mobile-items-amount">' + getItemsText(order.items) + ' \u00B7 <strong>' + formatAmount(order.amount) + '</strong></span>' +
+          getChannelBadge(order.channel) +
+        '</div>' +
+      '</div>' +
+      '<div class="order-row-detail">' +
+        '<div class="order-detail-inner">' +
+          '<div class="order-detail-section"><strong>Товары:</strong>' + itemsHtml + '</div>' +
+          '<div class="order-detail-section"><strong>Доставка:</strong> ' + order.delivery + '</div>' +
+          trackingLine +
+          '<div class="order-detail-section"><strong>Оплата:</strong> ' + order.payment + '</div>' +
+          commentLine +
+          '<div class="order-detail-timestamps">Создан: ' + order.created + ' \u00B7 Обновлён: ' + order.updated + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function getFilteredOrders() {
+    var searchVal = (document.getElementById('ordersSearchInput') ? document.getElementById('ordersSearchInput').value : '').toLowerCase();
+    var statusVal = document.getElementById('ordersStatusFilter') ? document.getElementById('ordersStatusFilter').value : 'all';
+    var channelVal = document.getElementById('ordersChannelFilter') ? document.getElementById('ordersChannelFilter').value : 'all';
+    var sortVal = document.getElementById('ordersSortSelect') ? document.getElementById('ordersSortSelect').value : 'date-desc';
+
+    var filtered = ordersData.slice();
+
+    // Search filter
+    if (searchVal) {
+      filtered = filtered.filter(function(o) {
+        return ('#' + o.num).toLowerCase().indexOf(searchVal) !== -1 ||
+               o.num.toString().indexOf(searchVal) !== -1 ||
+               o.client.toLowerCase().indexOf(searchVal) !== -1;
+      });
+    }
+
+    // Status filter
+    if (statusVal !== 'all') {
+      filtered = filtered.filter(function(o) { return o.status === statusVal; });
+    }
+
+    // Channel filter
+    if (channelVal !== 'all') {
+      filtered = filtered.filter(function(o) { return o.channel === channelVal; });
+    }
+
+    // Sort
+    if (sortVal === 'date-desc') {
+      filtered.sort(function(a, b) { return b.dateSort - a.dateSort || b.num - a.num; });
+    } else if (sortVal === 'date-asc') {
+      filtered.sort(function(a, b) { return a.dateSort - b.dateSort || a.num - b.num; });
+    } else if (sortVal === 'amount-desc') {
+      filtered.sort(function(a, b) { return b.amount - a.amount; });
+    } else if (sortVal === 'amount-asc') {
+      filtered.sort(function(a, b) { return a.amount - b.amount; });
+    } else if (sortVal === 'status') {
+      var statusOrder = { 'Новый': 0, 'В обработке': 1, 'Отправлен': 2, 'Доставлен': 3, 'Возврат': 4 };
+      filtered.sort(function(a, b) { return (statusOrder[a.status] || 0) - (statusOrder[b.status] || 0); });
+    }
+
+    return filtered;
+  }
+
+  function renderOrders(filtered, page) {
+    var container = document.getElementById('orderCardsContainer');
+    if (!container) return;
+
+    var totalFiltered = filtered.length;
+    var totalPages = Math.ceil(totalFiltered / ordersPerPage) || 1;
+    if (page > totalPages) page = totalPages;
+    if (page < 1) page = 1;
+    ordersCurrentPage = page;
+
+    var start = (page - 1) * ordersPerPage;
+    var pageItems = filtered.slice(start, start + ordersPerPage);
+
+    if (pageItems.length === 0) {
+      container.innerHTML = '<div class="order-no-results">Нет заказов, соответствующих фильтрам</div>';
+    } else {
+      container.innerHTML = pageItems.map(buildOrderRow).join('');
+    }
+
+    // Update count label
+    var label = document.getElementById('ordersCountLabel');
+    if (label) label.textContent = 'Показано ' + totalFiltered + ' из ' + ordersData.length + ' заказов';
+
+    // Render pagination
+    renderOrdersPagination(totalPages, page);
+  }
+
+  function renderOrdersPagination(totalPages, currentPage) {
+    var container = document.getElementById('ordersPagination');
+    if (!container) return;
+
+    if (totalPages <= 1) {
+      container.innerHTML = '';
+      return;
+    }
+
+    var html = '<button ' + (currentPage <= 1 ? 'disabled' : 'onclick="goToOrdersPage(' + (currentPage - 1) + ')"') + '>\u2190</button>';
+    for (var i = 1; i <= totalPages; i++) {
+      html += '<button class="' + (i === currentPage ? 'active' : '') + '" onclick="goToOrdersPage(' + i + ')">' + i + '</button>';
+    }
+    html += '<button ' + (currentPage >= totalPages ? 'disabled' : 'onclick="goToOrdersPage(' + (currentPage + 1) + ')"') + '>\u2192</button>';
+    container.innerHTML = html;
+  }
+
+  window.goToOrdersPage = function(page) {
+    var filtered = getFilteredOrders();
+    renderOrders(filtered, page);
+    // Scroll to top of orders list
+    var list = document.querySelector('.order-list-container');
+    if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  window.filterOrders = function() {
+    ordersCurrentPage = 1;
+    var filtered = getFilteredOrders();
+    renderOrders(filtered, 1);
+  };
+
+  window.sortOrdersBy = function(field) {
+    var select = document.getElementById('ordersSortSelect');
+    if (!select) return;
+
+    var currentVal = select.value;
+    var newVal;
+    if (field === 'date') {
+      newVal = currentVal === 'date-desc' ? 'date-asc' : 'date-desc';
+    } else if (field === 'amount') {
+      newVal = currentVal === 'amount-desc' ? 'amount-asc' : 'amount-desc';
+    } else if (field === 'status') {
+      newVal = 'status';
+    } else if (field === 'num') {
+      newVal = currentVal === 'date-desc' ? 'date-asc' : 'date-desc';
+    } else if (field === 'client') {
+      newVal = currentVal === 'date-desc' ? 'date-asc' : 'date-desc';
+    }
+    select.value = newVal;
+    filterOrders();
+  };
+
+  window.toggleOrderRow = function(row) {
+    var wasExpanded = row.classList.contains('expanded');
+    document.querySelectorAll('.scr-orders .order-row.expanded').forEach(function(c) { c.classList.remove('expanded'); });
+    if (!wasExpanded) row.classList.add('expanded');
+  };
+
+  function updateOrdersKpi(data) {
+    if (!data) return;
+    var el;
+    el = document.getElementById('ordersKpiTotal');
+    if (el) animateValue(el, data.total);
+    el = document.getElementById('ordersKpiRevenue');
+    if (el) animateValue(el, data.revenue + ' \u20BD');
+    el = document.getElementById('ordersKpiCheck');
+    if (el) animateValue(el, data.check + ' \u20BD');
+    el = document.getElementById('ordersKpiReturns');
+    if (el) animateValue(el, data.returns);
+
+    // Update trends
+    var trendEl;
+    trendEl = document.getElementById('ordersKpiTotalTrend');
+    if (trendEl) { trendEl.textContent = data.totalTrend; trendEl.className = 'orders-kpi-trend ' + (data.totalUp ? 'up' : 'down'); }
+    trendEl = document.getElementById('ordersKpiRevTrend');
+    if (trendEl) { trendEl.textContent = data.revTrend; trendEl.className = 'orders-kpi-trend ' + (data.revUp ? 'up' : 'down'); }
+    trendEl = document.getElementById('ordersKpiCheckTrend');
+    if (trendEl) { trendEl.textContent = data.checkTrend; trendEl.className = 'orders-kpi-trend ' + (data.checkUp ? 'up' : 'down'); }
+    trendEl = document.getElementById('ordersKpiReturnsTrend');
+    if (trendEl) { trendEl.textContent = data.returnsTrend; trendEl.className = 'orders-kpi-trend ' + (data.returnsUp ? 'down' : 'good'); }
+  }
+
+  function initOrdersScreen() {
+    if (ordersInitialized) return;
+    ordersInitialized = true;
+    // Adjust per page based on screen size
+    ordersPerPage = window.innerWidth <= 768 ? 10 : 15;
+    var filtered = getFilteredOrders();
+    renderOrders(filtered, 1);
   }
 
   /* ── Init ── */
