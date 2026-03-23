@@ -377,6 +377,13 @@ body {
   padding: 12px;
   flex-shrink: 0;
   overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar.collapsed .sidebar-footer {
+  align-items: center;
+  padding: 8px;
+  gap: 8px;
 }
 .sidebar-toggle {
   display: flex; align-items: center; justify-content: center;
@@ -388,6 +395,7 @@ body {
   transition: all 150ms;
   border: none; background: none; width: 100%;
   white-space: nowrap;
+  order: 2;
 }
 .sidebar-toggle:hover { color: var(--n300); background: rgba(255,255,255,.04); }
 .sidebar-toggle svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; flex-shrink: 0; transition: transform 300ms var(--ease-out); }
@@ -403,6 +411,7 @@ body {
   cursor: pointer;
   transition: background 150ms;
   overflow: hidden;
+  order: 1;
 }
 .sidebar-user:hover { background: rgba(255,255,255,.04); }
 .sidebar-user .user-avatar {
@@ -414,15 +423,16 @@ body {
   border: 2px solid var(--brand-gold);
 }
 .sidebar-user .user-info { white-space: nowrap; transition: opacity 200ms; }
-.sidebar.collapsed .sidebar-user .user-info { opacity: 0; }
+.sidebar.collapsed .sidebar-user .user-info { opacity: 0; width: 0; overflow: hidden; position: absolute; }
 .sidebar-user .user-name { font-size: 13px; color: var(--n200); font-weight: 500; }
 .sidebar-user .user-role { font-size: 10px; color: var(--n500); }
 
 /* Collapsed sidebar: center avatar, hide text */
 .sidebar.collapsed .sidebar-user {
   justify-content: center;
-  padding: 12px 0;
+  padding: 8px 0;
   overflow: visible;
+  margin-top: 0;
 }
 .sidebar.collapsed .sidebar-user .user-avatar {
   margin: 0;
@@ -437,6 +447,7 @@ body {
   opacity: .7;
   white-space: nowrap;
   transition: opacity 200ms;
+  order: 3;
 }
 .sidebar.collapsed .sidebar-updated { opacity: 0; height: 0; padding: 0; overflow: hidden; }
 
@@ -1628,7 +1639,7 @@ table tbody td.amount {
 }
 .scr-channels .channel-list-header {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr 0.8fr 0.8fr;
+  grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr 0.8fr 0.8fr 28px;
   gap: 0;
   padding: 10px 20px;
   background: var(--bg);
@@ -1638,7 +1649,7 @@ table tbody td.amount {
   z-index: 2;
 }
 .scr-channels .channel-list-header span {
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -1667,14 +1678,16 @@ table tbody td.amount {
 }
 .scr-channels .channel-row:last-child { border-bottom: none; }
 .scr-channels .channel-row:hover { background: var(--table-row-hover); }
-.scr-channels .channel-row[data-status="green"] { border-left-color: var(--success); }
-.scr-channels .channel-row[data-status="red"] { border-left-color: var(--danger); }
-.scr-channels .channel-row[data-status="gold"] { border-left-color: var(--brand-gold); }
+.scr-channels .channel-row[data-status="green"] { border-left-color: var(--success); border-left-width: 4px; }
+.scr-channels .channel-row[data-status="red"] { border-left-color: var(--danger); border-left-width: 4px; }
+.scr-channels .channel-row[data-status="red"]:hover { background: var(--danger-light); }
+.scr-channels .channel-row[data-status="gold"] { border-left-color: var(--brand-gold); border-left-width: 4px; }
+[data-theme="dark"] .scr-channels .channel-row[data-status="red"]:hover { background: rgba(239,68,68,.06); }
 
 /* Row header (collapsed view) */
 .scr-channels .channel-row-header {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr 0.8fr 0.8fr;
+  grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr 0.8fr 0.8fr 28px;
   gap: 0;
   padding: 14px 20px;
   align-items: center;
@@ -1686,7 +1699,7 @@ table tbody td.amount {
   min-width: 0;
 }
 .scr-channels .channel-row-name .name {
-  font-family: var(--f-display);
+  font-family: var(--f-body);
   font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
@@ -1695,12 +1708,14 @@ table tbody td.amount {
   text-overflow: ellipsis;
 }
 .scr-channels .channel-row-name .ch-type {
-  font-size: 12px;
+  font-family: var(--f-body);
+  font-size: 13px;
+  font-weight: 400;
   color: var(--text-secondary);
 }
 .scr-channels .channel-row-cell {
   font-family: var(--f-mono);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
@@ -1719,6 +1734,25 @@ table tbody td.amount {
 .scr-channels .channel-row-label { display: none; }
 .scr-channels .channel-row-mobile-metrics { display: none; }
 .scr-channels .mobile-ch-status { display: none; }
+
+/* Chevron expand indicator */
+.scr-channels .ch-row-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: transform 200ms var(--ease-out), color 150ms;
+  user-select: none;
+  flex-shrink: 0;
+}
+.scr-channels .channel-row:hover .ch-row-chevron {
+  color: var(--text-secondary);
+}
+.scr-channels .channel-row.expanded .ch-row-chevron {
+  transform: rotate(90deg);
+  color: var(--brand-gold);
+}
 
 /* Expanded detail */
 .scr-channels .channel-row-detail {
@@ -1778,64 +1812,6 @@ table tbody td.amount {
   border-color: rgba(245,158,11,.2);
 }
 
-/* Comparison table */
-.scr-channels .ch-compare-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  margin-bottom: 24px;
-}
-.scr-channels .ch-compare-title {
-  font-family: var(--f-display);
-  font-size: 18px;
-  color: var(--text-primary);
-  padding: 16px 20px 12px;
-  border-bottom: 1px solid var(--separator);
-}
-.scr-channels .ch-compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-.scr-channels .ch-compare-table thead th {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 10px 16px;
-  text-align: left;
-  background: var(--bg);
-  border-bottom: 1px solid var(--card-border);
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-  transition: color 150ms;
-}
-.scr-channels .ch-compare-table thead th:hover {
-  color: var(--text-primary);
-}
-.scr-channels .ch-compare-table thead th.sorted {
-  color: var(--brand-gold);
-}
-.scr-channels .ch-compare-table tbody td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--separator);
-  color: var(--text-primary);
-  font-family: var(--f-mono);
-  font-weight: 500;
-  white-space: nowrap;
-}
-.scr-channels .ch-compare-table tbody td:first-child {
-  font-family: var(--f-body);
-  font-weight: 600;
-}
-.scr-channels .ch-compare-table tbody tr:last-child td { border-bottom: none; }
-.scr-channels .ch-compare-table tbody tr:hover { background: var(--table-row-hover); }
-.scr-channels .ch-compare-table .td-green { color: var(--success); font-weight: 600; }
-.scr-channels .ch-compare-table .td-red { color: var(--danger); font-weight: 600; }
-
 /* Insight card */
 .scr-channels .ch-insight-card {
   background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-gold-hover) 100%);
@@ -1885,6 +1861,7 @@ table tbody td.amount {
     margin-left: 4px;
   }
   .scr-channels .channel-row-cell { display: none; }
+  .scr-channels .ch-row-chevron { display: none; }
   .scr-channels .channel-row-mobile-metrics {
     display: flex;
     flex-direction: column;
@@ -1914,38 +1891,6 @@ table tbody td.amount {
   .scr-channels .channel-detail-inner { padding: 14px 16px; }
   .scr-channels .channel-detail-metrics { gap: 4px 16px; font-size: 12px; }
 
-  /* Comparison table → card view on mobile */
-  .scr-channels .ch-compare-table thead { display: none; }
-  .scr-channels .ch-compare-table,
-  .scr-channels .ch-compare-table tbody,
-  .scr-channels .ch-compare-table tr,
-  .scr-channels .ch-compare-table td { display: block; }
-  .scr-channels .ch-compare-table tr {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--separator);
-  }
-  .scr-channels .ch-compare-table tr:last-child { border-bottom: none; }
-  .scr-channels .ch-compare-table td {
-    padding: 3px 0;
-    border-bottom: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .scr-channels .ch-compare-table td::before {
-    content: attr(data-label);
-    font-family: var(--f-body);
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .scr-channels .ch-compare-table td:first-child {
-    font-size: 14px;
-    padding-bottom: 4px;
-  }
-  .scr-channels .ch-compare-table td:first-child::before { content: none; }
 }
 
 @media (max-width: 380px) {
@@ -3743,27 +3688,9 @@ table tbody td.amount {
             <span data-sort="margin">Маржа</span>
             <span data-sort="status">Статус</span>
             <span data-sort="trend">Тренд</span>
+            <span></span>
           </div>
           <div id="channelCardsContainer"></div>
-        </div>
-
-        <!-- Comparison table -->
-        <div class="ch-compare-card">
-          <div class="ch-compare-title">Сравнение каналов</div>
-          <table class="ch-compare-table" id="chCompareTable">
-            <thead>
-              <tr>
-                <th data-col="name">Канал</th>
-                <th data-col="revenue">Выручка/мес</th>
-                <th data-col="orders">Заказы</th>
-                <th data-col="check">Ср.чек</th>
-                <th data-col="commission">Комиссия</th>
-                <th data-col="margin">Маржа</th>
-                <th data-col="status">Статус</th>
-              </tr>
-            </thead>
-            <tbody id="chCompareBody"></tbody>
-          </table>
         </div>
 
         <!-- Insight card -->
@@ -5502,6 +5429,7 @@ table tbody td.amount {
         '<span class="channel-row-cell ' + marginCls + '">' + ch.marginDisplay + '</span>' +
         '<span class="channel-row-cell status-cell">' + getStatusIcon(ch.status) + '</span>' +
         '<span class="channel-row-cell trend-cell ' + trendCls + '">' + trendArrow + ch.trend + '</span>' +
+        '<span class="ch-row-chevron">\u25B8</span>' +
         '<div class="channel-row-mobile-metrics">' +
           '<div class="channel-row-mobile-line"><span class="channel-row-label">\u0412\u044B\u0440\u0443\u0447\u043A\u0430</span><span class="channel-row-mobile-value">' + ch.revenueDisplay + '/\u043C\u0435\u0441</span></div>' +
           '<div class="channel-row-mobile-line"><span class="channel-row-label">\u0417\u0430\u043A\u0430\u0437\u044B</span><span class="channel-row-mobile-value">' + ch.orders + '</span></div>' +
@@ -5539,32 +5467,6 @@ table tbody td.amount {
     });
     var container = document.getElementById('channelCardsContainer');
     if (container) container.innerHTML = sorted.map(buildChannelRow).join('');
-  }
-
-  function renderCompareTable() {
-    var body = document.getElementById('chCompareBody');
-    if (!body) return;
-    var compareData = [
-      { name: 'alessandroborelli.ru', revenue: '2.5M', orders: '580', check: '4 300', commission: '3%', margin: '+22%', status: '\uD83D\uDFE2', marginPct: 22 },
-      { name: 'imperiya-detstva.ru', revenue: '1.2M', orders: '310', check: '3 870', commission: '3%', margin: '+18%', status: '\uD83D\uDFE2', marginPct: 18 },
-      { name: 'Wildberries', revenue: '1.8M', orders: '940', check: '1 910', commission: '34.5%', margin: '-2.1%', status: '\uD83D\uDD34', marginPct: -2.1 },
-      { name: 'Ozon', revenue: '0.9M', orders: '380', check: '2 370', commission: '42%', margin: '-8.3%', status: '\uD83D\uDD34', marginPct: -8.3 },
-      { name: '\u041C\u0435\u0436\u0434\u0443\u043D\u0430\u0440\u043E\u0434\u043D\u044B\u0435', revenue: '0.4M', orders: '45', check: '8 500', commission: '15-17%', margin: '+17%', status: '\uD83D\uDFE2', marginPct: 17 }
-    ];
-    var html = '';
-    compareData.forEach(function(r) {
-      var mCls = r.marginPct >= 0 ? 'td-green' : 'td-red';
-      html += '<tr>' +
-        '<td data-label="">' + r.name + '</td>' +
-        '<td data-label="\u0412\u044B\u0440\u0443\u0447\u043A\u0430/\u043C\u0435\u0441">' + r.revenue + '</td>' +
-        '<td data-label="\u0417\u0430\u043A\u0430\u0437\u044B">' + r.orders + '</td>' +
-        '<td data-label="\u0421\u0440.\u0447\u0435\u043A">' + r.check + '</td>' +
-        '<td data-label="\u041A\u043E\u043C\u0438\u0441\u0441\u0438\u044F">' + r.commission + '</td>' +
-        '<td data-label="\u041C\u0430\u0440\u0436\u0430" class="' + mCls + '">' + r.margin + '</td>' +
-        '<td data-label="\u0421\u0442\u0430\u0442\u0443\u0441">' + r.status + '</td>' +
-      '</tr>';
-    });
-    body.innerHTML = html;
   }
 
   window.toggleChannelDetail = function(row) {
@@ -5619,41 +5521,11 @@ table tbody td.amount {
     if (channelsInitialized) return;
     channelsInitialized = true;
     renderChannelCards();
-    renderCompareTable();
 
     // Attach sort handlers to channel list header
     document.querySelectorAll('#channelListHeader span[data-sort]').forEach(function(span) {
       span.addEventListener('click', function() {
         sortChannels(span.getAttribute('data-sort'));
-      });
-    });
-
-    // Attach sort handlers to comparison table headers
-    document.querySelectorAll('#chCompareTable thead th[data-col]').forEach(function(th) {
-      th.addEventListener('click', function() {
-        var col = th.getAttribute('data-col');
-        // Simple inline sort for comparison table
-        var tbody = document.getElementById('chCompareBody');
-        if (!tbody) return;
-        var rows = Array.from(tbody.querySelectorAll('tr'));
-        var asc = th.classList.contains('sorted-asc');
-        document.querySelectorAll('#chCompareTable thead th').forEach(function(t) {
-          t.classList.remove('sorted', 'sorted-asc');
-        });
-        th.classList.add('sorted');
-        if (!asc) th.classList.add('sorted-asc');
-        rows.sort(function(a, b) {
-          var colIdx = Array.from(th.parentNode.children).indexOf(th);
-          var va = a.children[colIdx].textContent.trim();
-          var vb = b.children[colIdx].textContent.trim();
-          var na = parseFloat(va.replace(/[^\d.\-]/g, ''));
-          var nb = parseFloat(vb.replace(/[^\d.\-]/g, ''));
-          if (!isNaN(na) && !isNaN(nb)) {
-            return asc ? nb - na : na - nb;
-          }
-          return asc ? vb.localeCompare(va) : va.localeCompare(vb);
-        });
-        rows.forEach(function(r) { tbody.appendChild(r); });
       });
     });
   }
