@@ -281,8 +281,30 @@ body {
   white-space: nowrap;
   border-left: 2px solid transparent;
 }
-/* No chevron ::after — reserved for tooltip in collapsed mode */
+/* No chevron ::after */
 .nav-item::after { content: none; }
+
+/* Tooltip element (added by JS when sidebar collapsed) */
+.nav-tooltip {
+  position: fixed;
+  background: #292524;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: var(--f-body);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  opacity: 0;
+  transition: opacity 100ms;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.nav-tooltip.visible {
+  opacity: 1;
+}
 
 .nav-item:hover { color: var(--n200); background: rgba(255,255,255,.04); }
 .nav-item.active {
@@ -324,36 +346,7 @@ body {
 .sidebar.collapsed .nav-item {
   position: relative;
 }
-.sidebar.collapsed .nav-item::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 68px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #292524;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 80ms;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  font-family: var(--f-body);
-  letter-spacing: 0;
-  text-transform: none;
-  /* Reset any inherited ::after properties */
-  width: auto;
-  height: auto;
-  border: none;
-  animation: none;
-}
-.sidebar.collapsed .nav-item:hover::after {
-  opacity: 1;
-  transition-delay: 0ms;
-}
+/* Tooltips handled by JS nav-tooltip element, not ::after */
 
 .nav-badge {
   margin-left: auto;
@@ -5553,6 +5546,32 @@ table tbody td.amount {
 
   /* ── Init ── */
   initTheme();
+
+  /* ── Sidebar Tooltips (JS-based, reliable) ── */
+  (function() {
+    var tip = document.createElement('div');
+    tip.className = 'nav-tooltip';
+    document.body.appendChild(tip);
+
+    document.querySelectorAll('.nav-item[data-tooltip]').forEach(function(item) {
+      item.addEventListener('mouseenter', function(e) {
+        var sidebar = document.querySelector('.sidebar');
+        if (!sidebar || !sidebar.classList.contains('collapsed')) return;
+        if (window.innerWidth <= 768) return;
+        var text = item.getAttribute('data-tooltip');
+        if (!text) return;
+        tip.textContent = text;
+        var rect = item.getBoundingClientRect();
+        tip.style.top = (rect.top + rect.height / 2) + 'px';
+        tip.style.left = (rect.right + 12) + 'px';
+        tip.style.transform = 'translateY(-50%)';
+        tip.classList.add('visible');
+      });
+      item.addEventListener('mouseleave', function() {
+        tip.classList.remove('visible');
+      });
+    });
+  })();
 
   document.addEventListener('DOMContentLoaded', function() {
     animateCountUp();
