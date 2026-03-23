@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1C1917">
 <title>BORELLI — Панель управления</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,6 +63,16 @@
   --sidebar-w: 240px;
   --sidebar-collapsed: 64px;
   --topbar-h: 64px;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 2px;
+}
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
 }
 
 html { font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -234,12 +245,14 @@ body {
 
 /* Mobile sidebar overlay */
 .sidebar-overlay {
-  display: none; position: fixed; inset: 0;
+  position: fixed; inset: 0;
   background: rgba(0,0,0,.5);
   z-index: 39;
-  opacity: 0; transition: opacity 300ms;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms;
 }
-.sidebar-overlay.active { display: block; opacity: 1; }
+.sidebar-overlay.active { opacity: 1; pointer-events: auto; }
 
 /* ============================================================
    MAIN LAYOUT
@@ -342,7 +355,7 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
    ============================================================ */
 .content {
   flex: 1;
-  padding: 28px 32px 120px;
+  padding: 28px 32px 48px;
   max-width: 1280px;
   margin: 0 auto;
   width: 100%;
@@ -376,8 +389,7 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
 .kpi-card:nth-child(4) { animation-delay: 260ms; }
 @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
 
-.kpi-card:hover { border-color: var(--n300); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.kpi-card:hover { animation: none; opacity: 1; }
+.kpi-card:hover { border-color: var(--n300); box-shadow: var(--shadow-md); transform: translateY(-2px); animation: none; opacity: 1; }
 
 .kpi-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -425,7 +437,7 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
 .kpi-prev span { font-family: var(--f-mono); font-weight: 500; color: var(--n500); }
 
 /* Sparkline animation */
-.spark-line { stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawLine 1.2s var(--ease-out) forwards; }
+.spark-line { stroke-dasharray: 600; stroke-dashoffset: 600; animation: drawLine 1.2s var(--ease-out) forwards; }
 .kpi-card:nth-child(1) .spark-line { animation-delay: 300ms; }
 .kpi-card:nth-child(2) .spark-line { animation-delay: 400ms; }
 .kpi-card:nth-child(3) .spark-line { animation-delay: 500ms; }
@@ -491,9 +503,7 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   font-size: 10px; font-weight: 600;
   padding: 2px 8px;
   border-radius: var(--r-full);
-  animation: pulse-badge 2s infinite;
 }
-@keyframes pulse-badge { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
 .channel-values {
   display: flex; align-items: baseline; gap: 8px;
 }
@@ -532,7 +542,11 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
 /* ============================================================
    ORDERS TABLE
    ============================================================ */
-.table-wrap { overflow-x: auto; }
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -676,8 +690,8 @@ table tbody td.amount {
 .bottom-bar {
   display: none;
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 56px;
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  height: auto;
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0));
   background: #fff;
   border-top: 1px solid var(--n200);
   box-shadow: 0 -4px 12px rgba(0,0,0,.05);
@@ -729,11 +743,10 @@ table tbody td.amount {
   .sidebar.collapsed .logo-text,
   .sidebar.collapsed .nav-item .nav-label,
   .sidebar.collapsed .sidebar-toggle span,
-  .sidebar.collapsed .sidebar-user .user-info,
-  .sidebar.collapsed .nav-section,
+  .sidebar.collapsed .sidebar-user .user-info { opacity: 1; }
+  .sidebar.collapsed .nav-section { opacity: 1; display: block; height: auto; padding: 16px 20px 6px; }
   .sidebar.collapsed .nav-badge,
-  .sidebar.collapsed .nav-dot { opacity: 1; display: flex; height: auto; padding-top: 16px; }
-  .sidebar.collapsed .nav-section { padding: 16px 20px 6px; }
+  .sidebar.collapsed .nav-dot { display: flex; }
   .sidebar.collapsed .nav-item { justify-content: flex-start; padding: 9px 20px; }
 
   .main { margin-left: 0 !important; }
@@ -745,9 +758,9 @@ table tbody td.amount {
   .topbar-title { font-size: 18px; }
 
   .topbar-center {
-    position: absolute;
+    position: fixed;
+    top: 52px;
     left: 0; right: 0;
-    bottom: -44px;
     padding: 8px 16px;
     background: rgba(250,250,249,.92);
     backdrop-filter: blur(12px);
@@ -760,7 +773,6 @@ table tbody td.amount {
     scrollbar-width: none;
   }
   .topbar-center::-webkit-scrollbar { display: none; }
-  .topbar { position: relative; }
 
   .content { padding: 60px 16px 100px; }
 
@@ -775,6 +787,15 @@ table tbody td.amount {
   .bottom-bar { display: flex; }
 
   .sidebar-toggle { display: none; }
+}
+
+/* Touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  .period-pill:active { transform: scale(0.96); }
+  .nav-item:active { background: rgba(255,255,255,.08); }
+  .bottom-tab:active { transform: scale(0.92); }
+  .kpi-card:active { transform: scale(0.98); }
+  .insight-card:active { transform: translateX(4px); }
 }
 
 @media (max-width: 380px) {
@@ -939,7 +960,7 @@ table tbody td.amount {
               +12.3%
             </div>
           </div>
-          <div class="kpi-value" data-target="61400000" data-suffix="M" data-divider="1000000" data-prefix="₽">₽0M</div>
+          <div class="kpi-value" data-target="61400000" data-suffix="M ₽" data-divider="1000000" data-prefix="">0M ₽</div>
           <div class="kpi-sparkline">
             <svg viewBox="0 0 200 32" preserveAspectRatio="none">
               <defs>
@@ -999,7 +1020,7 @@ table tbody td.amount {
               +3.4%
             </div>
           </div>
-          <div class="kpi-value" data-target="49200" data-suffix="₽" data-divider="1" data-prefix="">0₽</div>
+          <div class="kpi-value" data-target="49200" data-suffix=" ₽" data-divider="1" data-prefix="">0 ₽</div>
           <div class="kpi-sparkline">
             <svg viewBox="0 0 200 32" preserveAspectRatio="none">
               <defs>
@@ -1148,7 +1169,7 @@ table tbody td.amount {
               <tbody>
                 <tr>
                   <td class="mono">#4521</td>
-                  <td>23.03</td>
+                  <td class="mono">23.03</td>
                   <td>Иванова А.Н.</td>
                   <td class="amount">49 200 ₽</td>
                   <td><span class="badge badge-purple">WB</span></td>
@@ -1156,7 +1177,7 @@ table tbody td.amount {
                 </tr>
                 <tr>
                   <td class="mono">#4520</td>
-                  <td>23.03</td>
+                  <td class="mono">23.03</td>
                   <td>Петров К.В.</td>
                   <td class="amount">12 400 ₽</td>
                   <td><span class="badge badge-dark-blue">Ozon</span></td>
@@ -1164,7 +1185,7 @@ table tbody td.amount {
                 </tr>
                 <tr>
                   <td class="mono">#4519</td>
-                  <td>22.03</td>
+                  <td class="mono">22.03</td>
                   <td>Сидорова М.А.</td>
                   <td class="amount">8 750 ₽</td>
                   <td><span class="badge badge-green">Сайт</span></td>
@@ -1172,7 +1193,7 @@ table tbody td.amount {
                 </tr>
                 <tr>
                   <td class="mono">#4518</td>
-                  <td>22.03</td>
+                  <td class="mono">22.03</td>
                   <td>Al-Rashid F.</td>
                   <td class="amount">87 500 ₽</td>
                   <td><span class="badge badge-gold">Dubai</span></td>
@@ -1180,7 +1201,7 @@ table tbody td.amount {
                 </tr>
                 <tr>
                   <td class="mono">#4517</td>
-                  <td>22.03</td>
+                  <td class="mono">22.03</td>
                   <td>Козлов П.Д.</td>
                   <td class="amount">5 200 ₽</td>
                   <td><span class="badge badge-purple">WB</span></td>
@@ -1188,7 +1209,7 @@ table tbody td.amount {
                 </tr>
                 <tr>
                   <td class="mono">#4516</td>
-                  <td>21.03</td>
+                  <td class="mono">21.03</td>
                   <td>Михайлова Е.С.</td>
                   <td class="amount">34 600 ₽</td>
                   <td><span class="badge badge-green">Сайт</span></td>
@@ -1196,7 +1217,7 @@ table tbody td.amount {
                 </tr>
                 <tr>
                   <td class="mono">#4515</td>
-                  <td>21.03</td>
+                  <td class="mono">21.03</td>
                   <td>Волкова Н.П.</td>
                   <td class="amount">15 800 ₽</td>
                   <td><span class="badge badge-dark-blue">Ozon</span></td>
@@ -1204,7 +1225,7 @@ table tbody td.amount {
                 </tr>
                 <tr>
                   <td class="mono">#4514</td>
-                  <td>21.03</td>
+                  <td class="mono">21.03</td>
                   <td>Новикова Д.Р.</td>
                   <td class="amount">22 100 ₽</td>
                   <td><span class="badge badge-purple">WB</span></td>
@@ -1393,6 +1414,14 @@ table tbody td.amount {
 
     // Close mobile sidebar
     closeMobileSidebar();
+
+    // Sync bottom bar active state
+    const bottomTabs = document.querySelectorAll('.bottom-tab');
+    const bottomScreenMap = {'overview': 0, 'orders': 1, 'finance': 2, 'ai-advisor': 3};
+    bottomTabs.forEach(t => t.classList.remove('active'));
+    if (screen in bottomScreenMap) {
+      bottomTabs[bottomScreenMap[screen]].classList.add('active');
+    }
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
