@@ -3375,6 +3375,468 @@ table tbody td.amount {
   .scr-infra .infra-uptime-row { flex-wrap: wrap; gap: 4px; }
   .scr-infra .infra-uptime-domain { min-width: 100%; }
 }
+
+/* ============================================================
+   STAFF SCREEN (.scr-staff)
+   ============================================================ */
+#screen-staff {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0;
+  min-height: auto;
+}
+#screen-staff.active { display: block; opacity: 1; transform: none; }
+
+.scr-staff {
+  padding: 24px 0;
+  animation: cardIn 400ms var(--ease-out) forwards;
+}
+
+/* KPI row */
+.scr-staff .staff-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.scr-staff .staff-kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 200ms var(--ease-out);
+}
+.scr-staff .staff-kpi-card:hover {
+  border-color: var(--n300);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.scr-staff .staff-kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.scr-staff .staff-kpi-value {
+  font-family: var(--f-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scr-staff .staff-kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+.scr-staff .staff-kpi-trend.up { color: var(--success); background: var(--success-light); }
+.scr-staff .staff-kpi-trend.down { color: var(--danger); background: var(--danger-light); }
+.scr-staff .staff-kpi-trend.good { color: var(--success); background: var(--success-light); }
+
+/* Group selector pills */
+.scr-staff .staff-group-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  align-items: center;
+}
+.scr-staff .staff-group-pill {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-full);
+  padding: 6px 16px;
+  font-family: var(--f-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 150ms;
+}
+.scr-staff .staff-group-pill:hover {
+  border-color: var(--n300);
+  color: var(--text-primary);
+}
+.scr-staff .staff-group-pill.active {
+  background: var(--brand-gold);
+  border-color: var(--brand-gold);
+  color: #fff;
+}
+
+/* Filter bar */
+.scr-staff .staff-filter-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.scr-staff .staff-search-input {
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+  padding: 8px 12px 8px 36px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: border-color 150ms;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2378716C' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+.scr-staff .staff-search-input::placeholder { color: var(--text-muted); }
+.scr-staff .staff-search-input:hover { border-color: var(--n300); }
+.scr-staff .staff-search-input:focus {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 1px;
+}
+.scr-staff .staff-filter-bar select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  padding: 8px 32px 8px 12px;
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  min-width: 140px;
+  transition: border-color 150ms;
+}
+.scr-staff .staff-filter-bar select:hover { border-color: var(--n300); }
+.scr-staff .staff-filter-bar select:focus {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 1px;
+}
+.scr-staff .staff-count-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-left: auto;
+  font-family: var(--f-mono);
+}
+
+/* Staff list container */
+.scr-staff .staff-list-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+/* Group header */
+.scr-staff .staff-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: var(--n50);
+  border-bottom: 1px solid var(--separator);
+  cursor: pointer;
+  user-select: none;
+  transition: background 120ms;
+}
+.scr-staff .staff-group-header:hover { background: var(--n100); }
+.scr-staff .staff-group-header .group-chevron {
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: transform 200ms;
+  flex-shrink: 0;
+}
+.scr-staff .staff-group-header.collapsed .group-chevron {
+  transform: rotate(-90deg);
+}
+.scr-staff .staff-group-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.scr-staff .staff-group-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--f-mono);
+}
+.scr-staff .staff-group-salary {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--f-mono);
+  margin-left: auto;
+}
+[data-theme="dark"] .scr-staff .staff-group-header {
+  background: var(--n100);
+}
+[data-theme="dark"] .scr-staff .staff-group-header:hover {
+  background: var(--n200);
+}
+
+/* Employee rows inside group */
+.scr-staff .staff-group-body {
+  overflow: hidden;
+  transition: max-height 250ms var(--ease-out);
+}
+.scr-staff .staff-group-header.collapsed + .staff-group-body {
+  max-height: 0 !important;
+  overflow: hidden;
+}
+
+.scr-staff .staff-row {
+  border-bottom: 1px solid var(--separator);
+  cursor: pointer;
+  transition: background 120ms;
+}
+.scr-staff .staff-row:last-child { border-bottom: none; }
+.scr-staff .staff-row:hover { background: var(--table-row-hover); }
+
+/* Row header (collapsed) */
+.scr-staff .staff-row-header {
+  display: grid;
+  grid-template-columns: 1.5fr 1.2fr 0.8fr 0.7fr 0.5fr 28px;
+  gap: 0;
+  padding: 12px 20px;
+  align-items: center;
+}
+.scr-staff .staff-row-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scr-staff .staff-row-position {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scr-staff .staff-row-salary {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.scr-staff .staff-row-kpi {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.scr-staff .staff-row-kpi.kpi-green { color: var(--success); }
+.scr-staff .staff-row-kpi.kpi-yellow { color: var(--warning); }
+.scr-staff .staff-row-kpi.kpi-red { color: var(--danger); }
+.scr-staff .staff-row-kpi.kpi-na { color: var(--text-muted); }
+.scr-staff .staff-row-since {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.scr-staff .staff-row-chevron {
+  color: var(--text-muted);
+  font-size: 14px;
+  transition: transform 200ms;
+  text-align: center;
+}
+.scr-staff .staff-row.expanded .staff-row-chevron {
+  transform: rotate(90deg);
+}
+
+/* Expanded detail */
+.scr-staff .staff-row-detail {
+  display: none;
+  padding: 0 20px 16px 20px;
+  animation: storeDetailSlide 200ms var(--ease-out);
+}
+.scr-staff .staff-row.expanded .staff-row-detail { display: block; }
+.scr-staff .staff-detail-inner {
+  padding: 16px 20px;
+  background: var(--n50);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--brand-gold);
+}
+[data-theme="dark"] .scr-staff .staff-detail-inner {
+  background: #1a1a1e;
+}
+.scr-staff .staff-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+}
+.scr-staff .staff-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.scr-staff .staff-detail-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 500;
+}
+.scr-staff .staff-detail-value {
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.scr-staff .staff-detail-full {
+  grid-column: 1 / -1;
+}
+.scr-staff .staff-detail-note {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--separator);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.scr-staff .staff-detail-note strong {
+  color: var(--text-primary);
+}
+
+/* No results */
+.scr-staff .staff-no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Payroll summary card */
+.scr-staff .staff-payroll-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.scr-staff .staff-payroll-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.scr-staff .payroll-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.scr-staff .payroll-row:last-child { margin-bottom: 0; }
+.scr-staff .payroll-dept {
+  font-size: 13px;
+  color: var(--text-secondary);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+.scr-staff .payroll-bar-wrap {
+  flex: 1;
+  height: 10px;
+  background: var(--n200);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+.scr-staff .payroll-bar {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--brand-gold);
+  transition: width 600ms var(--ease-out);
+}
+.scr-staff .payroll-bar.bar-retail { background: var(--ch-retail); }
+.scr-staff .payroll-bar.bar-office { background: var(--info); }
+.scr-staff .payroll-bar.bar-warehouse { background: var(--success); }
+.scr-staff .payroll-bar.bar-management { background: var(--warning); }
+.scr-staff .payroll-amount {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 100px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.scr-staff .payroll-pct {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.scr-staff .payroll-insight {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--warning-light);
+  border: 1px solid var(--warning-muted);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  color: #92400E;
+  line-height: 1.6;
+}
+[data-theme="dark"] .scr-staff .payroll-insight {
+  background: rgba(245,158,11,.1);
+  border-color: rgba(245,158,11,.2);
+  color: var(--warning);
+}
+
+/* Responsive — Staff */
+@media (max-width: 1100px) {
+  .scr-staff .staff-kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .scr-staff .staff-detail-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .scr-staff .staff-kpi-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .scr-staff .staff-kpi-value { font-size: 18px; }
+  .scr-staff .staff-kpi-card { padding: 12px 14px; }
+
+  .scr-staff .staff-row-header {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 12px 16px;
+  }
+  .scr-staff .staff-row-name { font-size: 14px; font-weight: 600; }
+  .scr-staff .staff-row-position { font-size: 12px; }
+  .scr-staff .staff-row-salary { font-size: 13px; }
+  .scr-staff .staff-row-kpi { font-size: 12px; }
+  .scr-staff .staff-row-since { font-size: 11px; }
+  .scr-staff .staff-row-chevron { display: none; }
+
+  .scr-staff .staff-row-detail { padding: 0 14px 14px 14px; }
+  .scr-staff .staff-detail-inner { padding: 12px 14px; }
+  .scr-staff .staff-detail-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  .scr-staff .staff-group-header { padding: 10px 14px; }
+
+  .scr-staff .payroll-dept { min-width: 90px; font-size: 12px; }
+  .scr-staff .payroll-amount { min-width: 80px; font-size: 12px; }
+  .scr-staff .payroll-pct { min-width: 36px; font-size: 11px; }
+}
+@media (max-width: 380px) {
+  .scr-staff .staff-kpi-row { grid-template-columns: 1fr; }
+  .scr-staff .payroll-row { flex-wrap: wrap; gap: 4px; }
+  .scr-staff .payroll-dept { min-width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -4348,9 +4810,108 @@ table tbody td.amount {
       <div class="placeholder-desc">Этот раздел в разработке. Dubai Mall, Noon, Amazon.ae — аналитика по международным каналам.</div>
     </div>
     <div class="placeholder-screen" id="screen-staff">
-      <div class="placeholder-icon">&#x1F465;</div>
-      <div class="placeholder-title">Сотрудники</div>
-      <div class="placeholder-desc">Команда, KPI, начисление зарплат. Группировка по магазинам, департаментам, городам.</div>
+      <div class="scr-staff">
+
+        <!-- KPI CARDS -->
+        <div class="staff-kpi-row">
+          <div class="staff-kpi-card">
+            <div class="staff-kpi-label">Всего сотрудников</div>
+            <div class="staff-kpi-value" id="staffKpiTotal">73</div>
+          </div>
+          <div class="staff-kpi-card">
+            <div class="staff-kpi-label">ФОТ / мес</div>
+            <div class="staff-kpi-value" id="staffKpiFot">11.2M &#8381; <span class="staff-kpi-trend up">&#9650; +3%</span></div>
+          </div>
+          <div class="staff-kpi-card">
+            <div class="staff-kpi-label">Средняя зарплата</div>
+            <div class="staff-kpi-value" id="staffKpiAvg">153K &#8381;/мес</div>
+          </div>
+          <div class="staff-kpi-card">
+            <div class="staff-kpi-label">Текучесть</div>
+            <div class="staff-kpi-value" id="staffKpiTurnover">8% <span class="staff-kpi-trend good">&#9660; низкая</span></div>
+          </div>
+        </div>
+
+        <!-- GROUP BY SELECTOR -->
+        <div class="staff-group-bar">
+          <button class="staff-group-pill active" onclick="staffSwitchGroup('store', this)">По магазинам</button>
+          <button class="staff-group-pill" onclick="staffSwitchGroup('dept', this)">По департаментам</button>
+          <button class="staff-group-pill" onclick="staffSwitchGroup('city', this)">По городам</button>
+        </div>
+
+        <!-- FILTER BAR -->
+        <div class="staff-filter-bar">
+          <input type="text" class="staff-search-input" id="staffSearchInput" placeholder="Поиск по имени..." oninput="filterStaff()">
+          <select id="staffFilterDept" onchange="filterStaff()">
+            <option value="">Все департаменты</option>
+            <option value="Управление">Управление</option>
+            <option value="Офис">Офис</option>
+            <option value="Розница">Розница</option>
+            <option value="Склад">Склад</option>
+          </select>
+          <select id="staffFilterCity" onchange="filterStaff()">
+            <option value="">Все города</option>
+            <option value="Москва">Москва</option>
+            <option value="Санкт-Петербург">Санкт-Петербург</option>
+            <option value="Сочи">Сочи</option>
+            <option value="Краснодар">Краснодар</option>
+            <option value="Казань">Казань</option>
+            <option value="Екатеринбург">Екатеринбург</option>
+            <option value="Новосибирск">Новосибирск</option>
+            <option value="Ростов-на-Дону">Ростов-на-Дону</option>
+          </select>
+          <select id="staffFilterKpi" onchange="filterStaff()">
+            <option value="">KPI: все</option>
+            <option value="green">KPI &#x1F7E2; &gt;95%</option>
+            <option value="yellow">KPI &#x1F7E1; 80-95%</option>
+            <option value="red">KPI &#x1F534; &lt;80%</option>
+          </select>
+          <select id="staffSort" onchange="filterStaff()">
+            <option value="name">По имени</option>
+            <option value="salary-desc">По зарплате &#8595;</option>
+            <option value="salary-asc">По зарплате &#8593;</option>
+            <option value="kpi-desc">По KPI &#8595;</option>
+            <option value="kpi-asc">По KPI &#8593;</option>
+          </select>
+          <span class="staff-count-label" id="staffCountLabel">73 сотрудников</span>
+        </div>
+
+        <!-- STAFF LIST -->
+        <div class="staff-list-container" id="staffListContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- PAYROLL SUMMARY -->
+        <div class="staff-payroll-card">
+          <div class="staff-payroll-title">&#x1F4B0; Фонд оплаты труда</div>
+          <div class="payroll-row">
+            <span class="payroll-dept">Розница</span>
+            <div class="payroll-bar-wrap"><div class="payroll-bar bar-retail" style="width:39%"></div></div>
+            <span class="payroll-amount">52.5M &#8381;/год</span>
+            <span class="payroll-pct">39%</span>
+          </div>
+          <div class="payroll-row">
+            <span class="payroll-dept">Офис</span>
+            <div class="payroll-bar-wrap"><div class="payroll-bar bar-office" style="width:48%"></div></div>
+            <span class="payroll-amount">64.0M &#8381;/год</span>
+            <span class="payroll-pct">48%</span>
+          </div>
+          <div class="payroll-row">
+            <span class="payroll-dept">Склад</span>
+            <div class="payroll-bar-wrap"><div class="payroll-bar bar-warehouse" style="width:6%"></div></div>
+            <span class="payroll-amount">8.1M &#8381;/год</span>
+            <span class="payroll-pct">6%</span>
+          </div>
+          <div class="payroll-row">
+            <span class="payroll-dept">Управление</span>
+            <div class="payroll-bar-wrap"><div class="payroll-bar bar-management" style="width:7%"></div></div>
+            <span class="payroll-amount">10.0M &#8381;/год</span>
+            <span class="payroll-pct">7%</span>
+          </div>
+          <div class="payroll-insight">&#x26A0;&#xFE0F; Офис (48%) стоит дороже розницы (39%). Рассмотреть автоматизацию рутинных офисных задач для оптимизации ФОТ.</div>
+        </div>
+
+      </div>
     </div>
     <div class="placeholder-screen" id="screen-infrastructure">
       <div class="scr-infra">
@@ -5225,6 +5786,10 @@ table tbody td.amount {
         initChannelsScreen();
         var cd = PERIOD_DATA[currentPeriod];
         if (cd && cd.channels) updateChannelsData(cd.channels);
+      }
+      // Lazy-init staff screen
+      if (screen === 'staff') {
+        initStaffScreen();
       }
     }
 
@@ -6887,6 +7452,286 @@ table tbody td.amount {
       // Future: open search modal
     }
   });
+
+  /* ============================================================
+     STAFF SCREEN
+     ============================================================ */
+  var staffInited = false;
+  var staffCurrentGroup = 'store';
+  var STAFF_DATA = [
+    // === УПРАВЛЕНИЕ (3) ===
+    {id:1, name:'Борелли Алессандро', fullName:'Борелли Алессандро Витторио', position:'Генеральный директор', dept:'Управление', store:'Офис', city:'Москва', salaryBase:350000, salaryBonus:100000, kpi:null, startDate:'01.06.2014', yearsStr:'10 лет', daysWorked:22, sickDays:0, vacationLeft:28, note:'Основатель компании. Стратегическое управление всей группой.'},
+    {id:2, name:'Борелли Екатерина', fullName:'Борелли Екатерина Алексеевна', position:'Заместитель ген. директора', dept:'Управление', store:'Офис', city:'Москва', salaryBase:250000, salaryBonus:50000, kpi:null, startDate:'01.06.2014', yearsStr:'10 лет', daysWorked:22, sickDays:1, vacationLeft:21, note:'Соучредитель. Управление розничной сетью и B2B направлением.'},
+    {id:3, name:'Караева Диана', fullName:'Караева Диана Рустамовна', position:'Помощник руководителя', dept:'Управление', store:'Офис', city:'Москва', salaryBase:90000, salaryBonus:15000, kpi:null, startDate:'15.03.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Координация встреч, документооборот, взаимодействие с партнёрами.'},
+    // === ОФИС (12) ===
+    {id:4, name:'Лебедева Наталья', fullName:'Лебедева Наталья Владимировна', position:'Финансовый директор', dept:'Офис', store:'Офис', city:'Москва', salaryBase:220000, salaryBonus:60000, kpi:null, startDate:'01.09.2014', yearsStr:'10 лет', daysWorked:22, sickDays:0, vacationLeft:28, note:'Управление финансами, бюджетирование, налоговое планирование.'},
+    {id:5, name:'Морозов Дмитрий', fullName:'Морозов Дмитрий Андреевич', position:'Главный бухгалтер', dept:'Офис', store:'Офис', city:'Москва', salaryBase:95000, salaryBonus:25000, kpi:null, startDate:'10.01.2018', yearsStr:'6 лет', daysWorked:22, sickDays:2, vacationLeft:18, note:'Бухгалтерский и налоговый учёт, подготовка отчётности.'},
+    {id:6, name:'Самойлова Ирина', fullName:'Самойлова Ирина Петровна', position:'Бухгалтер', dept:'Офис', store:'Офис', city:'Москва', salaryBase:75000, salaryBonus:10000, kpi:null, startDate:'20.05.2020', yearsStr:'4 года', daysWorked:22, sickDays:1, vacationLeft:14, note:'Расчёт зарплат, работа с банками и контрагентами.'},
+    {id:7, name:'Тихонова Анна', fullName:'Тихонова Анна Сергеевна', position:'HR-менеджер', dept:'Офис', store:'Офис', city:'Москва', salaryBase:85000, salaryBonus:15000, kpi:null, startDate:'01.03.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:10, note:'Подбор, адаптация и развитие персонала. Кадровый учёт.'},
+    {id:8, name:'Васильев Кирилл', fullName:'Васильев Кирилл Игоревич', position:'Логист', dept:'Офис', store:'Офис', city:'Москва', salaryBase:80000, salaryBonus:15000, kpi:null, startDate:'15.08.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:16, note:'Логистика поставок от фабрик, координация с таможней.'},
+    {id:9, name:'Куликова Мария', fullName:'Куликова Мария Дмитриевна', position:'Менеджер по закупкам', dept:'Офис', store:'Офис', city:'Москва', salaryBase:90000, salaryBonus:20000, kpi:null, startDate:'01.02.2018', yearsStr:'6 лет', daysWorked:21, sickDays:1, vacationLeft:12, note:'Закупки коллекций, работа с итальянскими поставщиками.'},
+    {id:10, name:'Орлов Максим', fullName:'Орлов Максим Павлович', position:'Маркетолог', dept:'Офис', store:'Офис', city:'Москва', salaryBase:95000, salaryBonus:25000, kpi:null, startDate:'01.09.2020', yearsStr:'4 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Digital-маркетинг, SMM, работа с блогерами. Контент.'},
+    {id:11, name:'Попов Артём', fullName:'Попов Артём Владимирович', position:'IT-специалист', dept:'Офис', store:'Офис', city:'Москва', salaryBase:110000, salaryBonus:20000, kpi:null, startDate:'01.04.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:18, note:'Поддержка сайтов, 1С, кассовое оборудование, WB/Ozon интеграции.'},
+    {id:12, name:'Громова Елена', fullName:'Громова Елена Викторовна', position:'Менеджер по оптовым продажам', dept:'Офис', store:'Офис', city:'Москва', salaryBase:85000, salaryBonus:30000, kpi:null, startDate:'15.06.2017', yearsStr:'7 лет', daysWorked:22, sickDays:0, vacationLeft:10, note:'B2B продажи, работа с мультибрендовыми магазинами.'},
+    {id:13, name:'Федотова Ольга', fullName:'Федотова Ольга Николаевна', position:'Менеджер по работе с маркетплейсами', dept:'Офис', store:'Офис', city:'Москва', salaryBase:85000, salaryBonus:20000, kpi:null, startDate:'01.11.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Ведение карточек WB и Ozon, ценообразование, аналитика.'},
+    {id:14, name:'Николаев Сергей', fullName:'Николаев Сергей Александрович', position:'Юрист', dept:'Офис', store:'Офис', city:'Москва', salaryBase:100000, salaryBonus:0, kpi:null, startDate:'01.06.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:20, note:'Договорная работа, претензии, регуляторные вопросы.'},
+    {id:15, name:'Белова Татьяна', fullName:'Белова Татьяна Михайловна', position:'Офис-менеджер', dept:'Офис', store:'Офис', city:'Москва', salaryBase:55000, salaryBonus:5000, kpi:null, startDate:'01.10.2022', yearsStr:'2 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Административная поддержка офиса, закупка расходников.'},
+    // === СКЛАД (5) ===
+    {id:16, name:'Жуков Валерий', fullName:'Жуков Валерий Геннадьевич', position:'Начальник склада', dept:'Склад', store:'Склад', city:'Москва', salaryBase:80000, salaryBonus:15000, kpi:null, startDate:'01.03.2017', yearsStr:'7 лет', daysWorked:22, sickDays:1, vacationLeft:14, note:'Управление складом, инвентаризация, приёмка товара.'},
+    {id:17, name:'Климов Андрей', fullName:'Климов Андрей Борисович', position:'Кладовщик', dept:'Склад', store:'Склад', city:'Москва', salaryBase:55000, salaryBonus:5000, kpi:null, startDate:'15.07.2020', yearsStr:'4 года', daysWorked:22, sickDays:2, vacationLeft:14, note:'Размещение товара, комплектация заказов.'},
+    {id:18, name:'Соколов Игорь', fullName:'Соколов Игорь Фёдорович', position:'Кладовщик', dept:'Склад', store:'Склад', city:'Москва', salaryBase:52000, salaryBonus:5000, kpi:null, startDate:'01.11.2021', yearsStr:'3 года', daysWorked:21, sickDays:3, vacationLeft:12, note:'Приёмка и отгрузка, работа с ТСД.'},
+    {id:19, name:'Рыбаков Павел', fullName:'Рыбаков Павел Олегович', position:'Водитель-экспедитор', dept:'Склад', store:'Склад', city:'Москва', salaryBase:60000, salaryBonus:10000, kpi:null, startDate:'01.02.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:14, note:'Доставка по Москве, развоз по точкам.'},
+    {id:20, name:'Алексеев Роман', fullName:'Алексеев Роман Юрьевич', position:'Упаковщик', dept:'Склад', store:'Склад', city:'Москва', salaryBase:48000, salaryBonus:5000, kpi:null, startDate:'15.05.2023', yearsStr:'1 год', daysWorked:22, sickDays:0, vacationLeft:14, note:'Упаковка онлайн-заказов, подготовка к отправке.'},
+    // === РОЗНИЦА — Москва ===
+    {id:21, name:'Иванова Мария', fullName:'Иванова Мария Сергеевна', position:'Старший продавец', dept:'Розница', store:'ТРЦ Европейский', city:'Москва', salaryBase:65000, salaryBonus:20000, kpi:112, startDate:'15.03.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:14, note:'Лучший продавец магазина. Продажи: 1.8M \u20BD/мес. Средний чек: 5 200 \u20BD. Рекомендация: повысить до управляющего.'},
+    {id:22, name:'Петрова Екатерина', fullName:'Петрова Екатерина Александровна', position:'Продавец', dept:'Розница', store:'ТРЦ Европейский', city:'Москва', salaryBase:50000, salaryBonus:15000, kpi:98, startDate:'01.06.2021', yearsStr:'3 года', daysWorked:22, sickDays:1, vacationLeft:10, note:'Стабильные показатели. Продажи: 1.2M \u20BD/мес. Хорошо работает с VIP-клиентами.'},
+    {id:23, name:'Сидоров Алексей', fullName:'Сидоров Алексей Викторович', position:'Продавец', dept:'Розница', store:'ТРЦ Европейский', city:'Москва', salaryBase:50000, salaryBonus:12000, kpi:87, startDate:'10.09.2022', yearsStr:'2 года', daysWorked:21, sickDays:2, vacationLeft:14, note:'Продажи: 950K \u20BD/мес. Требуется дополнительное обучение по работе с возражениями.'},
+    {id:24, name:'Козлова Анна', fullName:'Козлова Анна Дмитриевна', position:'Стажёр', dept:'Розница', store:'ТРЦ Европейский', city:'Москва', salaryBase:45000, salaryBonus:0, kpi:null, startDate:'01.02.2024', yearsStr:'2 мес', daysWorked:20, sickDays:0, vacationLeft:14, note:'На стажировке. Проходит обучение под руководством Ивановой М.С.'},
+    {id:25, name:'Кузнецова Дарья', fullName:'Кузнецова Дарья Олеговна', position:'Управляющий магазином', dept:'Розница', store:'ТЦ Метрополис', city:'Москва', salaryBase:80000, salaryBonus:25000, kpi:105, startDate:'01.08.2017', yearsStr:'7 лет', daysWorked:22, sickDays:0, vacationLeft:8, note:'Опытный управляющий. Лучший магазин по конверсии (18%). Продажи точки: 4.2M \u20BD/мес.'},
+    {id:26, name:'Новикова Елена', fullName:'Новикова Елена Игоревна', position:'Продавец', dept:'Розница', store:'ТЦ Метрополис', city:'Москва', salaryBase:52000, salaryBonus:13000, kpi:96, startDate:'01.04.2020', yearsStr:'4 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.1M \u20BD/мес. Средний чек: 4 800 \u20BD. Активна в допродажах.'},
+    {id:27, name:'Волкова Светлана', fullName:'Волкова Светлана Борисовна', position:'Продавец', dept:'Розница', store:'ТЦ Метрополис', city:'Москва', salaryBase:50000, salaryBonus:10000, kpi:91, startDate:'15.01.2022', yearsStr:'2 года', daysWorked:22, sickDays:1, vacationLeft:12, note:'Продажи: 980K \u20BD/мес. Хорошо консультирует по размерам.'},
+    {id:28, name:'Егорова Полина', fullName:'Егорова Полина Максимовна', position:'Управляющий магазином', dept:'Розница', store:'ТРЦ Авиапарк', city:'Москва', salaryBase:78000, salaryBonus:22000, kpi:108, startDate:'01.03.2018', yearsStr:'6 лет', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи точки: 3.8M \u20BD/мес. Активно развивает cross-sell.'},
+    {id:29, name:'Титова Юлия', fullName:'Титова Юлия Андреевна', position:'Продавец', dept:'Розница', store:'ТРЦ Авиапарк', city:'Москва', salaryBase:50000, salaryBonus:14000, kpi:101, startDate:'01.07.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.15M \u20BD/мес. Специализация — школьная форма.'},
+    {id:30, name:'Павлов Денис', fullName:'Павлов Денис Станиславович', position:'Продавец', dept:'Розница', store:'ТРЦ Авиапарк', city:'Москва', salaryBase:50000, salaryBonus:8000, kpi:78, startDate:'01.11.2023', yearsStr:'5 мес', daysWorked:22, sickDays:3, vacationLeft:14, note:'Продажи: 720K \u20BD/мес. Недавно принят. KPI ниже нормы — план развития.'},
+    {id:31, name:'Захарова Виктория', fullName:'Захарова Виктория Алексеевна', position:'Управляющий магазином', dept:'Розница', store:'ТЦ МЕГА Тёплый Стан', city:'Москва', salaryBase:76000, salaryBonus:20000, kpi:102, startDate:'01.05.2018', yearsStr:'6 лет', daysWorked:22, sickDays:0, vacationLeft:12, note:'Продажи точки: 3.2M \u20BD/мес. Стабильные результаты.'},
+    {id:32, name:'Миронова Алёна', fullName:'Миронова Алёна Витальевна', position:'Продавец', dept:'Розница', store:'ТЦ МЕГА Тёплый Стан', city:'Москва', salaryBase:50000, salaryBonus:11000, kpi:93, startDate:'15.09.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.0M \u20BD/мес. Хорошо работает с детской линейкой.'},
+    {id:33, name:'Лазарева Ксения', fullName:'Лазарева Ксения Павловна', position:'Продавец', dept:'Розница', store:'ТЦ Кунцево Плаза', city:'Москва', salaryBase:50000, salaryBonus:12000, kpi:95, startDate:'01.08.2020', yearsStr:'4 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.05M \u20BD/мес. Единственный продавец в точке, совмещает с управлением.'},
+    {id:34, name:'Зайцев Олег', fullName:'Зайцев Олег Владимирович', position:'Продавец', dept:'Розница', store:'ТРЦ Ривьера', city:'Москва', salaryBase:50000, salaryBonus:11000, kpi:94, startDate:'01.03.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.0M \u20BD/мес. Хорошо работает с мужским ассортиментом.'},
+    {id:35, name:'Данилова Вера', fullName:'Данилова Вера Сергеевна', position:'Продавец', dept:'Розница', store:'ТРЦ Ривьера', city:'Москва', salaryBase:50000, salaryBonus:9000, kpi:84, startDate:'15.06.2023', yearsStr:'9 мес', daysWorked:21, sickDays:1, vacationLeft:14, note:'Продажи: 850K \u20BD/мес. В процессе адаптации, улучшение каждый месяц.'},
+    {id:36, name:'Филиппова Наталья', fullName:'Филиппова Наталья Анатольевна', position:'Управляющий магазином', dept:'Розница', store:'ТЦ Атриум', city:'Москва', salaryBase:75000, salaryBonus:20000, kpi:107, startDate:'01.09.2017', yearsStr:'7 лет', daysWorked:22, sickDays:0, vacationLeft:10, note:'Продажи точки: 3.5M \u20BD/мес. Одна из самых опытных управляющих.'},
+    {id:37, name:'Романова Диана', fullName:'Романова Диана Евгеньевна', position:'Продавец', dept:'Розница', store:'ТЦ Атриум', city:'Москва', salaryBase:50000, salaryBonus:14000, kpi:103, startDate:'01.02.2020', yearsStr:'4 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.2M \u20BD/мес. Высокий средний чек — 6 100 \u20BD.'},
+    {id:38, name:'Степанова Ольга', fullName:'Степанова Ольга Юрьевна', position:'Продавец', dept:'Розница', store:'ТРЦ Хорошо!', city:'Москва', salaryBase:50000, salaryBonus:10000, kpi:90, startDate:'01.05.2022', yearsStr:'2 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 970K \u20BD/мес. Совмещает роль управляющего.'},
+    {id:39, name:'Котова Алина', fullName:'Котова Алина Денисовна', position:'Продавец', dept:'Розница', store:'ТЦ Columbus', city:'Москва', salaryBase:50000, salaryBonus:12000, kpi:97, startDate:'01.10.2020', yearsStr:'4 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.1M \u20BD/мес. Специализация — праздничные коллекции.'},
+    {id:40, name:'Крылова Маргарита', fullName:'Крылова Маргарита Олеговна', position:'Продавец', dept:'Розница', store:'ТЦ Columbus', city:'Москва', salaryBase:50000, salaryBonus:8000, kpi:82, startDate:'01.08.2023', yearsStr:'8 мес', daysWorked:22, sickDays:2, vacationLeft:14, note:'Продажи: 800K \u20BD/мес. Новый сотрудник, на контроле.'},
+    // === РОЗНИЦА — Санкт-Петербург ===
+    {id:41, name:'Андреева Светлана', fullName:'Андреева Светлана Борисовна', position:'Управляющий магазином', dept:'Розница', store:'ТРЦ Галерея (СПб)', city:'Санкт-Петербург', salaryBase:75000, salaryBonus:20000, kpi:110, startDate:'01.07.2017', yearsStr:'7 лет', daysWorked:22, sickDays:0, vacationLeft:14, note:'Лучшая точка в СПб. Продажи: 3.6M \u20BD/мес.'},
+    {id:42, name:'Богданов Константин', fullName:'Богданов Константин Николаевич', position:'Продавец', dept:'Розница', store:'ТРЦ Галерея (СПб)', city:'Санкт-Петербург', salaryBase:50000, salaryBonus:13000, kpi:99, startDate:'01.04.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.15M \u20BD/мес. Один из лучших по конверсии.'},
+    {id:43, name:'Макарова Юлия', fullName:'Макарова Юлия Ивановна', position:'Продавец', dept:'Розница', store:'ТРЦ Галерея (СПб)', city:'Санкт-Петербург', salaryBase:48000, salaryBonus:10000, kpi:92, startDate:'15.10.2022', yearsStr:'2 года', daysWorked:22, sickDays:1, vacationLeft:14, note:'Продажи: 990K \u20BD/мес. Хорошо знает коллекцию.'},
+    {id:44, name:'Григорьева Анастасия', fullName:'Григорьева Анастасия Олеговна', position:'Управляющий магазином', dept:'Розница', store:'ТЦ Невский Центр (СПб)', city:'Санкт-Петербург', salaryBase:72000, salaryBonus:18000, kpi:104, startDate:'01.02.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:12, note:'Продажи точки: 2.8M \u20BD/мес. Активно привлекает новых клиентов.'},
+    {id:45, name:'Семёнов Антон', fullName:'Семёнов Антон Дмитриевич', position:'Продавец', dept:'Розница', store:'ТЦ Невский Центр (СПб)', city:'Санкт-Петербург', salaryBase:48000, salaryBonus:10000, kpi:88, startDate:'01.09.2022', yearsStr:'2 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 880K \u20BD/мес. Рост показателей последние 3 месяца.'},
+    {id:46, name:'Терентьева Оксана', fullName:'Терентьева Оксана Геннадьевна', position:'Продавец', dept:'Розница', store:'ТРЦ Жемчужная Плаза (СПб)', city:'Санкт-Петербург', salaryBase:48000, salaryBonus:9000, kpi:86, startDate:'01.01.2023', yearsStr:'1 год', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 860K \u20BD/мес. Единственный продавец в точке.'},
+    // === РОЗНИЦА — Сочи ===
+    {id:47, name:'Воробьёва Марина', fullName:'Воробьёва Марина Александровна', position:'Управляющий магазином', dept:'Розница', store:'ТРЦ МореМолл (Сочи)', city:'Сочи', salaryBase:70000, salaryBonus:18000, kpi:106, startDate:'01.06.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи точки: 2.5M \u20BD/мес. Сезонность: пик летом.'},
+    {id:48, name:'Ершова Валентина', fullName:'Ершова Валентина Петровна', position:'Продавец', dept:'Розница', store:'ТРЦ МореМолл (Сочи)', city:'Сочи', salaryBase:48000, salaryBonus:12000, kpi:100, startDate:'01.04.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.05M \u20BD/мес. Работает с туристами.'},
+    {id:49, name:'Шевченко Артём', fullName:'Шевченко Артём Юрьевич', position:'Продавец', dept:'Розница', store:'ТЦ Олимп (Сочи)', city:'Сочи', salaryBase:48000, salaryBonus:10000, kpi:89, startDate:'15.08.2022', yearsStr:'2 года', daysWorked:22, sickDays:1, vacationLeft:14, note:'Продажи: 900K \u20BD/мес. Высокий сезон — зима (горнолыжники).'},
+    {id:50, name:'Панова Людмила', fullName:'Панова Людмила Вячеславовна', position:'Продавец', dept:'Розница', store:'ТЦ Олимп (Сочи)', city:'Сочи', salaryBase:46000, salaryBonus:8000, kpi:81, startDate:'01.03.2023', yearsStr:'1 год', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 780K \u20BD/мес. Молодой сотрудник, перспективная.'},
+    // === РОЗНИЦА — Краснодар ===
+    {id:51, name:'Бойко Елена', fullName:'Бойко Елена Дмитриевна', position:'Управляющий магазином', dept:'Розница', store:'ТРЦ Красная Площадь (Краснодар)', city:'Краснодар', salaryBase:68000, salaryBonus:18000, kpi:109, startDate:'01.10.2018', yearsStr:'6 лет', daysWorked:22, sickDays:0, vacationLeft:10, note:'Продажи точки: 2.9M \u20BD/мес. Самая высокая конверсия в сети.'},
+    {id:52, name:'Маслова Екатерина', fullName:'Маслова Екатерина Ивановна', position:'Продавец', dept:'Розница', store:'ТРЦ Красная Площадь (Краснодар)', city:'Краснодар', salaryBase:48000, salaryBonus:13000, kpi:101, startDate:'01.06.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.1M \u20BD/мес. Энергичная, хорошие отзывы клиентов.'},
+    {id:53, name:'Сергеева Наталья', fullName:'Сергеева Наталья Михайловна', position:'Продавец', dept:'Розница', store:'ТЦ Галерея Краснодар', city:'Краснодар', salaryBase:46000, salaryBonus:9000, kpi:85, startDate:'01.01.2023', yearsStr:'1 год', daysWorked:22, sickDays:1, vacationLeft:14, note:'Продажи: 840K \u20BD/мес. В процессе обучения.'},
+    {id:54, name:'Соловьёв Михаил', fullName:'Соловьёв Михаил Анатольевич', position:'Продавец', dept:'Розница', store:'ТЦ Галерея Краснодар', city:'Краснодар', salaryBase:46000, salaryBonus:7000, kpi:79, startDate:'01.07.2023', yearsStr:'9 мес', daysWorked:22, sickDays:2, vacationLeft:14, note:'Продажи: 720K \u20BD/мес. KPI ниже нормы — обучение.'},
+    // === РОЗНИЦА — Другие города ===
+    {id:55, name:'Медведева Ирина', fullName:'Медведева Ирина Константиновна', position:'Управляющий магазином', dept:'Розница', store:'ТРЦ МЕГА (Казань)', city:'Казань', salaryBase:68000, salaryBonus:18000, kpi:103, startDate:'01.04.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:12, note:'Продажи точки: 2.4M \u20BD/мес. Стабильный рост год к году.'},
+    {id:56, name:'Комарова Дарья', fullName:'Комарова Дарья Витальевна', position:'Продавец', dept:'Розница', store:'ТРЦ МЕГА (Казань)', city:'Казань', salaryBase:46000, salaryBonus:10000, kpi:97, startDate:'01.11.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.0M \u20BD/мес. Хорошие навыки коммуникации.'},
+    {id:57, name:'Тарасова Людмила', fullName:'Тарасова Людмила Анатольевна', position:'Управляющий магазином', dept:'Розница', store:'ТЦ Гринвич (Екатеринбург)', city:'Екатеринбург', salaryBase:68000, salaryBonus:18000, kpi:100, startDate:'01.09.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи точки: 2.2M \u20BD/мес.'},
+    {id:58, name:'Горбунова Алиса', fullName:'Горбунова Алиса Денисовна', position:'Продавец', dept:'Розница', store:'ТЦ Гринвич (Екатеринбург)', city:'Екатеринбург', salaryBase:46000, salaryBonus:9000, kpi:90, startDate:'01.02.2022', yearsStr:'2 года', daysWorked:22, sickDays:1, vacationLeft:14, note:'Продажи: 900K \u20BD/мес. Растущие показатели.'},
+    {id:59, name:'Кравченко Наталья', fullName:'Кравченко Наталья Витальевна', position:'Управляющий магазином', dept:'Розница', store:'ТРЦ Аура (Новосибирск)', city:'Новосибирск', salaryBase:66000, salaryBonus:16000, kpi:99, startDate:'01.01.2020', yearsStr:'4 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи точки: 2.0M \u20BD/мес. Перспективный регион.'},
+    {id:60, name:'Фролова Анжелика', fullName:'Фролова Анжелика Сергеевна', position:'Продавец', dept:'Розница', store:'ТРЦ Аура (Новосибирск)', city:'Новосибирск', salaryBase:44000, salaryBonus:8000, kpi:83, startDate:'01.06.2023', yearsStr:'10 мес', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 790K \u20BD/мес. Молодой специалист.'},
+    {id:61, name:'Ковалёва Оксана', fullName:'Ковалёва Оксана Николаевна', position:'Продавец', dept:'Розница', store:'ТЦ Горизонт (Ростов-на-Дону)', city:'Ростов-на-Дону', salaryBase:46000, salaryBonus:10000, kpi:96, startDate:'01.08.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.0M \u20BD/мес. Единственный сотрудник в точке.'},
+    {id:62, name:'Антонова Яна', fullName:'Антонова Яна Аркадьевна', position:'Продавец', dept:'Розница', store:'ТЦ Горизонт (Ростов-на-Дону)', city:'Ростов-на-Дону', salaryBase:44000, salaryBonus:8000, kpi:88, startDate:'01.11.2022', yearsStr:'2 года', daysWorked:22, sickDays:1, vacationLeft:14, note:'Продажи: 870K \u20BD/мес. На полставки — студентка.'},
+    // === РОЗНИЦА — Dubai ===
+    {id:63, name:'Исмаилова Лейла', fullName:'Исмаилова Лейла Фархадовна', position:'Управляющий магазином', dept:'Розница', store:'Dubai Mall', city:'Москва', salaryBase:120000, salaryBonus:40000, kpi:115, startDate:'01.11.2023', yearsStr:'5 мес', daysWorked:22, sickDays:0, vacationLeft:28, note:'Управление флагманом в Dubai Mall. Продажи: 6.2M \u20BD/мес. Работа с VIP-клиентами.'},
+    {id:64, name:'Михайлова Елена', fullName:'Михайлова Елена Станиславовна', position:'Продавец', dept:'Розница', store:'Dubai Mall', city:'Москва', salaryBase:85000, salaryBonus:25000, kpi:108, startDate:'01.12.2023', yearsStr:'4 мес', daysWorked:22, sickDays:0, vacationLeft:28, note:'Продажи: 2.4M \u20BD/мес. Свободный английский и арабский.'},
+    {id:65, name:'Озерова Виктория', fullName:'Озерова Виктория Романовна', position:'Продавец', dept:'Розница', store:'Dubai Mall', city:'Москва', salaryBase:85000, salaryBonus:20000, kpi:102, startDate:'15.01.2024', yearsStr:'2 мес', daysWorked:20, sickDays:0, vacationLeft:28, note:'Новый сотрудник Dubai. Продажи: 1.8M \u20BD/мес. Быстро вошла в ритм.'},
+    // === РОЗНИЦА — Москва дополнительные точки ===
+    {id:66, name:'Баранова Яна', fullName:'Баранова Яна Сергеевна', position:'Продавец', dept:'Розница', store:'ТРЦ Афимолл', city:'Москва', salaryBase:52000, salaryBonus:14000, kpi:99, startDate:'01.05.2020', yearsStr:'4 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 1.15M \u20BD/мес. Хорошо работает с бизнес-аудиторией.'},
+    {id:67, name:'Калинина Вероника', fullName:'Калинина Вероника Евгеньевна', position:'Продавец', dept:'Розница', store:'ТРЦ Афимолл', city:'Москва', salaryBase:50000, salaryBonus:11000, kpi:93, startDate:'01.09.2021', yearsStr:'3 года', daysWorked:22, sickDays:1, vacationLeft:12, note:'Продажи: 990K \u20BD/мес. Стабильный результат.'},
+    {id:68, name:'Одинцова Ирина', fullName:'Одинцова Ирина Петровна', position:'Управляющий магазином', dept:'Розница', store:'ТЦ Рига Молл', city:'Москва', salaryBase:72000, salaryBonus:18000, kpi:101, startDate:'01.07.2019', yearsStr:'5 лет', daysWorked:22, sickDays:0, vacationLeft:10, note:'Продажи точки: 2.1M \u20BD/мес. Компактная точка, высокая эффективность.'},
+    {id:69, name:'Быков Антон', fullName:'Быков Антон Валерьевич', position:'Продавец', dept:'Розница', store:'ТЦ Рига Молл', city:'Москва', salaryBase:50000, salaryBonus:10000, kpi:92, startDate:'01.12.2021', yearsStr:'3 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 960K \u20BD/мес. Мужской ассортимент.'},
+    {id:70, name:'Сорокина Надежда', fullName:'Сорокина Надежда Юрьевна', position:'Продавец', dept:'Розница', store:'ТРЦ Саларис', city:'Москва', salaryBase:50000, salaryBonus:9000, kpi:87, startDate:'01.04.2023', yearsStr:'1 год', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 870K \u20BD/мес. Единственный продавец в точке.'},
+    {id:71, name:'Полякова Лидия', fullName:'Полякова Лидия Геннадьевна', position:'Продавец', dept:'Розница', store:'ТЦ Мегаполис', city:'Москва', salaryBase:50000, salaryBonus:10000, kpi:91, startDate:'01.10.2020', yearsStr:'4 года', daysWorked:22, sickDays:1, vacationLeft:14, note:'Продажи: 960K \u20BD/мес. Совмещает роль управляющего.'},
+    {id:72, name:'Молчанова Регина', fullName:'Молчанова Регина Азатовна', position:'Продавец', dept:'Розница', store:'ТРЦ Щёлковский', city:'Москва', salaryBase:48000, salaryBonus:9000, kpi:86, startDate:'01.06.2022', yearsStr:'2 года', daysWorked:22, sickDays:0, vacationLeft:14, note:'Продажи: 850K \u20BD/мес. Единственный продавец в точке.'},
+    {id:73, name:'Лукьянова Карина', fullName:'Лукьянова Карина Рамильевна', position:'Продавец', dept:'Розница', store:'ТРЦ Щёлковский', city:'Москва', salaryBase:46000, salaryBonus:7000, kpi:80, startDate:'15.08.2023', yearsStr:'8 мес', daysWorked:22, sickDays:2, vacationLeft:14, note:'Продажи: 760K \u20BD/мес. Новый сотрудник, на контроле.'}
+  ];
+
+  var staffGroupMode = 'store';
+
+  function getKpiClass(kpi) {
+    if (kpi === null) return 'kpi-na';
+    if (kpi >= 95) return 'kpi-green';
+    if (kpi >= 80) return 'kpi-yellow';
+    return 'kpi-red';
+  }
+
+  function getKpiDot(kpi) {
+    if (kpi === null) return '';
+    if (kpi >= 95) return '\uD83D\uDFE2';
+    if (kpi >= 80) return '\uD83D\uDFE1';
+    return '\uD83D\uDD34';
+  }
+
+  function getKpiText(kpi) {
+    if (kpi === null) return '\u2014';
+    return 'KPI: ' + kpi + '%';
+  }
+
+  function formatSalary(amount) {
+    if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M \u20BD';
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' \u20BD';
+  }
+
+  function getStaffFiltered() {
+    var search = (document.getElementById('staffSearchInput').value || '').toLowerCase().trim();
+    var dept = document.getElementById('staffFilterDept').value;
+    var city = document.getElementById('staffFilterCity').value;
+    var kpiF = document.getElementById('staffFilterKpi').value;
+    var sort = document.getElementById('staffSort').value;
+
+    var list = STAFF_DATA.filter(function(e) {
+      if (search && e.name.toLowerCase().indexOf(search) === -1 && e.fullName.toLowerCase().indexOf(search) === -1) return false;
+      if (dept && e.dept !== dept) return false;
+      if (city && e.city !== city) return false;
+      if (kpiF === 'green' && (e.kpi === null || e.kpi < 95)) return false;
+      if (kpiF === 'yellow' && (e.kpi === null || e.kpi < 80 || e.kpi >= 95)) return false;
+      if (kpiF === 'red' && (e.kpi === null || e.kpi >= 80)) return false;
+      return true;
+    });
+
+    list.sort(function(a, b) {
+      switch (sort) {
+        case 'salary-desc': return (b.salaryBase + b.salaryBonus) - (a.salaryBase + a.salaryBonus);
+        case 'salary-asc': return (a.salaryBase + a.salaryBonus) - (b.salaryBase + b.salaryBonus);
+        case 'kpi-desc': return ((b.kpi || 0) - (a.kpi || 0));
+        case 'kpi-asc': return ((a.kpi || 0) - (b.kpi || 0));
+        default: return a.name.localeCompare(b.name, 'ru');
+      }
+    });
+
+    return list;
+  }
+
+  function groupStaff(list, mode) {
+    var groups = {};
+    var order = [];
+    list.forEach(function(e) {
+      var key;
+      switch (mode) {
+        case 'dept': key = e.dept; break;
+        case 'city': key = e.city; break;
+        default: key = e.store; break;
+      }
+      if (!groups[key]) {
+        groups[key] = [];
+        order.push(key);
+      }
+      groups[key].push(e);
+    });
+    // Sort groups by predefined order for dept
+    if (mode === 'dept') {
+      var deptOrder = ['Управление', 'Офис', 'Склад', 'Розница'];
+      order.sort(function(a, b) {
+        var ai = deptOrder.indexOf(a); if (ai === -1) ai = 99;
+        var bi = deptOrder.indexOf(b); if (bi === -1) bi = 99;
+        return ai - bi;
+      });
+    }
+    return { groups: groups, order: order };
+  }
+
+  function buildStaffRow(e) {
+    var total = e.salaryBase + e.salaryBonus;
+    var kpiCls = getKpiClass(e.kpi);
+    var kpiTxt = getKpiText(e.kpi);
+    var kpiDot = getKpiDot(e.kpi);
+
+    return '<div class="staff-row" onclick="toggleStaffRow(this)">' +
+      '<div class="staff-row-header">' +
+        '<span class="staff-row-name">' + e.name + '</span>' +
+        '<span class="staff-row-position">' + e.position + '</span>' +
+        '<span class="staff-row-salary">' + formatSalary(total) + '</span>' +
+        '<span class="staff-row-kpi ' + kpiCls + '">' + kpiDot + ' ' + kpiTxt + '</span>' +
+        '<span class="staff-row-since">\u0421 ' + e.startDate.slice(6) + '</span>' +
+        '<span class="staff-row-chevron">&#x25B6;</span>' +
+      '</div>' +
+      '<div class="staff-row-detail">' +
+        '<div class="staff-detail-inner">' +
+          '<div class="staff-detail-grid">' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">ФИО</div><div class="staff-detail-value">' + e.fullName + '</div></div>' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Должность</div><div class="staff-detail-value">' + e.position + ' \u00B7 ' + e.store + '</div></div>' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Зарплата</div><div class="staff-detail-value">' + formatSalary(e.salaryBase) + ' (оклад) + ' + formatSalary(e.salaryBonus) + ' (бонус) = <strong>' + formatSalary(total) + '</strong></div></div>' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Город</div><div class="staff-detail-value">' + e.city + '</div></div>' +
+            (e.kpi !== null ? '<div class="staff-detail-item"><div class="staff-detail-label">KPI</div><div class="staff-detail-value">' + kpiDot + ' ' + e.kpi + '%</div></div>' : '') +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Работает с</div><div class="staff-detail-value">' + e.startDate + ' (' + e.yearsStr + ')</div></div>' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Рабочих дней</div><div class="staff-detail-value">' + e.daysWorked + '</div></div>' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Больничных</div><div class="staff-detail-value">' + e.sickDays + '</div></div>' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Отпуск</div><div class="staff-detail-value">Осталось ' + e.vacationLeft + ' дней</div></div>' +
+            '<div class="staff-detail-item"><div class="staff-detail-label">Департамент</div><div class="staff-detail-value">' + e.dept + '</div></div>' +
+            (e.note ? '<div class="staff-detail-note">\uD83D\uDCA1 ' + e.note + '</div>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderStaffList() {
+    var list = getStaffFiltered();
+    var container = document.getElementById('staffListContainer');
+    var countLabel = document.getElementById('staffCountLabel');
+
+    countLabel.textContent = list.length + ' ' + staffDeclension(list.length);
+
+    if (list.length === 0) {
+      container.innerHTML = '<div class="staff-no-results">\u041D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043E</div>';
+      return;
+    }
+
+    var data = groupStaff(list, staffGroupMode);
+    var html = '';
+    data.order.forEach(function(key) {
+      var members = data.groups[key];
+      var totalSalary = members.reduce(function(s, e) { return s + e.salaryBase + e.salaryBonus; }, 0);
+      html += '<div class="staff-group-header" onclick="toggleStaffGroup(this)">' +
+        '<span class="group-chevron">&#x25BC;</span>' +
+        '<span class="staff-group-name">' + key + '</span>' +
+        '<span class="staff-group-count">(' + members.length + ')</span>' +
+        '<span class="staff-group-salary">\u03A3 ' + formatSalary(totalSalary) + '/\u043C\u0435\u0441</span>' +
+      '</div>';
+      html += '<div class="staff-group-body">';
+      members.forEach(function(e) {
+        html += buildStaffRow(e);
+      });
+      html += '</div>';
+    });
+
+    container.innerHTML = html;
+  }
+
+  function staffDeclension(n) {
+    var abs = Math.abs(n) % 100;
+    var n1 = abs % 10;
+    if (abs > 10 && abs < 20) return '\u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432';
+    if (n1 > 1 && n1 < 5) return '\u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430';
+    if (n1 === 1) return '\u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A';
+    return '\u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432';
+  }
+
+  window.toggleStaffRow = function(row) {
+    var wasExpanded = row.classList.contains('expanded');
+    document.querySelectorAll('.scr-staff .staff-row.expanded').forEach(function(c) { c.classList.remove('expanded'); });
+    if (!wasExpanded) row.classList.add('expanded');
+  };
+
+  window.toggleStaffGroup = function(header) {
+    header.classList.toggle('collapsed');
+  };
+
+  window.staffSwitchGroup = function(mode, btn) {
+    staffGroupMode = mode;
+    document.querySelectorAll('.scr-staff .staff-group-pill').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    renderStaffList();
+  };
+
+  window.filterStaff = function() {
+    renderStaffList();
+  };
+
+  function initStaffScreen() {
+    if (staffInited) return;
+    staffInited = true;
+    renderStaffList();
+  }
+  window.initStaffScreen = initStaffScreen;
 
 })();
 </script>
