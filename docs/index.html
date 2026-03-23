@@ -2682,7 +2682,8 @@ table tbody td.amount {
   .sidebar.collapsed .nav-dot { display: flex; }
   .sidebar.collapsed .nav-item { justify-content: flex-start; padding: 9px 20px; }
   .sidebar.collapsed .nav-item .nav-icon { transform: none; }
-  .sidebar.collapsed .nav-item::after { content: none !important; }
+  /* Mobile: no tooltips needed (full sidebar slides in) */
+  .sidebar:not(.mobile-open) .nav-item::after { content: none; }
 
   .sidebar-overlay.active {
     /* Cover full viewport including safe areas */
