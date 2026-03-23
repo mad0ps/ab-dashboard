@@ -1978,6 +1978,24 @@ table tbody td.amount {
   .insight-text { font-size: 13px; }
 }
 
+/* Period label */
+.period-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: 12px;
+  white-space: nowrap;
+  font-weight: 500;
+  transition: opacity 200ms;
+}
+@media (max-width: 768px) {
+  .period-label { display: none; }
+}
+
+/* KPI fade transition */
+.kpi-fade {
+  transition: opacity 150ms ease !important;
+}
+
 /* Touch feedback */
 @media (hover: none) and (pointer: coarse) {
   .period-pill:active { transform: scale(0.96); }
@@ -2128,6 +2146,7 @@ table tbody td.amount {
         <button class="period-pill" onclick="setPeriod(this)">90д</button>
         <button class="period-pill" onclick="setPeriod(this)">Год</button>
       </div>
+      <span class="period-label" id="periodLabel">Данные за: 30 дней</span>
     </div>
     <div class="topbar-right">
       <div class="topbar-search">
@@ -2549,7 +2568,7 @@ table tbody td.amount {
           </div>
           <div class="stores-kpi-card">
             <div class="stores-kpi-label">Общая выручка</div>
-            <div class="stores-kpi-value">426M &#8381;/год</div>
+            <div class="stores-kpi-value">35.5M &#8381;</div>
           </div>
           <div class="stores-kpi-card">
             <div class="stores-kpi-label">Средняя маржа</div>
@@ -2612,8 +2631,8 @@ table tbody td.amount {
               <svg style="width:14px;height:14px;stroke:var(--success);fill:none;stroke-width:2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               Выручка
             </div>
-            <div class="fin-kpi-value green">737M &#8381;</div>
-            <div class="fin-kpi-trend up">+9.8% г/г</div>
+            <div class="fin-kpi-value green">61.4M &#8381;</div>
+            <div class="fin-kpi-trend up">+12.3%</div>
             <div class="fin-kpi-sparkline">
               <svg viewBox="0 0 200 24" preserveAspectRatio="none">
                 <defs><linearGradient id="fSparkGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity=".2"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
@@ -2628,8 +2647,8 @@ table tbody td.amount {
               <svg style="width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               Расходы (опер.)
             </div>
-            <div class="fin-kpi-value neutral">696M &#8381;</div>
-            <div class="fin-kpi-trend flat">операц.</div>
+            <div class="fin-kpi-value neutral">57.8M &#8381;</div>
+            <div class="fin-kpi-trend flat">+9.8%</div>
             <div class="fin-kpi-sparkline">
               <svg viewBox="0 0 200 24" preserveAspectRatio="none">
                 <defs><linearGradient id="fSparkGray" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#78716C" stop-opacity=".15"/><stop offset="100%" stop-color="#78716C" stop-opacity="0"/></linearGradient></defs>
@@ -2644,8 +2663,8 @@ table tbody td.amount {
               <svg style="width:14px;height:14px;stroke:var(--success);fill:none;stroke-width:2" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
               Валовая прибыль
             </div>
-            <div class="fin-kpi-value green">41M &#8381;</div>
-            <div class="fin-kpi-trend up">+</div>
+            <div class="fin-kpi-value green">3.6M &#8381;</div>
+            <div class="fin-kpi-trend up">+15%</div>
             <div class="fin-kpi-sparkline">
               <svg viewBox="0 0 200 24" preserveAspectRatio="none">
                 <defs><linearGradient id="fSparkGreen2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity=".2"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
@@ -2660,8 +2679,8 @@ table tbody td.amount {
               <svg style="width:14px;height:14px;stroke:var(--warning);fill:none;stroke-width:2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
               Опер. маржа
             </div>
-            <div class="fin-kpi-value yellow">5.6%</div>
-            <div class="fin-kpi-trend flat">узкая</div>
+            <div class="fin-kpi-value yellow">5.9%</div>
+            <div class="fin-kpi-trend flat">+0.4%</div>
             <div class="fin-kpi-sparkline">
               <svg viewBox="0 0 200 24" preserveAspectRatio="none">
                 <defs><linearGradient id="fSparkYellow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F59E0B" stop-opacity=".2"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></linearGradient></defs>
@@ -2676,8 +2695,8 @@ table tbody td.amount {
               <svg style="width:14px;height:14px;stroke:var(--warning);fill:none;stroke-width:2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 12 12 12"/></svg>
               Cash Flow
             </div>
-            <div class="fin-kpi-value yellow">+12.8M &#8381;</div>
-            <div class="fin-kpi-trend down">tight</div>
+            <div class="fin-kpi-value yellow">+1.1M &#8381;</div>
+            <div class="fin-kpi-trend up">+8%</div>
             <div class="fin-kpi-sparkline">
               <svg viewBox="0 0 200 24" preserveAspectRatio="none">
                 <defs><linearGradient id="fSparkOrange" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F59E0B" stop-opacity=".15"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></linearGradient></defs>
@@ -2925,6 +2944,166 @@ table tbody td.amount {
     'ai-advisor': ['AI-Советник', 'Рекомендации на основе данных']
   };
 
+  /* ── Global period data store ── */
+  var currentPeriod = '30д';
+
+  var PERIOD_DATA = {
+    '24ч': {
+      overview: {
+        revenue: '2.1M', orders: '47', check: '44 700', clients: '12',
+        revTrend: '+5.2%', ordTrend: '+3.1%', chkTrend: '+1.8%', cliTrend: '+8.3%',
+        revUp: true, ordUp: true, chkUp: true, cliUp: true,
+        chartLabels: ['00','02','04','06','08','10','12','14','16','18','20','22'],
+        chartData: [0.05, 0.02, 0.01, 0.03, 0.08, 0.12, 0.15, 0.18, 0.22, 0.19, 0.14, 0.08],
+        prevRevenue: '2.0M', prevOrders: '46', prevCheck: '43 900', prevClients: '11'
+      },
+      stores: {
+        totalRevenue: '1.4M',
+        avgMargin: '28%',
+        revenueMultiplier: 0.033
+      },
+      finance: {
+        revenue: '2.1M \u20BD', expenses: '1.9M \u20BD', profit: '0.2M \u20BD', margin: '9.5%', cashflow: '+0.2M \u20BD',
+        revTrend: '+5.2%', expTrend: '+3.1%', profTrend: '+12%', margTrend: '+0.8%', cfTrend: '+15%',
+        revTrendUp: true, expTrendUp: true, profTrendUp: true, margTrendUp: true, cfTrendUp: true,
+        chartLabels: ['00','04','08','12','16','20'],
+        chartRevenue: [0.3, 0.2, 0.15, 0.4, 0.55, 0.5],
+        chartExpenses: [0.25, 0.3, 0.2, 0.35, 0.45, 0.35],
+        cashflowData: [0.05, -0.1, -0.05, 0.05, 0.1, 0.15]
+      }
+    },
+    '7д': {
+      overview: {
+        revenue: '14.8M', orders: '312', check: '47 400', clients: '89',
+        revTrend: '+8.7%', ordTrend: '+6.2%', chkTrend: '+2.1%', cliTrend: '-1.5%',
+        revUp: true, ordUp: true, chkUp: true, cliUp: false,
+        chartLabels: ['\u041F\u043D','\u0412\u0442','\u0421\u0440','\u0427\u0442','\u041F\u0442','\u0421\u0431','\u0412\u0441'],
+        chartData: [1.8, 2.1, 2.3, 1.9, 2.5, 2.8, 1.4],
+        prevRevenue: '13.6M', prevOrders: '294', prevCheck: '46 400', prevClients: '91'
+      },
+      stores: {
+        totalRevenue: '9.8M',
+        avgMargin: '27%',
+        revenueMultiplier: 0.23
+      },
+      finance: {
+        revenue: '14.8M \u20BD', expenses: '13.2M \u20BD', profit: '1.6M \u20BD', margin: '10.8%', cashflow: '+1.6M \u20BD',
+        revTrend: '+8.7%', expTrend: '+5.4%', profTrend: '+18%', margTrend: '+1.2%', cfTrend: '+22%',
+        revTrendUp: true, expTrendUp: true, profTrendUp: true, margTrendUp: true, cfTrendUp: true,
+        chartLabels: ['\u041F\u043D','\u0412\u0442','\u0421\u0440','\u0427\u0442','\u041F\u0442','\u0421\u0431','\u0412\u0441'],
+        chartRevenue: [1.8, 2.1, 2.3, 1.9, 2.5, 2.8, 1.4],
+        chartExpenses: [1.7, 1.9, 2.0, 1.8, 2.2, 2.3, 1.3],
+        cashflowData: [0.1, 0.2, 0.3, 0.1, 0.3, 0.5, 0.1]
+      }
+    },
+    '15д': {
+      overview: {
+        revenue: '30.2M', orders: '634', check: '47 600', clients: '156',
+        revTrend: '+10.1%', ordTrend: '+7.8%', chkTrend: '+2.9%', cliTrend: '-0.8%',
+        revUp: true, ordUp: true, chkUp: true, cliUp: false,
+        chartLabels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'],
+        chartData: [1.8, 2.0, 1.9, 2.3, 2.1, 2.4, 2.2, 1.9, 2.0, 2.3, 2.1, 2.5, 2.2, 2.0, 2.1],
+        prevRevenue: '27.4M', prevOrders: '588', prevCheck: '46 300', prevClients: '157'
+      },
+      stores: {
+        totalRevenue: '19.6M',
+        avgMargin: '28%',
+        revenueMultiplier: 0.5
+      },
+      finance: {
+        revenue: '30.2M \u20BD', expenses: '27.1M \u20BD', profit: '3.1M \u20BD', margin: '10.3%', cashflow: '+3.1M \u20BD',
+        revTrend: '+10.1%', expTrend: '+6.8%', profTrend: '+21%', margTrend: '+1.5%', cfTrend: '+28%',
+        revTrendUp: true, expTrendUp: true, profTrendUp: true, margTrendUp: true, cfTrendUp: true,
+        chartLabels: ['1','3','5','7','9','11','13','15'],
+        chartRevenue: [1.8, 1.9, 2.1, 2.2, 2.0, 2.3, 2.2, 2.1],
+        chartExpenses: [1.6, 1.8, 1.9, 2.0, 1.8, 2.1, 1.9, 1.9],
+        cashflowData: [0.2, 0.1, 0.2, 0.2, 0.2, 0.2, 0.3, 0.2]
+      }
+    },
+    '30д': {
+      overview: {
+        revenue: '61.4M', orders: '1 247', check: '49 200', clients: '312',
+        revTrend: '+12.3%', ordTrend: '+8.1%', chkTrend: '+3.4%', cliTrend: '-2.1%',
+        revUp: true, ordUp: true, chkUp: true, cliUp: false,
+        chartLabels: ['\u042F\u043D\u0432','\u0424\u0435\u0432','\u041C\u0430\u0440','\u0410\u043F\u0440','\u041C\u0430\u0439','\u0418\u044E\u043D','\u0418\u044E\u043B','\u0410\u0432\u0433','\u0421\u0435\u043D','\u041E\u043A\u0442','\u041D\u043E\u044F','\u0414\u0435\u043A'],
+        chartData: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54],
+        prevRevenue: '54.7M', prevOrders: '1 153', prevCheck: '47 600', prevClients: '319'
+      },
+      stores: {
+        totalRevenue: '35.5M',
+        avgMargin: '28%',
+        revenueMultiplier: 1.0
+      },
+      finance: {
+        revenue: '61.4M \u20BD', expenses: '57.8M \u20BD', profit: '3.6M \u20BD', margin: '5.9%', cashflow: '+1.1M \u20BD',
+        revTrend: '+12.3%', expTrend: '+9.8%', profTrend: '+15%', margTrend: '+0.4%', cfTrend: '+8%',
+        revTrendUp: true, expTrendUp: true, profTrendUp: true, margTrendUp: true, cfTrendUp: true,
+        chartLabels: ['\u042F\u043D\u0432','\u0424\u0435\u0432','\u041C\u0430\u0440','\u0410\u043F\u0440','\u041C\u0430\u0439','\u0418\u044E\u043D','\u0418\u044E\u043B','\u0410\u0432\u0433','\u0421\u0435\u043D','\u041E\u043A\u0442','\u041D\u043E\u044F','\u0414\u0435\u043A'],
+        chartRevenue: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54],
+        chartExpenses: [40, 55, 62, 56, 50, 58, 72, 120, 55, 62, 45, 58],
+        cashflowData: [3, -5, 3, -2, 2, -3, -4, 17.5, 3, -3, -4, -4]
+      }
+    },
+    '90д': {
+      overview: {
+        revenue: '184.2M', orders: '3 741', check: '49 200', clients: '847',
+        revTrend: '+14.5%', ordTrend: '+11.2%', chkTrend: '+4.1%', cliTrend: '+1.2%',
+        revUp: true, ordUp: true, chkUp: true, cliUp: true,
+        chartLabels: ['\u041E\u043A\u0442','\u041D\u043E\u044F','\u0414\u0435\u043A','\u042F\u043D\u0432','\u0424\u0435\u0432','\u041C\u0430\u0440'],
+        chartData: [59, 41, 54, 43, 50, 65],
+        prevRevenue: '160.9M', prevOrders: '3 365', prevCheck: '47 300', prevClients: '837'
+      },
+      stores: {
+        totalRevenue: '106.5M',
+        avgMargin: '29%',
+        revenueMultiplier: 3.0
+      },
+      finance: {
+        revenue: '184.2M \u20BD', expenses: '172.8M \u20BD', profit: '11.4M \u20BD', margin: '6.2%', cashflow: '+3.2M \u20BD',
+        revTrend: '+14.5%', expTrend: '+10.2%', profTrend: '+22%', margTrend: '+1.1%', cfTrend: '+18%',
+        revTrendUp: true, expTrendUp: true, profTrendUp: true, margTrendUp: true, cfTrendUp: true,
+        chartLabels: ['\u041E\u043A\u0442','\u041D\u043E\u044F','\u0414\u0435\u043A','\u042F\u043D\u0432','\u0424\u0435\u0432','\u041C\u0430\u0440'],
+        chartRevenue: [59, 41, 54, 43, 50, 65],
+        chartExpenses: [62, 45, 58, 40, 55, 62],
+        cashflowData: [-3, -4, -4, 3, -5, 3]
+      }
+    },
+    '\u0413\u043E\u0434': {
+      overview: {
+        revenue: '737M', orders: '15 024', check: '49 100', clients: '3 200',
+        revTrend: '+9.8%', ordTrend: '+7.3%', chkTrend: '+2.8%', cliTrend: '+5.4%',
+        revUp: true, ordUp: true, chkUp: true, cliUp: true,
+        chartLabels: ['\u042F\u043D\u0432','\u0424\u0435\u0432','\u041C\u0430\u0440','\u0410\u043F\u0440','\u041C\u0430\u0439','\u0418\u044E\u043D','\u0418\u044E\u043B','\u0410\u0432\u0433','\u0421\u0435\u043D','\u041E\u043A\u0442','\u041D\u043E\u044F','\u0414\u0435\u043A'],
+        chartData: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54],
+        prevRevenue: '671M', prevOrders: '14 002', prevCheck: '47 800', prevClients: '3 036'
+      },
+      stores: {
+        totalRevenue: '426M',
+        avgMargin: '28%',
+        revenueMultiplier: 12.0
+      },
+      finance: {
+        revenue: '737M \u20BD', expenses: '696M \u20BD', profit: '41M \u20BD', margin: '5.6%', cashflow: '+12.8M \u20BD',
+        revTrend: '+9.8%', expTrend: '+7.2%', profTrend: '+18%', margTrend: '+0.6%', cfTrend: '+12%',
+        revTrendUp: true, expTrendUp: true, profTrendUp: true, margTrendUp: true, cfTrendUp: true,
+        chartLabels: ['\u042F\u043D\u0432','\u0424\u0435\u0432','\u041C\u0430\u0440','\u0410\u043F\u0440','\u041C\u0430\u0439','\u0418\u044E\u043D','\u0418\u044E\u043B','\u0410\u0432\u0433','\u0421\u0435\u043D','\u041E\u043A\u0442','\u041D\u043E\u044F','\u0414\u0435\u043A'],
+        chartRevenue: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54],
+        chartExpenses: [40, 55, 62, 56, 50, 58, 72, 120, 55, 62, 45, 58],
+        cashflowData: [3, -5, 3, -2, 2, -3, -4, 17.5, 3, -3, -4, -4]
+      }
+    }
+  };
+
+  /* ── Period label map ── */
+  var periodLabelMap = {
+    '24ч': '\u0414\u0430\u043D\u043D\u044B\u0435 \u0437\u0430: 24 \u0447\u0430\u0441\u0430',
+    '7д': '\u0414\u0430\u043D\u043D\u044B\u0435 \u0437\u0430: 7 \u0434\u043D\u0435\u0439',
+    '15д': '\u0414\u0430\u043D\u043D\u044B\u0435 \u0437\u0430: 15 \u0434\u043D\u0435\u0439',
+    '30д': '\u0414\u0430\u043D\u043D\u044B\u0435 \u0437\u0430: 30 \u0434\u043D\u0435\u0439',
+    '90д': '\u0414\u0430\u043D\u043D\u044B\u0435 \u0437\u0430: 90 \u0434\u043D\u0435\u0439',
+    '\u0413\u043E\u0434': '\u0414\u0430\u043D\u043D\u044B\u0435 \u0437\u0430: \u0433\u043E\u0434'
+  };
+
   /* ── Switch screen ── */
   window.switchScreen = function(screen, navEl) {
     // Update sidebar active item
@@ -2951,6 +3130,9 @@ table tbody td.amount {
       // Lazy-init finance screen
       if (screen === 'finance') {
         initFinanceScreen();
+        // Re-apply current period data to finance
+        var fd = PERIOD_DATA[currentPeriod];
+        if (fd && fd.finance) updateFinanceData(fd.finance);
       }
     }
 
@@ -2974,40 +3156,7 @@ table tbody td.amount {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /* ── Period data ── */
-  const periodData = {
-    '24ч': { revenue: '2.1M', orders: '47', check: '44 700', clients: '12',
-              revTrend: '+5.2%', ordTrend: '+3.1%', chkTrend: '+1.8%', cliTrend: '+8.3%',
-              revUp: true, ordUp: true, chkUp: true, cliUp: true,
-              revPrev: '2.0M', ordPrev: '46', chkPrev: '43 900', cliPrev: '11',
-              chartData: [1.8, 2.0, 1.9, 2.1, 2.3, 2.0, 1.8, 2.1, 2.4, 2.2, 2.0, 2.1] },
-    '7д':  { revenue: '14.8M', orders: '312', check: '47 400', clients: '89',
-              revTrend: '+8.7%', ordTrend: '+6.2%', chkTrend: '+2.1%', cliTrend: '-1.5%',
-              revUp: true, ordUp: true, chkUp: true, cliUp: false,
-              revPrev: '13.6M', ordPrev: '294', chkPrev: '46 400', cliPrev: '90',
-              chartData: [12.1, 13.5, 14.2, 13.8, 15.1, 14.5, 14.8] },
-    '15д': { revenue: '30.2M', orders: '634', check: '47 600', clients: '156',
-              revTrend: '+10.1%', ordTrend: '+7.8%', chkTrend: '+2.9%', cliTrend: '-0.8%',
-              revUp: true, ordUp: true, chkUp: true, cliUp: false,
-              revPrev: '27.4M', ordPrev: '588', chkPrev: '46 200', cliPrev: '157',
-              chartData: [1.8, 2.0, 1.9, 2.3, 2.1, 2.4, 2.2, 1.9, 2.0, 2.3, 2.1, 2.5, 2.2, 2.0, 2.1] },
-    '30д': { revenue: '61.4M', orders: '1 247', check: '49 200', clients: '312',
-              revTrend: '+12.3%', ordTrend: '+8.1%', chkTrend: '+3.4%', cliTrend: '-2.1%',
-              revUp: true, ordUp: true, chkUp: true, cliUp: false,
-              revPrev: '54.7M', ordPrev: '1 153', chkPrev: '47 600', cliPrev: '319',
-              chartData: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54] },
-    '90д': { revenue: '184.2M', orders: '3 741', check: '49 200', clients: '847',
-              revTrend: '+14.5%', ordTrend: '+11.2%', chkTrend: '+4.1%', cliTrend: '+1.2%',
-              revUp: true, ordUp: true, chkUp: true, cliUp: true,
-              revPrev: '160.9M', ordPrev: '3 364', chkPrev: '47 300', cliPrev: '837',
-              chartData: [55, 58, 62, 54, 52, 55, 68, 137.5, 58, 59, 41, 54] },
-    'Год': { revenue: '737M', orders: '15 024', check: '49 100', clients: '3 200',
-              revTrend: '+9.8%', ordTrend: '+7.3%', chkTrend: '+2.8%', cliTrend: '+5.4%',
-              revUp: true, ordUp: true, chkUp: true, cliUp: true,
-              revPrev: '671M', ordPrev: '14 002', chkPrev: '47 800', cliPrev: '3 036',
-              chartData: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54] }
-  };
-
+  /* ── Fade animation helper ── */
   function animateValue(el, newText) {
     el.style.transition = 'opacity 150ms';
     el.style.opacity = '0';
@@ -3017,8 +3166,8 @@ table tbody td.amount {
     }, 150);
   }
 
-  function updateDashboardData(periodKey) {
-    var d = periodData[periodKey];
+  /* ── Update Overview screen ── */
+  function updateOverviewData(d) {
     if (!d) return;
 
     var kpiCards = document.querySelectorAll('.kpi-card');
@@ -3031,7 +3180,7 @@ table tbody td.amount {
     animateValue(revValue, d.revenue + ' \u20BD');
     revTrend.className = 'kpi-trend ' + (d.revUp ? 'up' : 'down');
     revTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.revUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.revTrend;
-    if (revPrev) revPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>\u20BD' + d.revPrev + '</span>';
+    if (revPrev) revPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>\u20BD' + d.prevRevenue + '</span>';
 
     // Orders
     var ordValue = kpiCards[1].querySelector('.kpi-value');
@@ -3040,7 +3189,7 @@ table tbody td.amount {
     animateValue(ordValue, d.orders);
     ordTrend.className = 'kpi-trend ' + (d.ordUp ? 'up' : 'down');
     ordTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.ordUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.ordTrend;
-    if (ordPrev) ordPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.ordPrev + '</span>';
+    if (ordPrev) ordPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.prevOrders + '</span>';
 
     // Average check
     var chkValue = kpiCards[2].querySelector('.kpi-value');
@@ -3049,7 +3198,7 @@ table tbody td.amount {
     animateValue(chkValue, d.check + ' \u20BD');
     chkTrend.className = 'kpi-trend ' + (d.chkUp ? 'up' : 'down');
     chkTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.chkUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.chkTrend;
-    if (chkPrev) chkPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.chkPrev + '\u20BD</span>';
+    if (chkPrev) chkPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.prevCheck + '\u20BD</span>';
 
     // New clients
     var cliValue = kpiCards[3].querySelector('.kpi-value');
@@ -3058,17 +3207,128 @@ table tbody td.amount {
     animateValue(cliValue, d.clients);
     cliTrend.className = 'kpi-trend ' + (d.cliUp ? 'up' : 'down');
     cliTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.cliUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.cliTrend;
-    if (cliPrev) cliPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.cliPrev + '</span>';
+    if (cliPrev) cliPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.prevClients + '</span>';
 
     // Update Chart.js
-    updateRevenueChart(d.chartData);
+    updateRevenueChart(d.chartData, d.chartLabels);
+  }
+
+  /* ── Update Stores screen ── */
+  function updateStoresData(data) {
+    if (!data) return;
+    var storesKpiValues = document.querySelectorAll('#screen-stores .stores-kpi-value');
+    // 0 = total stores (static), 1 = total revenue, 2 = avg margin, 3 = loss-making (static)
+    if (storesKpiValues.length >= 3) {
+      animateValue(storesKpiValues[1], data.totalRevenue + ' \u20BD');
+      animateValue(storesKpiValues[2], data.avgMargin);
+    }
+
+    // Update store row revenues using multiplier
+    document.querySelectorAll('.store-row').forEach(function(row) {
+      var baseRevenue = parseFloat(row.getAttribute('data-base-revenue'));
+      if (isNaN(baseRevenue)) return;
+      var scaled = (baseRevenue * data.revenueMultiplier);
+      var display;
+      if (scaled >= 1) {
+        display = scaled.toFixed(1) + 'M/\u043C\u0435\u0441';
+      } else {
+        display = (scaled * 1000).toFixed(0) + 'K/\u043C\u0435\u0441';
+      }
+      // Update desktop cell
+      var cells = row.querySelectorAll('.store-row-cell');
+      if (cells.length > 0) cells[0].textContent = display;
+      // Update mobile value
+      var mobileValues = row.querySelectorAll('.store-row-mobile-value');
+      if (mobileValues.length > 0) mobileValues[0].textContent = display;
+    });
+  }
+
+  /* ── Update Finance screen ── */
+  function updateFinanceData(data) {
+    if (!data) return;
+    // Update 5 P&L summary cards
+    var cards = document.querySelectorAll('#screen-finance .fin-kpi-value');
+    var values = [data.revenue, data.expenses, data.profit, data.margin, data.cashflow];
+    cards.forEach(function(card, i) {
+      if (values[i] !== undefined) animateValue(card, values[i]);
+    });
+
+    // Update trend badges
+    var trends = document.querySelectorAll('#screen-finance .fin-kpi-trend');
+    var trendValues = [data.revTrend, data.expTrend, data.profTrend, data.margTrend, data.cfTrend];
+    var trendDirs = [data.revTrendUp, data.expTrendUp, data.profTrendUp, data.margTrendUp, data.cfTrendUp];
+    trends.forEach(function(t, i) {
+      if (trendValues[i] !== undefined) {
+        t.textContent = trendValues[i];
+        // Update class for trend direction (skip 'flat' ones like expenses/margin)
+        if (i === 0 || i === 2 || i === 4) {
+          t.className = 'fin-kpi-trend ' + (trendDirs[i] ? 'up' : 'down');
+        }
+      }
+    });
+
+    // Update finance charts if they exist
+    updateFinanceCharts(data);
+  }
+
+  /* ── Update Finance charts ── */
+  function updateFinanceCharts(data) {
+    if (!data) return;
+
+    // Update Revenue vs Expenses bar chart
+    if (finMonthlyChart) {
+      finMonthlyChart.data.labels = data.chartLabels;
+      finMonthlyChart.data.datasets[0].data = data.chartRevenue;
+      finMonthlyChart.data.datasets[1].data = data.chartExpenses;
+      // Recalculate y-axis max
+      var allVals = data.chartRevenue.concat(data.chartExpenses);
+      var maxVal = Math.max.apply(null, allVals);
+      finMonthlyChart.options.scales.y.max = Math.ceil(maxVal * 1.3 / 10) * 10 || 20;
+      finMonthlyChart.update('active');
+    }
+
+    // Update Cash Flow chart
+    if (finCashflowChart) {
+      finCashflowChart.data.labels = data.chartLabels;
+      finCashflowChart.data.datasets[0].data = data.cashflowData;
+      // Update point colors based on values
+      finCashflowChart.data.datasets[0].pointBackgroundColor = data.cashflowData.map(function(v) {
+        return v >= 0 ? '#10B981' : '#EF4444';
+      });
+      finCashflowChart.data.datasets[0].borderColor = data.cashflowData.map(function(v) {
+        return v >= 0 ? '#10B981' : '#EF4444';
+      });
+      finCashflowChart.update('active');
+    }
+  }
+
+  /* ── Global period change handler ── */
+  function onPeriodChange(period) {
+    currentPeriod = period;
+    var data = PERIOD_DATA[period];
+    if (!data) return;
+
+    // Update period label
+    var periodLabel = document.getElementById('periodLabel');
+    if (periodLabel) {
+      periodLabel.textContent = periodLabelMap[period] || period;
+    }
+
+    // Update Overview
+    updateOverviewData(data.overview);
+
+    // Update Stores
+    updateStoresData(data.stores);
+
+    // Update Finance (always update data, charts update if initialized)
+    updateFinanceData(data.finance);
   }
 
   /* ── Period selector ── */
   window.setPeriod = function(el) {
     document.querySelectorAll('.period-pill').forEach(p => p.classList.remove('active'));
     el.classList.add('active');
-    updateDashboardData(el.textContent.trim());
+    onPeriodChange(el.textContent.trim());
   };
 
   /* ── Sidebar toggle (desktop) ── */
@@ -3140,23 +3400,24 @@ table tbody td.amount {
   /* ── Revenue Chart (Chart.js) ── */
   var revenueChartInstance = null;
 
-  function updateRevenueChart(newData) {
+  function updateRevenueChart(newData, labels) {
     if (!revenueChartInstance) return;
     var chart = revenueChartInstance;
-    // Generate labels based on data length
-    var labels;
-    if (newData.length <= 7) {
-      labels = ['\u041F\u043D', '\u0412\u0442', '\u0421\u0440', '\u0427\u0442', '\u041F\u0442', '\u0421\u0431', '\u0412\u0441'].slice(0, newData.length);
-    } else if (newData.length <= 15) {
-      labels = newData.map(function(_, i) { return (i + 1) + '\u0434'; });
-    } else {
-      labels = ['\u042F\u043D\u0432', '\u0424\u0435\u0432', '\u041C\u0430\u0440', '\u0410\u043F\u0440', '\u041C\u0430\u0439', '\u0418\u044E\u043D', '\u0418\u044E\u043B', '\u0410\u0432\u0433', '\u0421\u0435\u043D', '\u041E\u043A\u0442', '\u041D\u043E\u044F', '\u0414\u0435\u043A'];
+    // Use provided labels or generate based on data length
+    if (!labels) {
+      if (newData.length <= 7) {
+        labels = ['\u041F\u043D', '\u0412\u0442', '\u0421\u0440', '\u0427\u0442', '\u041F\u0442', '\u0421\u0431', '\u0412\u0441'].slice(0, newData.length);
+      } else if (newData.length <= 15) {
+        labels = newData.map(function(_, i) { return (i + 1) + '\u0434'; });
+      } else {
+        labels = ['\u042F\u043D\u0432', '\u0424\u0435\u0432', '\u041C\u0430\u0440', '\u0410\u043F\u0440', '\u041C\u0430\u0439', '\u0418\u044E\u043D', '\u0418\u044E\u043B', '\u0410\u0432\u0433', '\u0421\u0435\u043D', '\u041E\u043A\u0442', '\u041D\u043E\u044F', '\u0414\u0435\u043A'];
+      }
     }
     chart.data.labels = labels;
     chart.data.datasets[0].data = newData;
     // Recalculate y-axis max
     var maxVal = Math.max.apply(null, newData);
-    chart.options.scales.y.max = Math.ceil(maxVal * 1.3 / 10) * 10;
+    chart.options.scales.y.max = Math.ceil(maxVal * 1.3 / 10) * 10 || 2;
     chart.update('active');
   }
 
@@ -3366,7 +3627,7 @@ table tbody td.amount {
     var marginSign = store.margin >= 0 ? '+' : '';
     var marginPctDisplay = store.marginPct > -100 ? ' (' + store.marginPct + '%)' : '';
 
-    return '<div class="store-row" data-status="' + store.status + '" onclick="toggleStoreDetail(this)">' +
+    return '<div class="store-row" data-status="' + store.status + '" data-base-revenue="' + store.revenue + '" onclick="toggleStoreDetail(this)">' +
       '<div class="store-row-header">' +
         // Desktop columns
         '<div class="store-row-name">' +
@@ -3421,6 +3682,9 @@ table tbody td.amount {
     }
     var label = document.getElementById('storesCountLabel');
     if (label) label.textContent = list.length + ' из ' + storesData.length;
+    // Apply current period multiplier to store revenues
+    var pd = PERIOD_DATA[currentPeriod];
+    if (pd && pd.stores) updateStoresData(pd.stores);
   }
 
   window.filterStores = function() {
