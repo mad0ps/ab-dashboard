@@ -1542,6 +1542,308 @@ table tbody td.amount {
   .stores-kpi-label { font-size: 11px; }
 }
 
+/* ============================================================
+   FINANCE SCREEN
+   ============================================================ */
+#screen-finance {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0;
+  min-height: auto;
+}
+#screen-finance.active { display: block; opacity: 1; transform: none; }
+
+.scr-finance .finance-wrapper {
+  padding: 24px 0;
+  animation: cardIn 400ms var(--ease-out) forwards;
+}
+
+/* P&L Summary Cards */
+.scr-finance .fin-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--separator);
+}
+.scr-finance .fin-kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  transition: all 200ms var(--ease-out);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.scr-finance .fin-kpi-card:hover {
+  border-color: var(--n300);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.scr-finance .fin-kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.scr-finance .fin-kpi-value {
+  font-family: var(--f-mono);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.scr-finance .fin-kpi-value.green { color: var(--success); }
+.scr-finance .fin-kpi-value.yellow { color: var(--warning); }
+.scr-finance .fin-kpi-value.neutral { color: var(--text-primary); }
+.scr-finance .fin-kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+.scr-finance .fin-kpi-trend.up { color: var(--success); background: var(--success-light); }
+.scr-finance .fin-kpi-trend.down { color: var(--danger); background: var(--danger-light); }
+.scr-finance .fin-kpi-trend.flat { color: var(--text-muted); background: var(--separator); }
+.scr-finance .fin-kpi-sparkline { margin-top: 8px; height: 24px; }
+.scr-finance .fin-kpi-sparkline svg { width: 100%; height: 24px; }
+
+/* Revenue vs Expenses Chart */
+.scr-finance .fin-chart-full {
+  margin-bottom: 24px;
+}
+.scr-finance .fin-chart-full .chart-wrapper {
+  height: 300px;
+}
+
+/* Two-column layout */
+.scr-finance .fin-two-col {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Expense Breakdown */
+.scr-finance .expense-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.scr-finance .expense-item {
+  border-bottom: 1px solid var(--separator);
+  cursor: pointer;
+  transition: background 120ms;
+}
+.scr-finance .expense-item:last-child { border-bottom: none; }
+.scr-finance .expense-item:hover { background: var(--table-row-hover); }
+.scr-finance .expense-item-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 0;
+  gap: 12px;
+}
+.scr-finance .expense-rank {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.scr-finance .expense-info {
+  flex: 1;
+  min-width: 0;
+}
+.scr-finance .expense-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scr-finance .expense-name .expense-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: var(--r-full);
+  font-weight: 600;
+  background: var(--warning-light);
+  color: #92400E;
+  border: 1px solid var(--warning-muted);
+}
+.scr-finance .expense-bar-wrap {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scr-finance .expense-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--separator);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+.scr-finance .expense-bar-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--brand-gold);
+  transition: width 800ms var(--ease-out);
+  width: 0;
+}
+.scr-finance .expense-pct {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+.scr-finance .expense-amount {
+  font-family: var(--f-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.scr-finance .expense-chevron {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 200ms var(--ease-out);
+}
+.scr-finance .expense-item.expanded .expense-chevron {
+  transform: rotate(90deg);
+}
+.scr-finance .expense-detail {
+  display: none;
+  padding: 0 0 14px 32px;
+  animation: storeDetailSlide 200ms var(--ease-out);
+}
+.scr-finance .expense-item.expanded .expense-detail {
+  display: block;
+}
+.scr-finance .expense-detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.scr-finance .expense-detail-list li {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  padding: 3px 0;
+  padding-left: 16px;
+  position: relative;
+}
+.scr-finance .expense-detail-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--brand-gold);
+}
+.scr-finance .expense-detail-list li span {
+  font-family: var(--f-mono);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Revenue Breakdown */
+.scr-finance .rev-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Cash Flow chart */
+.scr-finance .fin-cashflow-section {
+  margin-bottom: 24px;
+}
+.scr-finance .fin-cashflow-section .chart-wrapper {
+  height: 240px;
+}
+
+/* Bottom insight */
+.scr-finance .fin-insight-card {
+  padding: 18px 22px;
+  background: var(--info-light);
+  border: 1px solid var(--info-muted);
+  border-radius: var(--r-lg);
+  font-size: 13.5px;
+  color: #1E40AF;
+  line-height: 1.6;
+}
+.scr-finance .fin-insight-card strong {
+  font-weight: 600;
+}
+[data-theme="dark"] .scr-finance .fin-insight-card {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+  color: #93C5FD;
+}
+[data-theme="dark"] .scr-finance .expense-name .expense-badge {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: #FCD34D;
+}
+
+/* Finance mobile */
+@media (max-width: 1100px) {
+  .scr-finance .fin-kpi-row { grid-template-columns: repeat(3, 1fr); }
+  .scr-finance .fin-two-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .scr-finance .fin-kpi-row {
+    grid-template-columns: repeat(5, 1fr);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    gap: 10px;
+    display: flex;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    scroll-snap-type: x mandatory;
+  }
+  .scr-finance .fin-kpi-row::-webkit-scrollbar { display: none; }
+  .scr-finance .fin-kpi-card {
+    min-width: 160px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  .scr-finance .fin-kpi-value { font-size: 20px; }
+  .scr-finance .fin-chart-full .chart-wrapper { height: 240px; }
+  .scr-finance .fin-two-col { grid-template-columns: 1fr; }
+  .scr-finance .fin-cashflow-section .chart-wrapper { height: 200px; }
+}
+@media (max-width: 380px) {
+  .scr-finance .fin-kpi-card { min-width: 140px; padding: 14px 16px; }
+  .scr-finance .fin-kpi-value { font-size: 18px; }
+}
+
 /* Overview screen */
 .screen-overview { display: block; }
 .screen-overview.hidden { display: none; }
@@ -2299,10 +2601,199 @@ table tbody td.amount {
         </div>
       </div>
     </div>
-    <div class="placeholder-screen" id="screen-finance">
-      <div class="placeholder-icon">&#x1F4B0;</div>
-      <div class="placeholder-title">Финансы</div>
-      <div class="placeholder-desc">Этот раздел в разработке. P&L, БДДС, unit-экономика по каждому каналу.</div>
+    <div class="placeholder-screen scr-finance" id="screen-finance">
+      <div class="finance-wrapper">
+
+        <!-- P&L Summary Cards -->
+        <div class="fin-kpi-row">
+          <!-- Выручка -->
+          <div class="fin-kpi-card">
+            <div class="fin-kpi-label">
+              <svg style="width:14px;height:14px;stroke:var(--success);fill:none;stroke-width:2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Выручка
+            </div>
+            <div class="fin-kpi-value green">737M &#8381;</div>
+            <div class="fin-kpi-trend up">+9.8% г/г</div>
+            <div class="fin-kpi-sparkline">
+              <svg viewBox="0 0 200 24" preserveAspectRatio="none">
+                <defs><linearGradient id="fSparkGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity=".2"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,18 L17,16 L34,12 L51,14 L68,15 L85,13 L102,11 L119,3 L136,13 L153,12 L170,18 L187,14 L200,14 L200,24 L0,24Z" fill="url(#fSparkGreen)"/>
+                <path d="M0,18 L17,16 L34,12 L51,14 L68,15 L85,13 L102,11 L119,3 L136,13 L153,12 L170,18 L187,14" fill="none" stroke="#10B981" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Расходы -->
+          <div class="fin-kpi-card">
+            <div class="fin-kpi-label">
+              <svg style="width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Расходы (опер.)
+            </div>
+            <div class="fin-kpi-value neutral">696M &#8381;</div>
+            <div class="fin-kpi-trend flat">операц.</div>
+            <div class="fin-kpi-sparkline">
+              <svg viewBox="0 0 200 24" preserveAspectRatio="none">
+                <defs><linearGradient id="fSparkGray" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#78716C" stop-opacity=".15"/><stop offset="100%" stop-color="#78716C" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,16 L17,12 L34,10 L51,11 L68,13 L85,10 L102,8 L119,4 L136,11 L153,9 L170,14 L187,10 L200,10 L200,24 L0,24Z" fill="url(#fSparkGray)"/>
+                <path d="M0,16 L17,12 L34,10 L51,11 L68,13 L85,10 L102,8 L119,4 L136,11 L153,9 L170,14 L187,10" fill="none" stroke="#78716C" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Валовая прибыль -->
+          <div class="fin-kpi-card">
+            <div class="fin-kpi-label">
+              <svg style="width:14px;height:14px;stroke:var(--success);fill:none;stroke-width:2" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+              Валовая прибыль
+            </div>
+            <div class="fin-kpi-value green">41M &#8381;</div>
+            <div class="fin-kpi-trend up">+</div>
+            <div class="fin-kpi-sparkline">
+              <svg viewBox="0 0 200 24" preserveAspectRatio="none">
+                <defs><linearGradient id="fSparkGreen2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity=".2"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,14 L17,16 L34,18 L51,15 L68,14 L85,16 L102,14 L119,8 L136,14 L153,13 L170,16 L187,14 L200,12 L200,24 L0,24Z" fill="url(#fSparkGreen2)"/>
+                <path d="M0,14 L17,16 L34,18 L51,15 L68,14 L85,16 L102,14 L119,8 L136,14 L153,13 L170,16 L187,14" fill="none" stroke="#10B981" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Операционная маржа -->
+          <div class="fin-kpi-card">
+            <div class="fin-kpi-label">
+              <svg style="width:14px;height:14px;stroke:var(--warning);fill:none;stroke-width:2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              Опер. маржа
+            </div>
+            <div class="fin-kpi-value yellow">5.6%</div>
+            <div class="fin-kpi-trend flat">узкая</div>
+            <div class="fin-kpi-sparkline">
+              <svg viewBox="0 0 200 24" preserveAspectRatio="none">
+                <defs><linearGradient id="fSparkYellow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F59E0B" stop-opacity=".2"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,12 L17,13 L34,14 L51,12 L68,11 L85,13 L102,12 L119,10 L136,12 L153,11 L170,14 L187,12 L200,11 L200,24 L0,24Z" fill="url(#fSparkYellow)"/>
+                <path d="M0,12 L17,13 L34,14 L51,12 L68,11 L85,13 L102,12 L119,10 L136,12 L153,11 L170,14 L187,12" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Cash Flow -->
+          <div class="fin-kpi-card">
+            <div class="fin-kpi-label">
+              <svg style="width:14px;height:14px;stroke:var(--warning);fill:none;stroke-width:2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="21 3 21 12 12 12"/></svg>
+              Cash Flow
+            </div>
+            <div class="fin-kpi-value yellow">+12.8M &#8381;</div>
+            <div class="fin-kpi-trend down">tight</div>
+            <div class="fin-kpi-sparkline">
+              <svg viewBox="0 0 200 24" preserveAspectRatio="none">
+                <defs><linearGradient id="fSparkOrange" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F59E0B" stop-opacity=".15"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,14 L17,12 L34,18 L51,15 L68,14 L85,16 L102,14 L119,4 L136,14 L153,16 L170,20 L187,14 L200,12 L200,24 L0,24Z" fill="url(#fSparkOrange)"/>
+                <path d="M0,14 L17,12 L34,18 L51,15 L68,14 L85,16 L102,14 L119,4 L136,14 L153,16 L170,20 L187,14" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue vs Expenses Chart -->
+        <div class="card fin-chart-full">
+          <div class="card-title">
+            <svg style="width:20px;height:20px;stroke:var(--ch-retail);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+            Выручка vs Расходы
+          </div>
+          <div class="card-subtitle">Помесячно, млн &#8381; &middot; БДДС 2024</div>
+          <div class="chart-wrapper">
+            <canvas id="chart-finance-monthly"></canvas>
+          </div>
+        </div>
+
+        <!-- Two-column: Expense Breakdown + Revenue Breakdown -->
+        <div class="fin-two-col">
+          <!-- Left: Expense Breakdown -->
+          <div class="card">
+            <div class="card-title">
+              <svg style="width:20px;height:20px;stroke:var(--danger);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Структура расходов
+            </div>
+            <div class="card-subtitle">Операционные расходы &middot; Топ-7 статей</div>
+            <div class="expense-list" id="finExpenseList"></div>
+          </div>
+          <!-- Right: Revenue Breakdown -->
+          <div class="card">
+            <div class="card-title">
+              <svg style="width:20px;height:20px;stroke:var(--success);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Структура выручки
+            </div>
+            <div class="card-subtitle">По каналам продаж &middot; 2024</div>
+            <div class="rev-breakdown">
+              <!-- Розница -->
+              <div class="channel-item">
+                <div class="channel-header">
+                  <div class="channel-name">
+                    <span style="width:8px;height:8px;border-radius:50%;background:var(--ch-retail);display:inline-block"></span>
+                    Розница (п/карты)
+                  </div>
+                  <div class="channel-values">
+                    <span class="channel-amount">426M &#8381;</span>
+                    <span class="channel-pct">58%</span>
+                  </div>
+                </div>
+                <div class="channel-bar-track">
+                  <div class="channel-bar-fill fin-rev-bar" data-width="58" style="background:var(--ch-retail)"></div>
+                </div>
+              </div>
+              <!-- Опт -->
+              <div class="channel-item">
+                <div class="channel-header">
+                  <div class="channel-name">
+                    <span style="width:8px;height:8px;border-radius:50%;background:var(--ch-wholesale);display:inline-block"></span>
+                    Опт
+                  </div>
+                  <div class="channel-values">
+                    <span class="channel-amount">285M &#8381;</span>
+                    <span class="channel-pct">39%</span>
+                  </div>
+                </div>
+                <div class="channel-bar-track">
+                  <div class="channel-bar-fill fin-rev-bar" data-width="39" style="background:var(--ch-wholesale)"></div>
+                </div>
+              </div>
+              <!-- Интернет-магазин -->
+              <div class="channel-item">
+                <div class="channel-header">
+                  <div class="channel-name">
+                    <span style="width:8px;height:8px;border-radius:50%;background:var(--ch-online);display:inline-block"></span>
+                    Интернет-магазин
+                    <span class="badge badge-red" style="font-size:9px;padding:1px 6px;">3.5%</span>
+                  </div>
+                  <div class="channel-values">
+                    <span class="channel-amount">25.5M &#8381;</span>
+                    <span class="channel-pct">3%</span>
+                  </div>
+                </div>
+                <div class="channel-bar-track">
+                  <div class="channel-bar-fill fin-rev-bar" data-width="3.5" style="background:var(--ch-online)"></div>
+                </div>
+              </div>
+              <div class="channel-insight">
+                <strong>&#x26A0;&#xFE0F; Онлайн = всего 3.5%</strong> выручки. Средний по рынку детской одежды &mdash; 15-25%. Увеличение онлайн-доли до 15% = потенциал +85M &#8381; в год.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cash Flow Trend -->
+        <div class="card fin-cashflow-section">
+          <div class="card-title">
+            <svg style="width:20px;height:20px;stroke:var(--warning);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Cash Flow по месяцам
+          </div>
+          <div class="card-subtitle">Выручка минус расходы, млн &#8381; &middot; 2024</div>
+          <div class="chart-wrapper">
+            <canvas id="chart-cashflow"></canvas>
+          </div>
+        </div>
+
+        <!-- Bottom Insight -->
+        <div class="fin-insight-card">
+          &#x1F4A1; <strong>Операционная маржа 5.6%</strong> &mdash; бизнес прибылен, но каждый рубль на счету.
+          Основные рычаги: оптимизация аренды (124.9M) и увеличение онлайн-продаж (с 3.5% до 15%+).
+        </div>
+
+      </div>
     </div>
     <div class="placeholder-screen" id="screen-orders">
       <div class="placeholder-icon">&#x1F4CB;</div>
@@ -2456,6 +2947,10 @@ table tbody td.amount {
         target.style.animation = 'none';
         target.offsetHeight;
         target.style.animation = '';
+      }
+      // Lazy-init finance screen
+      if (screen === 'finance') {
+        initFinanceScreen();
       }
     }
 
@@ -2961,6 +3456,304 @@ table tbody td.amount {
     document.querySelectorAll('.store-row.expanded').forEach(function(c) { c.classList.remove('expanded'); });
     if (!wasExpanded) row.classList.add('expanded');
   };
+
+  /* ── Finance Screen ── */
+  var financeChartsRendered = false;
+  var finMonthlyChart = null;
+  var finCashflowChart = null;
+
+  var finExpenseData = [
+    { name: '\u0417\u0430\u043A\u0443\u043F\u043A\u0430 \u0442\u043E\u0432\u0430\u0440\u0430', amount: '360M', pct: 41.3, details: ['\u0417\u0430 \u0432\u0430\u043B\u044E\u0442\u0443: <span>200M \u20BD</span>', '\u0422\u0430\u043C\u043E\u0436\u043D\u044F: <span>44M \u20BD</span>', '\u041F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0441\u0442\u0432\u043E: <span>11M \u20BD</span>', '\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430: <span>11M \u20BD</span>'] },
+    { name: '\u0424\u041E\u0422', amount: '134.6M', pct: 15.4, details: ['\u041C\u0430\u0433\u0430\u0437\u0438\u043D\u044B: <span>52.5M \u20BD</span>', '\u041E\u0444\u0438\u0441: <span>64M \u20BD</span> \u2014 \u0434\u043E\u0440\u043E\u0436\u0435 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u043E\u0432!', '\u041A\u0430\u0440\u0442\u044B: <span>17.8M \u20BD</span>'] },
+    { name: '\u0410\u0440\u0435\u043D\u0434\u0430', amount: '124.9M', pct: 14.3, details: ['\u0415\u0432\u0440\u043E\u043F\u0435\u0439\u0441\u043A\u0438\u0439: <span>22.1M \u20BD</span>', '\u041B\u0443\u0431\u044F\u043D\u043A\u0430 (\u0426\u0414\u041C): <span>22.4M \u20BD</span>', '\u0421\u043E\u0447\u0438: <span>9.2M \u20BD</span>', '13+ \u0442\u043E\u0447\u0435\u043A \u0432 \u0441\u0435\u0442\u0438'] },
+    { name: '\u041D\u0430\u043B\u043E\u0433\u0438', amount: '25.9M', pct: 3.0, details: [] },
+    { name: '\u041A\u0440\u0435\u0434\u0438\u0442\u044B (%)', amount: '18.2M', pct: 2.1, details: ['\u0422\u043E\u043B\u044C\u043A\u043E \u043F\u0440\u043E\u0446\u0435\u043D\u0442\u044B, \u0431\u0435\u0437 \u0442\u0435\u043B\u0430 \u043A\u0440\u0435\u0434\u0438\u0442\u0430', '\u0422\u0435\u043B\u043E \u043A\u0440\u0435\u0434\u0438\u0442\u0430: <span>92M \u20BD</span> (\u043D\u0435 \u043E\u043F\u0435\u0440. \u0440\u0430\u0441\u0445\u043E\u0434)'] },
+    { name: '\u0420\u0435\u043A\u043B\u0430\u043C\u0430', amount: '12.9M', pct: 1.5, badge: '\u26A0\uFE0F \u041D\u0438\u0436\u0435 \u043D\u043E\u0440\u043C\u044B', details: ['\u0412\u0441\u0435\u0433\u043E 1.5% \u043E\u0442 \u0432\u044B\u0440\u0443\u0447\u043A\u0438', '\u041D\u043E\u0440\u043C\u0430 \u0434\u043B\u044F \u0444\u0435\u0448\u043D: 5-10%', '\u041F\u043E\u0442\u0435\u043D\u0446\u0438\u0430\u043B: +37-74M \u20BD \u0431\u044E\u0434\u0436\u0435\u0442\u0430'] },
+    { name: '\u041F\u0440\u043E\u0447\u0438\u0435', amount: '18M', pct: 2.1, details: ['\u0425\u043E\u0437\u0442\u043E\u0432\u0430\u0440\u044B, \u044E\u0440\u0438\u0441\u0442\u044B, \u043F\u0430\u043A\u0435\u0442\u044B', '\u0421\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u044B, \u0430\u0432\u0442\u043E'] }
+  ];
+
+  function renderExpenseList() {
+    var container = document.getElementById('finExpenseList');
+    if (!container) return;
+    var maxPct = 41.3;
+    var html = '';
+    finExpenseData.forEach(function(item, idx) {
+      var hasDetails = item.details && item.details.length > 0;
+      var badgeHtml = item.badge ? ' <span class="expense-badge">' + item.badge + '</span>' : '';
+      html += '<div class="expense-item" ' + (hasDetails ? 'onclick="toggleFinExpense(this)"' : '') + '>' +
+        '<div class="expense-item-header">' +
+          '<span class="expense-rank">' + (idx + 1) + '</span>' +
+          '<div class="expense-info">' +
+            '<div class="expense-name">' + item.name + badgeHtml + '</div>' +
+            '<div class="expense-bar-wrap">' +
+              '<div class="expense-bar-track"><div class="expense-bar-fill fin-expense-bar" data-width="' + (item.pct / maxPct * 100).toFixed(0) + '"></div></div>' +
+              '<span class="expense-pct">' + item.pct + '%</span>' +
+            '</div>' +
+          '</div>' +
+          '<span class="expense-amount">' + item.amount + '</span>' +
+          (hasDetails ? '<svg class="expense-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' : '<span style="width:16px"></span>') +
+        '</div>' +
+        (hasDetails ? '<div class="expense-detail"><ul class="expense-detail-list">' + item.details.map(function(d) { return '<li>' + d + '</li>'; }).join('') + '</ul></div>' : '') +
+      '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.toggleFinExpense = function(el) {
+    var wasExpanded = el.classList.contains('expanded');
+    document.querySelectorAll('.scr-finance .expense-item.expanded').forEach(function(c) { c.classList.remove('expanded'); });
+    if (!wasExpanded) el.classList.add('expanded');
+  };
+
+  function animateFinBars() {
+    document.querySelectorAll('.fin-expense-bar[data-width]').forEach(function(bar) {
+      setTimeout(function() { bar.style.width = bar.dataset.width + '%'; }, 300);
+    });
+    document.querySelectorAll('.fin-rev-bar[data-width]').forEach(function(bar) {
+      setTimeout(function() { bar.style.width = bar.dataset.width + '%'; }, 500);
+    });
+  }
+
+  function initFinanceCharts() {
+    if (financeChartsRendered) return;
+    financeChartsRendered = true;
+
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var gridColor = isDark ? '#2A2A2A' : '#F0F0F0';
+    var tickColor = isDark ? '#666' : '#A8A29E';
+    var months = ['\u042F\u043D\u0432', '\u0424\u0435\u0432', '\u041C\u0430\u0440', '\u0410\u043F\u0440', '\u041C\u0430\u0439', '\u0418\u044E\u043D', '\u0418\u044E\u043B', '\u0410\u0432\u0433', '\u0421\u0435\u043D', '\u041E\u043A\u0442', '\u041D\u043E\u044F', '\u0414\u0435\u043A'];
+
+    var revenue = [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54];
+    var expenses = [40, 55, 62, 56, 50, 58, 72, 120, 55, 62, 45, 58];
+
+    // Revenue vs Expenses bar chart
+    var ctxMonthly = document.getElementById('chart-finance-monthly');
+    if (ctxMonthly) {
+      finMonthlyChart = new Chart(ctxMonthly, {
+        type: 'bar',
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: '\u0412\u044B\u0440\u0443\u0447\u043A\u0430',
+              data: revenue,
+              backgroundColor: revenue.map(function(v, i) {
+                return i === 7 ? 'rgba(59, 130, 246, 0.9)' : 'rgba(59, 130, 246, 0.7)';
+              }),
+              borderColor: revenue.map(function(v, i) {
+                return i === 7 ? '#2563EB' : 'rgba(59, 130, 246, 0.85)';
+              }),
+              borderWidth: revenue.map(function(v, i) { return i === 7 ? 2 : 1; }),
+              borderRadius: 4,
+              borderSkipped: false,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            },
+            {
+              label: '\u0420\u0430\u0441\u0445\u043E\u0434\u044B',
+              data: expenses,
+              backgroundColor: 'rgba(239, 68, 68, 0.55)',
+              borderColor: 'rgba(239, 68, 68, 0.7)',
+              borderWidth: 1,
+              borderRadius: 4,
+              borderSkipped: false,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              align: 'end',
+              labels: {
+                boxWidth: 12,
+                boxHeight: 12,
+                borderRadius: 3,
+                useBorderRadius: true,
+                padding: 16,
+                font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 12, weight: '500' },
+                color: tickColor
+              }
+            },
+            tooltip: {
+              backgroundColor: '#1C1917',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              titleFont: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 12, weight: '500' },
+              bodyFont: { family: "'JetBrains Mono', monospace", size: 13, weight: '500' },
+              padding: { x: 14, y: 10 },
+              cornerRadius: 10,
+              boxShadow: '0 8px 24px rgba(0,0,0,.2)',
+              callbacks: {
+                title: function(items) {
+                  var label = items[0].label;
+                  return label + (items[0].dataIndex === 7 ? ' \u2190 \u041F\u0438\u043A (\u0448\u043A\u043E\u043B\u044C\u043D\u044B\u0439 \u0441\u0435\u0437\u043E\u043D)' : '');
+                },
+                label: function(item) {
+                  return item.dataset.label + ': ' + item.raw.toFixed(1) + 'M \u20BD';
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              border: { display: false },
+              ticks: {
+                font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 11, weight: '500' },
+                color: function(ctx) {
+                  return ctx.index === 7 ? '#2563EB' : tickColor;
+                },
+                padding: 8
+              }
+            },
+            y: {
+              grid: { color: gridColor, drawBorder: false, lineWidth: 1 },
+              border: { display: false },
+              ticks: {
+                font: { family: "'JetBrains Mono', monospace", size: 11 },
+                color: tickColor,
+                padding: 12,
+                callback: function(v) { return v + 'M'; }
+              },
+              min: 0,
+              max: 160
+            }
+          },
+          animation: {
+            duration: 1000,
+            delay: function(ctx) { return ctx.dataIndex * 50; },
+            easing: 'easeOutQuart'
+          }
+        }
+      });
+    }
+
+    // Cash Flow line chart
+    var cashflow = revenue.map(function(r, i) { return +(r - expenses[i]).toFixed(1); });
+    var ctxCF = document.getElementById('chart-cashflow');
+    if (ctxCF) {
+      var cfCtx2d = ctxCF.getContext('2d');
+      var gradientPos = cfCtx2d.createLinearGradient(0, 0, 0, 240);
+      gradientPos.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+      gradientPos.addColorStop(0.5, 'rgba(16, 185, 129, 0.05)');
+      gradientPos.addColorStop(1, 'rgba(16, 185, 129, 0)');
+      var gradientNeg = cfCtx2d.createLinearGradient(0, 0, 0, 240);
+      gradientNeg.addColorStop(0, 'rgba(239, 68, 68, 0)');
+      gradientNeg.addColorStop(0.5, 'rgba(239, 68, 68, 0.05)');
+      gradientNeg.addColorStop(1, 'rgba(239, 68, 68, 0.15)');
+
+      finCashflowChart = new Chart(ctxCF, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'Cash Flow',
+            data: cashflow,
+            fill: true,
+            backgroundColor: function(ctx) {
+              var chart = ctx.chart;
+              var yScale = chart.scales.y;
+              if (!yScale) return gradientPos;
+              var zeroY = yScale.getPixelForValue(0);
+              var topY = chart.chartArea.top;
+              var bottomY = chart.chartArea.bottom;
+              var gPos = cfCtx2d.createLinearGradient(0, topY, 0, zeroY);
+              gPos.addColorStop(0, 'rgba(16, 185, 129, 0.18)');
+              gPos.addColorStop(1, 'rgba(16, 185, 129, 0.02)');
+              return gPos;
+            },
+            borderColor: cashflow.map(function(v) { return v >= 0 ? '#10B981' : '#EF4444'; }),
+            borderWidth: 2.5,
+            tension: 0.35,
+            pointRadius: 4,
+            pointBackgroundColor: cashflow.map(function(v) { return v >= 0 ? '#10B981' : '#EF4444'; }),
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointHoverRadius: 6,
+            segment: {
+              borderColor: function(ctx) {
+                return ctx.p0.parsed.y < 0 || ctx.p1.parsed.y < 0 ? '#EF4444' : '#10B981';
+              }
+            }
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1C1917',
+              titleColor: '#fff',
+              bodyColor: '#fff',
+              titleFont: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 12, weight: '500' },
+              bodyFont: { family: "'JetBrains Mono', monospace", size: 13, weight: '500' },
+              padding: { x: 14, y: 10 },
+              cornerRadius: 10,
+              displayColors: false,
+              callbacks: {
+                title: function(items) { return items[0].label + ' 2024'; },
+                label: function(item) {
+                  var v = item.raw;
+                  var sign = v >= 0 ? '+' : '';
+                  return 'Cash Flow: ' + sign + v.toFixed(1) + 'M \u20BD';
+                }
+              }
+            },
+            annotation: undefined
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              border: { display: false },
+              ticks: {
+                font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 11, weight: '500' },
+                color: tickColor,
+                padding: 8
+              }
+            },
+            y: {
+              grid: {
+                color: function(ctx) {
+                  return ctx.tick.value === 0 ? (isDark ? '#555' : '#999') : gridColor;
+                },
+                lineWidth: function(ctx) {
+                  return ctx.tick.value === 0 ? 2 : 1;
+                },
+                drawBorder: false
+              },
+              border: { display: false },
+              ticks: {
+                font: { family: "'JetBrains Mono', monospace", size: 11 },
+                color: tickColor,
+                padding: 12,
+                callback: function(v) { return (v >= 0 ? '+' : '') + v + 'M'; }
+              }
+            }
+          },
+          animation: {
+            duration: 1200,
+            delay: 200,
+            easing: 'easeOutQuart'
+          }
+        }
+      });
+    }
+  }
+
+  function initFinanceScreen() {
+    renderExpenseList();
+    animateFinBars();
+    initFinanceCharts();
+  }
 
   /* ── Init ── */
   initTheme();
