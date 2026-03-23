@@ -7,7 +7,7 @@
 <title>BORELLI — Панель управления</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <style>
 /* ============================================================
@@ -50,10 +50,10 @@
   /* Radii */
   --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-full: 9999px;
 
-  /* Fonts */
-  --f-display: 'Instrument Serif', Georgia, serif;
-  --f-body: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --f-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  /* Fonts — graceful fallbacks */
+  --f-display: 'Instrument Serif', 'Georgia', 'Times New Roman', serif;
+  --f-body: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
 
   /* Easing */
   --ease-out: cubic-bezier(.16,1,.3,1);
@@ -86,6 +86,51 @@ body {
 }
 
 /* ============================================================
+   SVG NOISE FILTER (for sidebar grain texture)
+   ============================================================ */
+.svg-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ============================================================
+   ORCHESTRATED ENTRANCE ANIMATIONS
+   ============================================================ */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes sectionFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+@keyframes chevronSlideIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ============================================================
    SIDEBAR
    ============================================================ */
 .sidebar {
@@ -97,6 +142,19 @@ body {
   transition: width 300ms var(--ease-out);
   overflow: hidden;
 }
+/* Subtle noise grain texture */
+.sidebar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: .035;
+  pointer-events: none;
+  filter: url(#noiseFilter);
+  background: rgba(255,255,255,.5);
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+.sidebar > * { position: relative; z-index: 2; }
 .sidebar.collapsed { width: var(--sidebar-collapsed); }
 
 .sidebar-logo {
@@ -113,11 +171,14 @@ body {
   transform: rotate(45deg);
   border-radius: 4px;
   display: flex; align-items: center; justify-content: center;
+  /* Subtle gold glow */
+  box-shadow: 0 0 12px rgba(200,168,85,.35), 0 0 24px rgba(200,168,85,.15);
 }
 .sidebar-logo .logo-diamond span {
   transform: rotate(-45deg);
   font-family: var(--f-display);
   font-size: 13px; color: #fff; font-weight: 700;
+  text-shadow: 0 0 8px rgba(200,168,85,.5);
 }
 .sidebar-logo .logo-text {
   display: flex; flex-direction: column; gap: 1px;
@@ -126,7 +187,7 @@ body {
 .sidebar.collapsed .logo-text { opacity: 0; pointer-events: none; }
 .sidebar-logo .logo-brand {
   font-family: var(--f-display);
-  font-size: 17px; color: var(--brand-gold);
+  font-size: 17px; color: #fff;
   letter-spacing: .02em; line-height: 1.1;
 }
 .sidebar-logo .logo-sub {
@@ -165,17 +226,41 @@ body {
   white-space: nowrap;
   border-left: 2px solid transparent;
 }
+/* Hover chevron indicator */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  right: 14px;
+  width: 5px; height: 5px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  opacity: 0;
+  transition: opacity 180ms, transform 180ms var(--ease-out);
+}
+.nav-item:hover::after {
+  opacity: .5;
+  animation: chevronSlideIn 200ms var(--ease-out) forwards;
+}
+.nav-item.active::after { display: none; }
+.sidebar.collapsed .nav-item::after { display: none; }
+
 .nav-item:hover { color: var(--n200); background: rgba(255,255,255,.04); }
 .nav-item.active {
   color: #fff; font-weight: 500;
-  background: rgba(255,255,255,.06);
+  background: rgba(200,168,85,.08);
   border-left-color: var(--brand-gold);
 }
 .nav-item .nav-icon {
   width: 20px; height: 20px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
+  transition: transform 200ms var(--ease-out);
 }
 .nav-item .nav-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* Scale-up icons when sidebar is collapsed */
+.sidebar.collapsed .nav-item .nav-icon {
+  transform: scale(1.15);
+}
 .nav-item .nav-label { transition: opacity 200ms; }
 .sidebar.collapsed .nav-item .nav-label { opacity: 0; }
 .sidebar.collapsed .nav-item { justify-content: center; padding: 10px 0; }
@@ -195,7 +280,6 @@ body {
   margin-left: auto; flex-shrink: 0;
   animation: pulse-dot 2s infinite;
 }
-@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
 .sidebar.collapsed .nav-badge, .sidebar.collapsed .nav-dot { display: none; }
 
 .sidebar-footer {
@@ -204,8 +288,8 @@ body {
   flex-shrink: 0;
 }
 .sidebar-toggle {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 8px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px;
   color: var(--n500);
   font-size: 12px;
   cursor: pointer;
@@ -217,8 +301,8 @@ body {
 .sidebar-toggle:hover { color: var(--n300); background: rgba(255,255,255,.04); }
 .sidebar-toggle svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; flex-shrink: 0; transition: transform 300ms var(--ease-out); }
 .sidebar.collapsed .sidebar-toggle svg { transform: rotate(180deg); }
-.sidebar-toggle span { transition: opacity 200ms; }
-.sidebar.collapsed .sidebar-toggle span { opacity: 0; }
+.sidebar-toggle span { transition: opacity 200ms; margin-left: 8px; }
+.sidebar.collapsed .sidebar-toggle span { opacity: 0; width: 0; margin: 0; overflow: hidden; }
 
 .sidebar-user {
   display: flex; align-items: center; gap: 10px;
@@ -242,6 +326,17 @@ body {
 .sidebar.collapsed .sidebar-user .user-info { opacity: 0; }
 .sidebar-user .user-name { font-size: 13px; color: var(--n200); font-weight: 500; }
 .sidebar-user .user-role { font-size: 10px; color: var(--n500); }
+
+/* Sidebar updated timestamp */
+.sidebar-updated {
+  padding: 8px 12px 4px;
+  font-size: 10px;
+  color: var(--n500);
+  opacity: .7;
+  white-space: nowrap;
+  transition: opacity 200ms;
+}
+.sidebar.collapsed .sidebar-updated { opacity: 0; height: 0; padding: 0; overflow: hidden; }
 
 /* Mobile sidebar overlay */
 .sidebar-overlay {
@@ -271,7 +366,7 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
 .topbar {
   position: sticky; top: 0; z-index: 30;
   height: var(--topbar-h);
-  background: rgba(250,250,249,.88);
+  background: linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(250,250,249,.88) 100%);
   backdrop-filter: blur(12px) saturate(1.5);
   -webkit-backdrop-filter: blur(12px) saturate(1.5);
   border-bottom: 1px solid var(--n200);
@@ -293,6 +388,7 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   background: var(--n100);
   padding: 3px;
   border-radius: var(--r-full);
+  position: relative;
 }
 .period-pill {
   padding: 6px 14px;
@@ -300,10 +396,12 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   color: var(--n600);
   border-radius: var(--r-full);
   cursor: pointer;
-  transition: all 200ms var(--ease-out);
+  transition: color 200ms var(--ease-out), background-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out);
   border: none; background: none;
   white-space: nowrap;
   font-family: var(--f-body);
+  position: relative;
+  z-index: 1;
 }
 .period-pill:hover { color: var(--n800); background: rgba(255,255,255,.6); }
 .period-pill.active {
@@ -345,8 +443,10 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
 
 .hamburger {
   display: none; border: none; background: none;
-  cursor: pointer; padding: 6px;
+  cursor: pointer; padding: 0;
   color: var(--n700);
+  width: 44px; height: 44px;
+  align-items: center; justify-content: center;
 }
 .hamburger svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
 
@@ -369,10 +469,13 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 24px;
+  /* Subtle separator after KPI row */
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--n100);
 }
 .kpi-card {
   background: #fff;
-  border: 1px solid var(--n200);
+  border: 1px solid #F0EFED;
   border-radius: var(--r-lg);
   padding: 20px;
   cursor: pointer;
@@ -380,16 +483,26 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   position: relative;
   overflow: hidden;
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(16px);
   animation: cardIn 500ms var(--ease-out) forwards;
 }
-.kpi-card:nth-child(1) { animation-delay: 50ms; }
-.kpi-card:nth-child(2) { animation-delay: 120ms; }
-.kpi-card:nth-child(3) { animation-delay: 190ms; }
-.kpi-card:nth-child(4) { animation-delay: 260ms; }
-@keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+/* Staggered entrance: 0ms, 80ms, 160ms, 240ms */
+.kpi-card:nth-child(1) { animation-delay: 0ms; }
+.kpi-card:nth-child(2) { animation-delay: 80ms; }
+.kpi-card:nth-child(3) { animation-delay: 160ms; }
+.kpi-card:nth-child(4) { animation-delay: 240ms; }
 
 .kpi-card:hover { border-color: var(--n300); box-shadow: var(--shadow-md); transform: translateY(-2px); animation: none; opacity: 1; }
+
+/* Sparkline hover effect */
+.kpi-card .kpi-sparkline {
+  transition: opacity 300ms, transform 300ms var(--ease-out);
+}
+.kpi-card:hover .kpi-sparkline {
+  opacity: 1;
+  transform: scaleY(1.08);
+  transform-origin: bottom;
+}
 
 .kpi-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -432,24 +545,23 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
 .kpi-sparkline svg { width: 100%; height: 32px; }
 
 .kpi-prev {
-  font-size: 11.5px; color: var(--n400);
+  font-size: 12px; color: #A8A29E;
+  font-style: italic;
 }
-.kpi-prev span { font-family: var(--f-mono); font-weight: 500; color: var(--n500); }
+.kpi-prev span { font-family: var(--f-mono); font-weight: 500; color: var(--n500); font-style: normal; }
 
 /* Sparkline animation */
 .spark-line { stroke-dasharray: 600; stroke-dashoffset: 600; animation: drawLine 1.2s var(--ease-out) forwards; }
 .kpi-card:nth-child(1) .spark-line { animation-delay: 300ms; }
-.kpi-card:nth-child(2) .spark-line { animation-delay: 400ms; }
-.kpi-card:nth-child(3) .spark-line { animation-delay: 500ms; }
-.kpi-card:nth-child(4) .spark-line { animation-delay: 600ms; }
-@keyframes drawLine { to { stroke-dashoffset: 0; } }
+.kpi-card:nth-child(2) .spark-line { animation-delay: 380ms; }
+.kpi-card:nth-child(3) .spark-line { animation-delay: 460ms; }
+.kpi-card:nth-child(4) .spark-line { animation-delay: 540ms; }
 
 .spark-fill { opacity: 0; animation: fadeIn 800ms ease forwards; }
 .kpi-card:nth-child(1) .spark-fill { animation-delay: 600ms; }
-.kpi-card:nth-child(2) .spark-fill { animation-delay: 700ms; }
-.kpi-card:nth-child(3) .spark-fill { animation-delay: 800ms; }
-.kpi-card:nth-child(4) .spark-fill { animation-delay: 900ms; }
-@keyframes fadeIn { to { opacity: 1; } }
+.kpi-card:nth-child(2) .spark-fill { animation-delay: 680ms; }
+.kpi-card:nth-child(3) .spark-fill { animation-delay: 760ms; }
+.kpi-card:nth-child(4) .spark-fill { animation-delay: 840ms; }
 
 /* ============================================================
    TWO-COLUMN SECTIONS
@@ -461,16 +573,26 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   margin-bottom: 24px;
 }
 
+/* Charts row: 400ms delay (after KPI cards) */
+.row-2col.row-charts {
+  opacity: 0;
+  animation: sectionFadeIn 500ms var(--ease-out) forwards;
+  animation-delay: 400ms;
+}
+/* Orders + AI row: 800ms delay */
+.row-2col.row-orders {
+  opacity: 0;
+  animation: sectionFadeIn 500ms var(--ease-out) forwards;
+  animation-delay: 800ms;
+}
+
 .card {
   background: #fff;
-  border: 1px solid var(--n200);
+  border: 1px solid #F0EFED;
   border-radius: var(--r-lg);
   padding: 24px;
   box-shadow: var(--shadow-xs);
   transition: box-shadow 200ms, border-color 200ms;
-  opacity: 0; transform: translateY(12px);
-  animation: cardIn 500ms var(--ease-out) forwards;
-  animation-delay: 350ms;
 }
 .card:hover { box-shadow: var(--shadow-sm); }
 
@@ -482,6 +604,15 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   display: flex; align-items: center; gap: 8px;
 }
 .card-subtitle { font-size: 12px; color: var(--n500); margin-bottom: 20px; }
+
+/* Section label styling inside cards */
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #A8A29E;
+  font-weight: 600;
+}
 
 /* ============================================================
    REVENUE CHART
@@ -567,10 +698,14 @@ table thead th:last-child { text-align: right; }
 table thead th.align-right { text-align: right; }
 table tbody tr {
   border-bottom: 1px solid var(--n100);
-  transition: background 120ms;
+  transition: background 120ms, border-left-color 200ms var(--ease-out);
   cursor: pointer;
+  border-left: 2px solid transparent;
 }
-table tbody tr:hover { background: var(--n50); }
+/* Alternate row backgrounds */
+table tbody tr:nth-child(even) { background: #FAFAF9; }
+/* Hover: gold left border slides in */
+table tbody tr:hover { background: var(--n50); border-left-color: var(--brand-gold); }
 table tbody tr:last-child { border-bottom: none; }
 table tbody td {
   padding: 12px 14px;
@@ -586,7 +721,7 @@ table tbody td.mono {
 table tbody td.amount {
   font-family: var(--f-mono);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   text-align: right;
   color: var(--n800);
 }
@@ -625,10 +760,14 @@ table tbody td.amount {
   padding: 16px 18px;
   border-radius: var(--r-md);
   border-left: 3px solid;
-  transition: all 200ms;
+  transition: all 200ms var(--ease-out);
   cursor: pointer;
 }
-.insight-card:hover { transform: translateX(2px); }
+/* Hover: lift card up 2px with increased shadow */
+.insight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
 .insight-card.urgent { border-left-color: var(--danger); background: var(--danger-light); }
 .insight-card.important { border-left-color: var(--warning); background: var(--warning-light); }
 .insight-card.idea { border-left-color: var(--info); background: var(--info-light); }
@@ -645,7 +784,7 @@ table tbody td.amount {
 
 .insight-text {
   font-size: 13px;
-  color: var(--n700);
+  color: #57534E;
   line-height: 1.5;
   margin-bottom: 8px;
 }
@@ -700,7 +839,8 @@ table tbody td.amount {
   justify-content: space-around;
 }
 .bottom-tab {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
   padding: 6px 12px;
   font-size: 10px; font-weight: 500;
   color: var(--n400);
@@ -709,6 +849,7 @@ table tbody td.amount {
   transition: color 150ms;
   border: none; background: none;
   font-family: var(--f-body);
+  min-width: 56px;
 }
 .bottom-tab.active { color: var(--brand-gold); }
 .bottom-tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; }
@@ -717,10 +858,6 @@ table tbody td.amount {
 /* ============================================================
    LOADING SHIMMER
    ============================================================ */
-@keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
-}
 .shimmer {
   background: linear-gradient(90deg, var(--n100) 25%, var(--n50) 50%, var(--n100) 75%);
   background-size: 200px 100%;
@@ -737,7 +874,13 @@ table tbody td.amount {
 }
 
 @media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); width: 280px; transition: transform 300ms var(--ease-out); }
+  .sidebar {
+    transform: translateX(-100%); width: 280px;
+    transition: transform 300ms var(--ease-out);
+    /* Full viewport coverage including safe areas */
+    top: 0; bottom: 0; left: 0;
+    padding-top: env(safe-area-inset-top, 0);
+  }
   .sidebar.mobile-open { transform: translateX(0); }
   .sidebar.collapsed { width: 280px; }
   .sidebar.collapsed .logo-text,
@@ -748,10 +891,17 @@ table tbody td.amount {
   .sidebar.collapsed .nav-badge,
   .sidebar.collapsed .nav-dot { display: flex; }
   .sidebar.collapsed .nav-item { justify-content: flex-start; padding: 9px 20px; }
+  .sidebar.collapsed .nav-item .nav-icon { transform: none; }
+
+  .sidebar-overlay.active {
+    /* Cover full viewport including safe areas */
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
 
   .main { margin-left: 0 !important; }
 
-  .hamburger { display: block; }
+  .hamburger { display: flex; width: 44px; height: 44px; }
 
   .topbar { padding: 0 16px; height: 52px; }
   .topbar-subtitle, .topbar-search { display: none; }
@@ -771,14 +921,19 @@ table tbody td.amount {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    /* Scroll snap for period selector on mobile */
+    scroll-snap-type: x mandatory;
   }
   .topbar-center::-webkit-scrollbar { display: none; }
+  .topbar-center .period-pill {
+    scroll-snap-align: center;
+  }
 
   .content { padding: 60px 16px 100px; }
 
   .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .kpi-card { padding: 16px; }
-  .kpi-value { font-size: 24px; }
+  .kpi-value { font-size: 24px; white-space: nowrap; }
 
   .row-2col { grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
   .card { padding: 18px; }
@@ -787,6 +942,14 @@ table tbody td.amount {
   .bottom-bar { display: flex; }
 
   .sidebar-toggle { display: none; }
+
+  /* Ensure nothing under 12px on mobile */
+  .kpi-prev { font-size: 12px; }
+  .nav-badge { font-size: 10px; }
+  .channel-pct { font-size: 12px; }
+  .bottom-tab .tab-label { font-size: 10.5px; }
+  table tbody td { font-size: 13px; }
+  .insight-text { font-size: 13px; }
 }
 
 /* Touch feedback */
@@ -799,13 +962,23 @@ table tbody td.amount {
 }
 
 @media (max-width: 380px) {
-  .kpi-value { font-size: 20px; }
+  .kpi-value { font-size: 20px; white-space: nowrap; }
   .kpi-sparkline { display: none; }
   .period-pill { padding: 5px 10px; font-size: 11.5px; }
 }
 </style>
 </head>
 <body>
+
+<!-- SVG Filter for noise texture -->
+<svg class="svg-filters" aria-hidden="true">
+  <defs>
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+</svg>
 
 <!-- ============================================================
      SIDEBAR
@@ -820,7 +993,7 @@ table tbody td.amount {
   </div>
 
   <nav class="sidebar-nav">
-    <div class="nav-section">Аналитика</div>
+    <div class="nav-section">&middot; Аналитика</div>
     <a class="nav-item active" data-screen="overview" onclick="switchScreen('overview', this)">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
       <span class="nav-label">Обзор</span>
@@ -835,7 +1008,7 @@ table tbody td.amount {
       <span class="nav-label">Финансы</span>
     </a>
 
-    <div class="nav-section">Продажи</div>
+    <div class="nav-section">&middot; Продажи</div>
     <a class="nav-item" data-screen="orders" onclick="switchScreen('orders', this)">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
       <span class="nav-label">Заказы</span>
@@ -853,7 +1026,7 @@ table tbody td.amount {
       <span class="nav-label">Реклама</span>
     </a>
 
-    <div class="nav-section">Клиенты</div>
+    <div class="nav-section">&middot; Клиенты</div>
     <a class="nav-item" data-screen="clients" onclick="switchScreen('clients', this)">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
       <span class="nav-label">Клиенты</span>
@@ -864,7 +1037,7 @@ table tbody td.amount {
       <span class="nav-badge">NEW</span>
     </a>
 
-    <div class="nav-section">Операции</div>
+    <div class="nav-section">&middot; Операции</div>
     <a class="nav-item" data-screen="warehouse" onclick="switchScreen('warehouse', this)">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
       <span class="nav-label">Склад</span>
@@ -875,7 +1048,7 @@ table tbody td.amount {
       <span class="nav-badge">3</span>
     </a>
 
-    <div class="nav-section">Стратегия</div>
+    <div class="nav-section">&middot; Стратегия</div>
     <a class="nav-item" data-screen="competitors" onclick="switchScreen('competitors', this)">
       <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg></div>
       <span class="nav-label">Конкуренты</span>
@@ -888,7 +1061,7 @@ table tbody td.amount {
   </nav>
 
   <div class="sidebar-footer">
-    <button class="sidebar-toggle" onclick="toggleSidebar()">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Свернуть боковую панель">
       <svg viewBox="0 0 24 24"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
       <span>Свернуть</span>
     </button>
@@ -899,6 +1072,7 @@ table tbody td.amount {
         <div class="user-role">Администратор</div>
       </div>
     </div>
+    <div class="sidebar-updated">Обновлено: 23 марта 2026, 14:32</div>
   </div>
 </aside>
 
@@ -960,7 +1134,7 @@ table tbody td.amount {
               +12.3%
             </div>
           </div>
-          <div class="kpi-value" data-target="61400000" data-suffix="M ₽" data-divider="1000000" data-prefix="">0M ₽</div>
+          <div class="kpi-value" data-target="61400000" data-suffix="M &#8381;" data-divider="1000000" data-prefix="">0M &#8381;</div>
           <div class="kpi-sparkline">
             <svg viewBox="0 0 200 32" preserveAspectRatio="none">
               <defs>
@@ -973,7 +1147,7 @@ table tbody td.amount {
               <path class="spark-line" d="M0,28 L7,26 L14,24 L21,25 L28,22 L35,20 L42,21 L49,18 L56,19 L63,16 L70,17 L77,15 L84,14 L91,16 L98,13 L105,12 L112,14 L119,11 L126,10 L133,12 L140,9 L147,8 L154,10 L161,7 L168,6 L175,8 L182,5 L189,4 L196,3" fill="none" stroke="#10B981" stroke-width="1.5"/>
             </svg>
           </div>
-          <div class="kpi-prev">пред. период: <span>₽54.7M</span></div>
+          <div class="kpi-prev">пред. период: <span>&#8381;54.7M</span></div>
         </div>
 
         <!-- Orders -->
@@ -1020,7 +1194,7 @@ table tbody td.amount {
               +3.4%
             </div>
           </div>
-          <div class="kpi-value" data-target="49200" data-suffix=" ₽" data-divider="1" data-prefix="">0 ₽</div>
+          <div class="kpi-value" data-target="49200" data-suffix=" &#8381;" data-divider="1" data-prefix="">0 &#8381;</div>
           <div class="kpi-sparkline">
             <svg viewBox="0 0 200 32" preserveAspectRatio="none">
               <defs>
@@ -1033,7 +1207,7 @@ table tbody td.amount {
               <path class="spark-line" d="M0,16 L7,15 L14,17 L21,14 L28,16 L35,13 L42,15 L49,14 L56,16 L63,13 L70,14 L77,15 L84,13 L91,14 L98,12 L105,14 L112,13 L119,11 L126,13 L133,12 L140,14 L147,11 L154,13 L161,12 L168,10 L175,12 L182,11 L189,10 L196,11" fill="none" stroke="#C8A855" stroke-width="1.5"/>
             </svg>
           </div>
-          <div class="kpi-prev">пред. период: <span>47 600₽</span></div>
+          <div class="kpi-prev">пред. период: <span>47 600&#8381;</span></div>
         </div>
 
         <!-- New clients -->
@@ -1068,26 +1242,26 @@ table tbody td.amount {
       </div>
 
       <!-- ROW: Revenue Chart + Channel Breakdown -->
-      <div class="row-2col">
+      <div class="row-2col row-charts">
         <!-- Revenue Area Chart -->
-        <div class="card" style="animation-delay:400ms">
+        <div class="card">
           <div class="card-title">
             <svg style="width:20px;height:20px;stroke:var(--ch-retail);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             Выручка по месяцам
           </div>
-          <div class="card-subtitle">Данные БДДС, млн ₽ · 2025</div>
+          <div class="card-subtitle">Данные БДДС, млн &#8381; &middot; 2025</div>
           <div class="chart-wrapper">
             <canvas id="revenueChart"></canvas>
           </div>
         </div>
 
         <!-- Channel Breakdown -->
-        <div class="card" style="animation-delay:500ms">
+        <div class="card">
           <div class="card-title">
             <svg style="width:20px;height:20px;stroke:var(--n600);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
             Каналы продаж
           </div>
-          <div class="card-subtitle">Распределение выручки · Год</div>
+          <div class="card-subtitle">Распределение выручки &middot; Год</div>
           <div class="channel-list">
             <!-- Retail -->
             <div class="channel-item">
@@ -1097,7 +1271,7 @@ table tbody td.amount {
                   Розница
                 </div>
                 <div class="channel-values">
-                  <span class="channel-amount">426M ₽</span>
+                  <span class="channel-amount">426M &#8381;</span>
                   <span class="channel-pct">58%</span>
                 </div>
               </div>
@@ -1113,7 +1287,7 @@ table tbody td.amount {
                   Опт
                 </div>
                 <div class="channel-values">
-                  <span class="channel-amount">285M ₽</span>
+                  <span class="channel-amount">285M &#8381;</span>
                   <span class="channel-pct">39%</span>
                 </div>
               </div>
@@ -1130,7 +1304,7 @@ table tbody td.amount {
                   <span class="channel-badge" style="background:var(--info-light);color:var(--info);border:1px solid var(--info-muted);font-size:9px;padding:1px 6px;border-radius:var(--r-full)">&#9889; Точка роста</span>
                 </div>
                 <div class="channel-values">
-                  <span class="channel-amount">25.5M ₽</span>
+                  <span class="channel-amount">25.5M &#8381;</span>
                   <span class="channel-pct">3%</span>
                 </div>
               </div>
@@ -1140,15 +1314,15 @@ table tbody td.amount {
             </div>
           </div>
           <div class="channel-insight">
-            <strong>Онлайн = 3% выручки.</strong> Средний по рынку — 20%+. При переводе 10% клиентов из розницы в онлайн — дополнительная маржа ₽18M/год за счёт экономии на аренде.
+            <strong>Онлайн = 3% выручки.</strong> Средний по рынку — 20%+. При переводе 10% клиентов из розницы в онлайн — дополнительная маржа &#8381;18M/год за счёт экономии на аренде.
           </div>
         </div>
       </div>
 
       <!-- ROW: Orders Table + AI Insights -->
-      <div class="row-2col">
+      <div class="row-2col row-orders">
         <!-- Recent Orders -->
-        <div class="card" style="animation-delay:550ms">
+        <div class="card">
           <div class="card-title">
             <svg style="width:20px;height:20px;stroke:var(--n600);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Последние заказы
@@ -1171,7 +1345,7 @@ table tbody td.amount {
                   <td class="mono">#4521</td>
                   <td class="mono">23.03</td>
                   <td>Иванова А.Н.</td>
-                  <td class="amount">49 200 ₽</td>
+                  <td class="amount">49 200 &#8381;</td>
                   <td><span class="badge badge-purple">WB</span></td>
                   <td style="text-align:right"><span class="badge badge-green">Оплачен</span></td>
                 </tr>
@@ -1179,7 +1353,7 @@ table tbody td.amount {
                   <td class="mono">#4520</td>
                   <td class="mono">23.03</td>
                   <td>Петров К.В.</td>
-                  <td class="amount">12 400 ₽</td>
+                  <td class="amount">12 400 &#8381;</td>
                   <td><span class="badge badge-dark-blue">Ozon</span></td>
                   <td style="text-align:right"><span class="badge badge-blue">В пути</span></td>
                 </tr>
@@ -1187,7 +1361,7 @@ table tbody td.amount {
                   <td class="mono">#4519</td>
                   <td class="mono">22.03</td>
                   <td>Сидорова М.А.</td>
-                  <td class="amount">8 750 ₽</td>
+                  <td class="amount">8 750 &#8381;</td>
                   <td><span class="badge badge-green">Сайт</span></td>
                   <td style="text-align:right"><span class="badge badge-gold">Новый</span></td>
                 </tr>
@@ -1195,7 +1369,7 @@ table tbody td.amount {
                   <td class="mono">#4518</td>
                   <td class="mono">22.03</td>
                   <td>Al-Rashid F.</td>
-                  <td class="amount">87 500 ₽</td>
+                  <td class="amount">87 500 &#8381;</td>
                   <td><span class="badge badge-gold">Dubai</span></td>
                   <td style="text-align:right"><span class="badge badge-green">Оплачен</span></td>
                 </tr>
@@ -1203,7 +1377,7 @@ table tbody td.amount {
                   <td class="mono">#4517</td>
                   <td class="mono">22.03</td>
                   <td>Козлов П.Д.</td>
-                  <td class="amount">5 200 ₽</td>
+                  <td class="amount">5 200 &#8381;</td>
                   <td><span class="badge badge-purple">WB</span></td>
                   <td style="text-align:right"><span class="badge badge-red">Возврат</span></td>
                 </tr>
@@ -1211,7 +1385,7 @@ table tbody td.amount {
                   <td class="mono">#4516</td>
                   <td class="mono">21.03</td>
                   <td>Михайлова Е.С.</td>
-                  <td class="amount">34 600 ₽</td>
+                  <td class="amount">34 600 &#8381;</td>
                   <td><span class="badge badge-green">Сайт</span></td>
                   <td style="text-align:right"><span class="badge badge-green">Оплачен</span></td>
                 </tr>
@@ -1219,7 +1393,7 @@ table tbody td.amount {
                   <td class="mono">#4515</td>
                   <td class="mono">21.03</td>
                   <td>Волкова Н.П.</td>
-                  <td class="amount">15 800 ₽</td>
+                  <td class="amount">15 800 &#8381;</td>
                   <td><span class="badge badge-dark-blue">Ozon</span></td>
                   <td style="text-align:right"><span class="badge badge-blue">В пути</span></td>
                 </tr>
@@ -1227,7 +1401,7 @@ table tbody td.amount {
                   <td class="mono">#4514</td>
                   <td class="mono">21.03</td>
                   <td>Новикова Д.Р.</td>
-                  <td class="amount">22 100 ₽</td>
+                  <td class="amount">22 100 &#8381;</td>
                   <td><span class="badge badge-purple">WB</span></td>
                   <td style="text-align:right"><span class="badge badge-gold">Новый</span></td>
                 </tr>
@@ -1240,7 +1414,7 @@ table tbody td.amount {
         </div>
 
         <!-- AI Insights -->
-        <div class="card" style="animation-delay:650ms">
+        <div class="card">
           <div class="card-title">
             <svg style="width:20px;height:20px;stroke:var(--brand-gold);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.57-3.25 3.92"/><path d="M8.24 4.47A4 4 0 0 1 12 2"/><path d="M12 8v2"/><path d="M12 14h.01"/><rect x="3" y="14" width="18" height="8" rx="2"/><path d="M7 14v-2a5 5 0 0 1 10 0v2"/></svg>
             AI-Советник
@@ -1249,7 +1423,7 @@ table tbody td.amount {
           <div class="insight-stack">
             <div class="insight-card urgent">
               <div class="insight-tag">&#x1F534; Срочно</div>
-              <div class="insight-text">Поднимите цены на WB до 8 000 ₽ — каждая продажа при 5 000 ₽ приносит убыток 1 370 ₽. Точка безубыточности: 7 700 ₽.</div>
+              <div class="insight-text">Поднимите цены на WB до 8 000 &#8381; — каждая продажа при 5 000 &#8381; приносит убыток 1 370 &#8381;. Точка безубыточности: 7 700 &#8381;.</div>
               <a class="insight-link" href="#" onclick="switchScreen('channels', document.querySelector('[data-screen=channels]'));return false;">Подробнее &rarr;</a>
             </div>
             <div class="insight-card important">
@@ -1259,7 +1433,7 @@ table tbody td.amount {
             </div>
             <div class="insight-card idea">
               <div class="insight-tag">&#x1F535; Идея</div>
-              <div class="insight-text">1 240 клиентов готовы к покупке — дети выросли из прошлой коллекции. Одна персонализированная рассылка = потенциал 6.2M ₽ выручки.</div>
+              <div class="insight-text">1 240 клиентов готовы к покупке — дети выросли из прошлой коллекции. Одна персонализированная рассылка = потенциал 6.2M &#8381; выручки.</div>
               <a class="insight-link" href="#" onclick="switchScreen('clients', document.querySelector('[data-screen=clients]'));return false;">Подробнее &rarr;</a>
             </div>
           </div>
@@ -1490,12 +1664,12 @@ table tbody td.amount {
     });
   }
 
-  /* ── Channel bar animation ── */
+  /* ── Channel bar animation (600ms delay — after chart) ── */
   function animateChannelBars() {
     document.querySelectorAll('.channel-bar-fill[data-width]').forEach(bar => {
       setTimeout(() => {
         bar.style.width = bar.dataset.width + '%';
-      }, 600);
+      }, 800);
     });
   }
 
@@ -1504,7 +1678,7 @@ table tbody td.amount {
     const ctx = document.getElementById('revenueChart');
     if (!ctx) return;
 
-    const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+    const months = ['\u042F\u043D\u0432', '\u0424\u0435\u0432', '\u041C\u0430\u0440', '\u0410\u043F\u0440', '\u041C\u0430\u0439', '\u0418\u044E\u043D', '\u0418\u044E\u043B', '\u0410\u0432\u0433', '\u0421\u0435\u043D', '\u041E\u043A\u0442', '\u041D\u043E\u044F', '\u0414\u0435\u043A'];
     const data = [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54];
 
     const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 280);
@@ -1524,7 +1698,7 @@ table tbody td.amount {
           borderWidth: 2.5,
           tension: 0.4,
           pointRadius: 0,
-          pointHoverRadius: 6,
+          pointHoverRadius: 4,
           pointHoverBackgroundColor: '#8B5CF6',
           pointHoverBorderColor: '#fff',
           pointHoverBorderWidth: 3,
@@ -1540,17 +1714,18 @@ table tbody td.amount {
             backgroundColor: '#1C1917',
             titleColor: '#fff',
             bodyColor: '#fff',
-            titleFont: { family: "'Plus Jakarta Sans'", size: 12, weight: '500' },
-            bodyFont: { family: "'JetBrains Mono'", size: 13, weight: '500' },
+            titleFont: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 12, weight: '500' },
+            bodyFont: { family: "'JetBrains Mono', monospace", size: 13, weight: '500' },
             padding: { x: 14, y: 10 },
-            cornerRadius: 8,
+            cornerRadius: 10,
             displayColors: false,
+            boxShadow: '0 8px 24px rgba(0,0,0,.2)',
             callbacks: {
               title: function(items) { return items[0].label + ' 2025'; },
               label: function(item) {
                 const v = item.raw;
-                let label = v.toFixed(1) + 'M ₽';
-                if (item.dataIndex === 7) label += '  ← Школьный сезон';
+                let label = v.toFixed(1) + 'M \u20BD';
+                if (item.dataIndex === 7) label += '  \u2190 \u0428\u043A\u043E\u043B\u044C\u043D\u044B\u0439 \u0441\u0435\u0437\u043E\u043D';
                 return label;
               }
             }
@@ -1561,16 +1736,20 @@ table tbody td.amount {
             grid: { display: false },
             border: { display: false },
             ticks: {
-              font: { family: "'Plus Jakarta Sans'", size: 11, weight: '500' },
+              font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 11, weight: '500' },
               color: '#A8A29E',
               padding: 8
             }
           },
           y: {
-            grid: { color: 'rgba(0,0,0,.04)', drawBorder: false },
+            grid: {
+              color: '#F0F0F0',
+              drawBorder: false,
+              lineWidth: 1
+            },
             border: { display: false },
             ticks: {
-              font: { family: "'JetBrains Mono'", size: 11 },
+              font: { family: "'JetBrains Mono', monospace", size: 11 },
               color: '#A8A29E',
               padding: 12,
               callback: v => v + 'M'
@@ -1581,10 +1760,19 @@ table tbody td.amount {
         },
         animation: {
           duration: 1200,
+          delay: 400,
           easing: 'easeOutQuart'
         }
       }
     });
+  }
+
+  /* ── Hide search hint on mobile ── */
+  function handleSearchHint() {
+    const hint = document.querySelector('.search-hint');
+    if (hint && window.innerWidth <= 768) {
+      hint.style.display = 'none';
+    }
   }
 
   /* ── Init ── */
@@ -1592,7 +1780,11 @@ table tbody td.amount {
     animateCountUp();
     animateChannelBars();
     initRevenueChart();
+    handleSearchHint();
   });
+
+  /* ── Resize handler ── */
+  window.addEventListener('resize', handleSearchHint);
 
   /* ── Keyboard shortcut (Cmd+K) ── */
   document.addEventListener('keydown', function(e) {
