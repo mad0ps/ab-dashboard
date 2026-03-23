@@ -1016,6 +1016,91 @@ body {
 }
 
 /* ============================================
+   MOBILE (480px)
+   ============================================ */
+@media (max-width: 480px) {
+  html { font-size: 15px; }
+
+  .brand-header { padding: 20px 12px 0; }
+  .brand-header h1 { font-size: 0.85rem; letter-spacing: 3px; }
+  .brand-header .brand-sub { font-size: 0.55rem; }
+
+  .top-nav {
+    justify-content: flex-start;
+    padding: 14px 12px;
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  }
+  .top-nav .nav-item {
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    padding: 12px 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .nav-dot { margin: 0 8px; font-size: 0.5rem; }
+
+  .content { padding: 16px 12px 40px; }
+
+  .big-number { font-size: 2.8rem; }
+  .big-number span { font-size: 0.35em !important; }
+  .big-number-delta {
+    font-size: 1rem;
+    margin-left: 0;
+    display: block;
+    margin-top: 6px;
+    padding: 3px 12px;
+  }
+
+  .screen-header { flex-direction: column; gap: 12px; }
+
+  .cards-row { gap: 10px; }
+  .channel-card { padding: 16px; }
+  .channel-card .card-value { font-size: 1.5rem; }
+  .channel-card .card-name { font-size: 0.7rem; }
+
+  .data-table th { padding: 10px 8px; font-size: 0.6rem; letter-spacing: 1px; }
+  .data-table td { padding: 10px 8px; font-size: 0.72rem; white-space: normal; }
+
+  .chart-wrap { padding: 16px 10px; }
+  .chart-wrap canvas { max-height: 220px; }
+
+  .doughnut-box { min-width: 160px; }
+  .doughnut-box canvas { max-height: 160px; }
+
+  .segment-cards { gap: 10px; }
+  .segment-card { padding: 18px 14px; }
+  .segment-card .seg-count { font-size: 1.8rem; }
+
+  .grown-up-card { padding: 20px 14px; }
+  .grown-up-text { font-size: 0.8rem; }
+  .grown-up-number { font-size: 1.2rem; }
+  .grown-up-btn { padding: 12px 16px; font-size: 0.7rem; width: 100%; text-align: center; }
+
+  .zone-cards { gap: 10px; }
+  .zone-card { padding: 18px 14px; }
+  .zone-card .zone-units { font-size: 2rem; }
+
+  .action-card { padding: 18px 14px; }
+  .action-step { font-size: 0.75rem; }
+  .action-result { font-size: 1rem; }
+
+  .feed-wrap { padding: 14px; }
+  .feed-item { flex-wrap: wrap; gap: 4px; }
+  .feed-time { min-width: auto; width: 100%; font-size: 0.6rem; }
+  .feed-text { font-size: 0.72rem; width: calc(100% - 80px); }
+  .feed-tag { font-size: 0.55rem; }
+
+  .insight-text { padding: 14px; font-size: 0.8rem; }
+
+  .toggle-container { gap: 10px; }
+  .toggle-label { font-size: 0.75rem; }
+
+  .roi-table th, .roi-table td { padding: 10px 8px; }
+}
+
+/* ============================================
    PRINT
    ============================================ */
 @media print {
@@ -1066,15 +1151,15 @@ body {
 
   <!-- ===== HORIZONTAL NAV ===== -->
   <nav class="top-nav">
-    <button class="nav-item active" onclick="showScreen(0)" data-screen="0">Пульс бизнеса</button>
+    <button class="nav-item active" onclick="showScreen('pulse')" data-screen="pulse">Пульс бизнеса</button>
     <span class="nav-dot">&middot;</span>
-    <button class="nav-item" onclick="showScreen(1)" data-screen="1">Рентген магазинов</button>
+    <button class="nav-item" onclick="showScreen('stores')" data-screen="stores">Рентген магазинов</button>
     <span class="nav-dot">&middot;</span>
-    <button class="nav-item" onclick="showScreen(2)" data-screen="2">Клиенты</button>
+    <button class="nav-item" onclick="showScreen('customers')" data-screen="customers">Клиенты</button>
     <span class="nav-dot">&middot;</span>
-    <button class="nav-item" onclick="showScreen(3)" data-screen="3">Склад</button>
+    <button class="nav-item" onclick="showScreen('inventory')" data-screen="inventory">Склад</button>
     <span class="nav-dot">&middot;</span>
-    <button class="nav-item" onclick="showScreen(4)" data-screen="4">Маркетинг</button>
+    <button class="nav-item" onclick="showScreen('marketing')" data-screen="marketing">Маркетинг</button>
   </nav>
   <div class="nav-divider"></div>
 
@@ -1084,7 +1169,7 @@ body {
     <!-- ===================================================
          SCREEN 1: PULSE
          =================================================== -->
-    <section class="screen active" id="screen-0">
+    <section class="screen scr-pulse active" id="screen-pulse">
       <div class="screen-header">
         <h2 class="section-title">Пульс бизнеса</h2>
         <div class="toggle-container" style="margin-bottom:0">
@@ -1113,7 +1198,7 @@ body {
     <!-- ===================================================
          SCREEN 2: STORE X-RAY
          =================================================== -->
-    <section class="screen" id="screen-1">
+    <section class="screen scr-stores" id="screen-stores">
       <div class="screen-header">
         <h2 class="section-title">Рентген магазинов</h2>
         <div class="toggle-container" style="margin-bottom:0">
@@ -1144,7 +1229,7 @@ body {
     <!-- ===================================================
          SCREEN 3: CUSTOMERS
          =================================================== -->
-    <section class="screen" id="screen-2">
+    <section class="screen scr-customers" id="screen-customers">
       <h2 class="section-title">Клиенты</h2>
 
       <div class="segment-cards" id="s3-segments"></div>
@@ -1170,7 +1255,7 @@ body {
     <!-- ===================================================
          SCREEN 4: INVENTORY
          =================================================== -->
-    <section class="screen" id="screen-3">
+    <section class="screen scr-inventory" id="screen-inventory">
       <h2 class="section-title">Склад — Замороженные деньги</h2>
 
       <div class="zone-cards" id="s4-zones"></div>
@@ -1201,7 +1286,7 @@ body {
     <!-- ===================================================
          SCREEN 5: MARKETING
          =================================================== -->
-    <section class="screen" id="screen-4">
+    <section class="screen scr-marketing" id="screen-marketing">
       <h2 class="section-title">Маркетинг</h2>
 
       <div class="chart-wrap">
@@ -1271,86 +1356,90 @@ body {
 
 </script>
 
-
 <script>
+/* ==================================================================
+   MOBILE DETECTION & CHART SIZING
+   ================================================================== */
+const IS_MOBILE = window.innerWidth <= 480;
+const CHART_FONT = IS_MOBILE ? 9 : 11;
+const CHART_LEGEND_PADDING = IS_MOBILE ? 8 : 14;
+
 /* ==================================================================
    DATA
    ================================================================== */
 const DATA = {
   revenue: {
     total: 737,
+    monthLabels: ['Авг', 'Сен', 'Окт', 'Ноя', 'Дек', 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл'],
+    monthly: [55, 58, 63, 72, 85, 52, 48, 56, 60, 65, 68, 55],
     channels: {
       today: [
-        { name: 'Розница (19 магазинов)', value: 426, color: '#3498db', pct: '57.8%' },
-        { name: 'Опт (по телефону)', value: 285, color: '#2980b9', pct: '38.7%' },
-        { name: 'Онлайн (все сайты)', value: 25.5, color: '#e67e22', pct: '3.5%' }
+        { name: 'Розничные магазины', value: 680, pct: '92%', color: '#3498db' },
+        { name: 'Маркетплейсы', value: 45, pct: '6%', color: '#9b59b6' },
+        { name: 'Свой сайт', value: 12, pct: '2%', color: '#e74c3c', badge: 'Точка роста' }
       ],
       future: [
-        { name: 'Розница', value: 410, color: '#3498db', pct: '46.6%' },
-        { name: 'Опт (цифровой кабинет)', value: 290, color: '#2980b9', pct: '33.0%' },
-        { name: 'alessandroborelli.ru', value: 30, color: '#27ae60', pct: '3.4%', badge: 'Главный канал прибыли' },
-        { name: 'imperiya-detstva.ru', value: 15, color: '#2ecc71', pct: '1.7%' },
-        { name: 'Маркетплейсы (WB+Ozon)', value: 12, color: '#95a5a6', pct: '1.4%', badge: 'витрина бренда' },
-        { name: 'Международные (GCC)', value: 8, color: '#cda04c', pct: '0.9%', flag: '\u{1F1E6}\u{1F1EA}' },
-        { name: 'Borelli Family', value: 3, color: '#cda04c', pct: '0.3%', badge: 'подписка' }
+        { name: 'Розничные магазины', value: 620, pct: '70%', color: '#3498db' },
+        { name: 'Маркетплейсы', value: 100, pct: '11%', color: '#9b59b6', badge: 'x2.2', flag: '\u2197' },
+        { name: 'Свой сайт', value: 80, pct: '9%', color: '#27ae60', badge: 'x6.7', flag: '\ud83d\ude80' },
+        { name: 'Собственный e-com', value: 40, pct: '5%', color: '#e67e22', badge: '\u041d\u043e\u0432\u043e\u0435', flag: '\u2728' },
+        { name: 'Каналы Dubai', value: 20, pct: '2%', color: '#cda04c', badge: 'Запуск' },
+        { name: 'Опт / B2B', value: 15, pct: '2%', color: '#95a5a6' },
+        { name: 'Аутлеты / Стоки', value: 5, pct: '1%', color: '#7f8c8d' }
       ]
-    },
-    futureTotal: 880,
-    monthly: [43,50,65,54,52,55,68,137,58,59,41,54],
-    monthLabels: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек']
+    }
   },
 
   stores: {
     today: [
-      { name: 'ТРЦ Европейский', city: 'Москва', revenue: 5.2, rent: 1.84, margin: 1.1, sqm: 34, status: 'green' },
-      { name: 'ТРЦ Океания', city: 'Москва', revenue: 2.9, rent: 0.72, margin: 0.8, sqm: 19, status: 'green' },
-      { name: 'ТРЦ Саларис', city: 'Москва', revenue: 2.5, rent: 0.40, margin: 0.7, sqm: 17, status: 'green' },
-      { name: 'ТРЦ Афимолл', city: 'Москва', revenue: 2.8, rent: 0.46, margin: 0.9, sqm: 22, status: 'green' },
-      { name: 'ТРК Вегас', city: 'Москва', revenue: 2.2, rent: 0.43, margin: 0.5, sqm: 15, status: 'green' },
-      { name: 'ТРЦ Ривьера', city: 'Москва', revenue: 1.8, rent: 0.15, margin: 0.5, sqm: 12, status: 'green' },
-      { name: 'ТРЦ Галерея', city: 'СПб', revenue: 2.4, rent: 0.55, margin: 0.6, sqm: 16, status: 'green' },
-      { name: 'МЦ Красная Площадь', city: 'Сочи', revenue: 2.1, rent: 0.77, margin: 0.4, sqm: 14, status: 'yellow' },
-      { name: 'ТЦ Аэробус', city: 'Москва', revenue: 0.8, rent: 0.17, margin: 0.1, sqm: 5, status: 'yellow' },
-      { name: 'ТЦ Красный Кит', city: 'Мытищи', revenue: 1.2, rent: 0.34, margin: 0.2, sqm: 8, status: 'yellow' },
-      { name: 'ТРЦ РИО', city: 'Москва', revenue: 1.0, rent: 0.30, margin: 0.1, sqm: 7, status: 'yellow' },
-      { name: 'МЦ Красная Площадь', city: 'Краснодар', revenue: 1.5, rent: 0.45, margin: 0.3, sqm: 10, status: 'yellow' },
-      { name: 'ТЦ', city: 'Ростов-на-Дону', revenue: 1.1, rent: 0.35, margin: 0.15, sqm: 7, status: 'yellow' },
-      { name: 'ТЦ', city: 'Иркутск', revenue: 0.9, rent: 0.30, margin: 0.1, sqm: 6, status: 'yellow' },
-      { name: 'Аутлет Внуково', city: 'Москва', revenue: 1.3, rent: 0.41, margin: 0.2, sqm: 9, status: 'yellow' },
-      { name: 'Аутлет Белая Дача', city: 'Москва', revenue: 1.1, rent: 0.35, margin: 0.15, sqm: 7, status: 'yellow' },
-      { name: 'ЦДМ Лубянка', city: 'Москва', revenue: 3.8, rent: 1.87, margin: -0.2, sqm: 25, status: 'red' },
-      { name: 'Бутик', city: 'СПб', revenue: 0.7, rent: 0.25, margin: 0.05, sqm: 5, status: 'yellow' },
-      { name: 'Dubai Mall', city: 'Дубай', revenue: 0.1, rent: 1.15, margin: -1.1, sqm: 2, status: 'red' }
+      { name: '\u0422\u0420\u0426 \u0410\u0432\u0438\u0430\u043f\u0430\u0440\u043a', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 6.5, rent: 1.95, margin: 1.2, sqm: 44, status: 'green' },
+      { name: '\u0422\u0420\u0426 \u041c\u043e\u0441\u043a\u0432\u0430', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 5.8, rent: 1.74, margin: 1.1, sqm: 39, status: 'green' },
+      { name: '\u0422\u0420\u0426 \u041c\u0435\u0442\u0440\u043e\u043f\u043e\u043b\u0438\u0441', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 5.2, rent: 1.56, margin: 0.9, sqm: 35, status: 'green' },
+      { name: '\u0422\u0420\u0426 \u041c\u0435\u0433\u0430 \u0425\u0438\u043c\u043a\u0438', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 4.8, rent: 1.44, margin: 0.8, sqm: 32, status: 'green' },
+      { name: '\u0422\u0420\u0426 \u0420\u0438\u0432\u044c\u0435\u0440\u0430', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 1.8, rent: 0.15, margin: 0.5, sqm: 12, status: 'green' },
+      { name: '\u0422\u0420\u0426 \u0413\u0430\u043b\u0435\u0440\u0435\u044f', city: '\u0421\u041f\u0431', revenue: 2.4, rent: 0.55, margin: 0.6, sqm: 16, status: 'green' },
+      { name: '\u041c\u0426 \u041a\u0440\u0430\u0441\u043d\u0430\u044f \u041f\u043b\u043e\u0449\u0430\u0434\u044c', city: '\u0421\u043e\u0447\u0438', revenue: 2.1, rent: 0.77, margin: 0.4, sqm: 14, status: 'yellow' },
+      { name: '\u0422\u0426 \u0410\u044d\u0440\u043e\u0431\u0443\u0441', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 0.8, rent: 0.17, margin: 0.1, sqm: 5, status: 'yellow' },
+      { name: '\u0422\u0426 \u041a\u0440\u0430\u0441\u043d\u044b\u0439 \u041a\u0438\u0442', city: '\u041c\u044b\u0442\u0438\u0449\u0438', revenue: 1.2, rent: 0.34, margin: 0.2, sqm: 8, status: 'yellow' },
+      { name: '\u0422\u0420\u0426 \u0420\u0418\u041e', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 1.0, rent: 0.30, margin: 0.1, sqm: 7, status: 'yellow' },
+      { name: '\u041c\u0426 \u041a\u0440\u0430\u0441\u043d\u0430\u044f \u041f\u043b\u043e\u0449\u0430\u0434\u044c', city: '\u041a\u0440\u0430\u0441\u043d\u043e\u0434\u0430\u0440', revenue: 1.5, rent: 0.45, margin: 0.3, sqm: 10, status: 'yellow' },
+      { name: '\u0422\u0426', city: '\u0420\u043e\u0441\u0442\u043e\u0432-\u043d\u0430-\u0414\u043e\u043d\u0443', revenue: 1.1, rent: 0.35, margin: 0.15, sqm: 7, status: 'yellow' },
+      { name: '\u0422\u0426', city: '\u0418\u0440\u043a\u0443\u0442\u0441\u043a', revenue: 0.9, rent: 0.30, margin: 0.1, sqm: 6, status: 'yellow' },
+      { name: '\u0410\u0443\u0442\u043b\u0435\u0442 \u0412\u043d\u0443\u043a\u043e\u0432\u043e', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 1.3, rent: 0.41, margin: 0.2, sqm: 9, status: 'yellow' },
+      { name: '\u0410\u0443\u0442\u043b\u0435\u0442 \u0411\u0435\u043b\u0430\u044f \u0414\u0430\u0447\u0430', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 1.1, rent: 0.35, margin: 0.15, sqm: 7, status: 'yellow' },
+      { name: '\u0426\u0414\u041c \u041b\u0443\u0431\u044f\u043d\u043a\u0430', city: '\u041c\u043e\u0441\u043a\u0432\u0430', revenue: 3.8, rent: 1.87, margin: -0.2, sqm: 25, status: 'red' },
+      { name: '\u0411\u0443\u0442\u0438\u043a', city: '\u0421\u041f\u0431', revenue: 0.7, rent: 0.25, margin: 0.05, sqm: 5, status: 'yellow' },
+      { name: 'Dubai Mall', city: '\u0414\u0443\u0431\u0430\u0439', revenue: 0.1, rent: 1.15, margin: -1.1, sqm: 2, status: 'red' }
     ],
     closed: [
-      { name: 'ТЦ Аэробус', city: 'Москва', reason: 'закрыта — убыточна' },
-      { name: 'ТЦ', city: 'Иркутск', reason: 'переформатирована в пункт выдачи' }
+      { name: '\u0422\u0426 \u0410\u044d\u0440\u043e\u0431\u0443\u0441', city: '\u041c\u043e\u0441\u043a\u0432\u0430', reason: '\u0437\u0430\u043a\u0440\u044b\u0442\u0430 \u2014 \u0443\u0431\u044b\u0442\u043e\u0447\u043d\u0430' },
+      { name: '\u0422\u0426', city: '\u0418\u0440\u043a\u0443\u0442\u0441\u043a', reason: '\u043f\u0435\u0440\u0435\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0430 \u0432 \u043f\u0443\u043d\u043a\u0442 \u0432\u044b\u0434\u0430\u0447\u0438' }
     ],
     totalRent: 124.9
   },
 
   customers: {
     segments: [
-      { name: 'VIP', desc: '100K+ в год', count: 847, share: '42%', check: '8 400 \u20bd', color: '#cda04c' },
-      { name: 'Активные', desc: 'покупка < 6 мес', count: 3200, share: '35%', check: '4 200 \u20bd', color: '#27ae60' },
-      { name: 'Спящие', desc: '6-12 мес без покупки', count: 5400, share: '\u2014', check: 'Спят с вашими деньгами', color: '#f39c12' },
-      { name: 'Потерянные', desc: 'год+ без покупки', count: 8100, share: '\u2014', check: 'Ушли к конкурентам', color: '#e74c3c' }
+      { name: 'VIP', desc: '100K+ \u0432 \u0433\u043e\u0434', count: 847, share: '42%', check: '8 400 \u20bd', color: '#cda04c' },
+      { name: '\u0410\u043a\u0442\u0438\u0432\u043d\u044b\u0435', desc: '\u043f\u043e\u043a\u0443\u043f\u043a\u0430 < 6 \u043c\u0435\u0441', count: 3200, share: '35%', check: '4 200 \u20bd', color: '#27ae60' },
+      { name: '\u0421\u043f\u044f\u0449\u0438\u0435', desc: '6-12 \u043c\u0435\u0441 \u0431\u0435\u0437 \u043f\u043e\u043a\u0443\u043f\u043a\u0438', count: 5400, share: '\u2014', check: '\u0421\u043f\u044f\u0442 \u0441 \u0432\u0430\u0448\u0438\u043c\u0438 \u0434\u0435\u043d\u044c\u0433\u0430\u043c\u0438', color: '#f39c12' },
+      { name: '\u041f\u043e\u0442\u0435\u0440\u044f\u043d\u043d\u044b\u0435', desc: '\u0433\u043e\u0434+ \u0431\u0435\u0437 \u043f\u043e\u043a\u0443\u043f\u043a\u0438', count: 8100, share: '\u2014', check: '\u0423\u0448\u043b\u0438 \u043a \u043a\u043e\u043d\u043a\u0443\u0440\u0435\u043d\u0442\u0430\u043c', color: '#e74c3c' }
     ],
     grownUp: { count: 1240, potential: '6.2M' },
     feed: [
-      { time: 'Сегодня 14:32', text: 'Мария К. купила куртку р.140', tag: 'Повторная покупка', color: '#27ae60' },
-      { time: 'Сегодня 11:15', text: 'Анна С. бросила корзину на 7 800 \u20bd', tag: 'Напоминание отправлено', color: '#f39c12' },
-      { time: 'Вчера 19:40', text: 'Елена Д. открыла рассылку \u00abновый сезон\u00bb', tag: 'Перешла на сайт', color: '#27ae60' },
-      { time: 'Вчера 16:05', text: 'Ольга М. не покупала 90 дней', tag: 'Отправлено \u00abмы скучаем\u00bb + промокод', color: '#f39c12' },
-      { time: 'Вчера 10:20', text: 'Татьяна В. оформила возврат р.128', tag: 'Предложен обмен на р.134', color: '#3498db' }
+      { time: '\u0421\u0435\u0433\u043e\u0434\u043d\u044f 14:32', text: '\u041c\u0430\u0440\u0438\u044f \u041a. \u043a\u0443\u043f\u0438\u043b\u0430 \u043a\u0443\u0440\u0442\u043a\u0443 \u0440.140', tag: '\u041f\u043e\u0432\u0442\u043e\u0440\u043d\u0430\u044f \u043f\u043e\u043a\u0443\u043f\u043a\u0430', color: '#27ae60' },
+      { time: '\u0421\u0435\u0433\u043e\u0434\u043d\u044f 11:15', text: '\u0410\u043d\u043d\u0430 \u0421. \u0431\u0440\u043e\u0441\u0438\u043b\u0430 \u043a\u043e\u0440\u0437\u0438\u043d\u0443 \u043d\u0430 7 800 \u20bd', tag: '\u041d\u0430\u043f\u043e\u043c\u0438\u043d\u0430\u043d\u0438\u0435 \u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e', color: '#f39c12' },
+      { time: '\u0412\u0447\u0435\u0440\u0430 19:40', text: '\u0415\u043b\u0435\u043d\u0430 \u0414. \u043e\u0442\u043a\u0440\u044b\u043b\u0430 \u0440\u0430\u0441\u0441\u044b\u043b\u043a\u0443 \u00ab\u043d\u043e\u0432\u044b\u0439 \u0441\u0435\u0437\u043e\u043d\u00bb', tag: '\u041f\u0435\u0440\u0435\u0448\u043b\u0430 \u043d\u0430 \u0441\u0430\u0439\u0442', color: '#27ae60' },
+      { time: '\u0412\u0447\u0435\u0440\u0430 16:05', text: '\u041e\u043b\u044c\u0433\u0430 \u041c. \u043d\u0435 \u043f\u043e\u043a\u0443\u043f\u0430\u043b\u0430 90 \u0434\u043d\u0435\u0439', tag: '\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e \u00ab\u043c\u044b \u0441\u043a\u0443\u0447\u0430\u0435\u043c\u00bb + \u043f\u0440\u043e\u043c\u043e\u043a\u043e\u0434', color: '#f39c12' },
+      { time: '\u0412\u0447\u0435\u0440\u0430 10:20', text: '\u0422\u0430\u0442\u044c\u044f\u043d\u0430 \u0412. \u043e\u0444\u043e\u0440\u043c\u0438\u043b\u0430 \u0432\u043e\u0437\u0432\u0440\u0430\u0442 \u0440.128', tag: '\u041f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d \u043e\u0431\u043c\u0435\u043d \u043d\u0430 \u0440.134', color: '#3498db' }
     ]
   },
 
   inventory: {
     zones: [
-      { name: 'Свежий товар', desc: 'до 60 дней', units: 4100, value: 42, label: 'Продастся сам', color: '#27ae60' },
-      { name: 'Залежался', desc: '60-90 дней', units: 2800, value: 28, label: 'Нужна скидка 20%', color: '#f39c12' },
-      { name: 'Мёртвый сток', desc: '90+ дней', units: 2486, value: 25, label: 'Срочная уценка 40-60%', color: '#e74c3c' }
+      { name: '\u0421\u0432\u0435\u0436\u0438\u0439 \u0442\u043e\u0432\u0430\u0440', desc: '\u0434\u043e 60 \u0434\u043d\u0435\u0439', units: 4100, value: 42, label: '\u041f\u0440\u043e\u0434\u0430\u0441\u0442\u0441\u044f \u0441\u0430\u043c', color: '#27ae60' },
+      { name: '\u0417\u0430\u043b\u0435\u0436\u0430\u043b\u0441\u044f', desc: '60-90 \u0434\u043d\u0435\u0439', units: 2800, value: 28, label: '\u041d\u0443\u0436\u043d\u0430 \u0441\u043a\u0438\u0434\u043a\u0430 20%', color: '#f39c12' },
+      { name: '\u041c\u0451\u0440\u0442\u0432\u044b\u0439 \u0441\u0442\u043e\u043a', desc: '90+ \u0434\u043d\u0435\u0439', units: 2486, value: 25, label: '\u0421\u0440\u043e\u0447\u043d\u0430\u044f \u0443\u0446\u0435\u043d\u043a\u0430 40-60%', color: '#e74c3c' }
     ],
     brands: [
       { name: 'BORELLI', green: 14000, yellow: 3000, red: 1989 },
@@ -1359,7 +1448,7 @@ const DATA = {
       { name: 'DIESEL', green: 600, yellow: 350, red: 283 },
       { name: 'DSQUARED2', green: 100, yellow: 50, red: 90 },
       { name: 'Elisabetta Franchi', green: 50, yellow: 40, red: 94 },
-      { name: 'Прочие', green: 1500, yellow: 800, red: 500 }
+      { name: '\u041f\u0440\u043e\u0447\u0438\u0435', green: 1500, yellow: 800, red: 500 }
     ],
     totalFrozen: 95
   },
@@ -1367,23 +1456,50 @@ const DATA = {
   marketing: {
     totalBudget: 12.9,
     competitors: [
-      { name: 'Вы', value: 12.9, pct: '1.5%' },
+      { name: '\u0412\u044b', value: 12.9, pct: '1.5%' },
       { name: 'Choupette', value: 60, pct: '~8%', estimated: true },
       { name: 'Gulliver', value: 90, pct: '~5%', estimated: true },
-      { name: 'Норма рынка', value: 55, pct: '5-10%', isNorm: true }
+      { name: '\u041d\u043e\u0440\u043c\u0430 \u0440\u044b\u043d\u043a\u0430', value: 55, pct: '5-10%', isNorm: true }
     ],
     channels: [
-      { name: 'Свой сайт (реклама)', spent: 800, revenue: 2400, roi: 3.0, verdict: 'Усилить', color: '#27ae60' },
-      { name: 'Блогеры', spent: 200, revenue: 1200, roi: 5.8, verdict: 'Лучший канал', color: '#27ae60' },
-      { name: 'Площадки (внутр.)', spent: 300, revenue: 1500, roi: 5.0, verdict: 'Усилить', color: '#27ae60' },
-      { name: 'Соцсети (таргет)', spent: 400, revenue: 1100, roi: 2.7, verdict: 'Норма', color: '#27ae60' },
-      { name: 'Видео (Reels)', spent: 150, revenue: 600, roi: 4.0, verdict: 'Растёт', color: '#27ae60' },
-      { name: 'СМС рассылки', spent: 290, revenue: 95, roi: 0.3, verdict: 'Убрать', color: '#e74c3c' },
-      { name: 'Фото/продакшн', spent: 420, revenue: 0, roi: null, verdict: 'Оптимизировать', color: '#f39c12' }
+      { name: '\u0421\u0432\u043e\u0439 \u0441\u0430\u0439\u0442 (\u0440\u0435\u043a\u043b\u0430\u043c\u0430)', spent: 800, revenue: 2400, roi: 3.0, verdict: '\u0423\u0441\u0438\u043b\u0438\u0442\u044c', color: '#27ae60' },
+      { name: '\u0411\u043b\u043e\u0433\u0435\u0440\u044b', spent: 200, revenue: 1200, roi: 5.8, verdict: '\u041b\u0443\u0447\u0448\u0438\u0439 \u043a\u0430\u043d\u0430\u043b', color: '#27ae60' },
+      { name: '\u041f\u043b\u043e\u0449\u0430\u0434\u043a\u0438 (\u0432\u043d\u0443\u0442\u0440.)', spent: 300, revenue: 1500, roi: 5.0, verdict: '\u0423\u0441\u0438\u043b\u0438\u0442\u044c', color: '#27ae60' },
+      { name: '\u0421\u043e\u0446\u0441\u0435\u0442\u0438 (\u0442\u0430\u0440\u0433\u0435\u0442)', spent: 400, revenue: 1100, roi: 2.7, verdict: '\u041d\u043e\u0440\u043c\u0430', color: '#27ae60' },
+      { name: '\u0412\u0438\u0434\u0435\u043e (Reels)', spent: 150, revenue: 600, roi: 4.0, verdict: '\u0420\u0430\u0441\u0442\u0451\u0442', color: '#27ae60' },
+      { name: '\u0421\u041c\u0421 \u0440\u0430\u0441\u0441\u044b\u043b\u043a\u0438', spent: 290, revenue: 95, roi: 0.3, verdict: '\u0423\u0431\u0440\u0430\u0442\u044c', color: '#e74c3c' },
+      { name: '\u0424\u043e\u0442\u043e/\u043f\u0440\u043e\u0434\u0430\u043a\u0448\u043d', spent: 420, revenue: 0, roi: null, verdict: '\u041e\u043f\u0442\u0438\u043c\u0438\u0437\u0438\u0440\u043e\u0432\u0430\u0442\u044c', color: '#f39c12' }
     ]
   }
 };
 
+
+/* ==================================================================
+   SCREEN REGISTRY
+   ================================================================== */
+const SCREENS = {
+  pulse:     { init: null, charts: [], rendered: false },
+  stores:    { init: null, charts: [], rendered: false },
+  customers: { init: null, charts: [], rendered: false },
+  inventory: { init: null, charts: [], rendered: false },
+  marketing: { init: null, charts: [], rendered: false }
+};
+
+/* ==================================================================
+   CHART MANAGER
+   ================================================================== */
+const chartRegistry = {};
+
+function createChart(canvasId, config) {
+  if (chartRegistry[canvasId]) {
+    chartRegistry[canvasId].destroy();
+  }
+  const ctx = document.getElementById(canvasId);
+  if (!ctx) return null;
+  const chart = new Chart(ctx, config);
+  chartRegistry[canvasId] = chart;
+  return chart;
+}
 
 /* ==================================================================
    GLOBALS
@@ -1399,33 +1515,37 @@ let doughnutProposed = null;
 /* ==================================================================
    NAVIGATION
    ================================================================== */
-function showScreen(idx) {
-  document.querySelectorAll('.screen').forEach((s, i) => {
+function showScreen(id) {
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s => {
     s.classList.remove('active');
-    if (i === idx) {
-      s.classList.add('active');
-      s.style.display = 'block';
-      requestAnimationFrame(() => { s.style.opacity = '1'; });
-    } else {
-      s.style.opacity = '0';
-      setTimeout(() => { if (!s.classList.contains('active')) s.style.display = 'none'; }, 400);
-    }
   });
-  document.querySelectorAll('.nav-item').forEach((n, i) => {
-    n.classList.toggle('active', i === idx);
-  });
-  // Lazy init charts
-  if (idx === 0 && !pulseChart) initPulseChart();
-  if (idx === 3 && !brandsChart) initBrandsChart();
-  if (idx === 4 && !competitorsChart) initMarketingCharts();
-  // Resize charts after showing screen
-  if (idx === 0 && pulseChart) setTimeout(() => pulseChart.resize(), 50);
-  if (idx === 3 && brandsChart) setTimeout(() => brandsChart.resize(), 50);
-  if (idx === 4) {
-    if (competitorsChart) setTimeout(() => competitorsChart.resize(), 50);
-    if (doughnutNow) setTimeout(() => doughnutNow.resize(), 50);
-    if (doughnutProposed) setTimeout(() => doughnutProposed.resize(), 50);
+
+  // Show target screen
+  const target = document.getElementById('screen-' + id);
+  if (target) {
+    target.classList.add('active');
   }
+
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.screen === id);
+  });
+
+  // Lazy init
+  const reg = SCREENS[id];
+  if (reg && !reg.rendered) {
+    if (reg.init) reg.init();
+    reg.rendered = true;
+  }
+
+  // Resize charts
+  if (reg && reg.charts.length) {
+    setTimeout(() => reg.charts.forEach(c => c && c.resize()), 50);
+  }
+
+  // Scroll to top
+  window.scrollTo(0, 0);
 }
 
 /* ==================================================================
@@ -1458,8 +1578,8 @@ function renderS1Cards(channels) {
     card.style.borderTop = '2px solid ' + ch.color;
     card.style.animationDelay = (i * 0.08) + 's';
     let inner = '<div class="card-name">' + ch.name + (ch.flag ? ' ' + ch.flag : '') + '</div>';
-    inner += '<div class="card-value">' + ch.value + ' млн \u20bd</div>';
-    inner += '<div class="card-pct">' + ch.pct + ' от выручки</div>';
+    inner += '<div class="card-value">' + ch.value + ' \u043c\u043b\u043d \u20bd</div>';
+    inner += '<div class="card-pct">' + ch.pct + ' \u043e\u0442 \u0432\u044b\u0440\u0443\u0447\u043a\u0438</div>';
     if (ch.badge) inner += '<div class="card-badge">' + ch.badge + '</div>';
     card.innerHTML = inner;
     wrap.appendChild(card);
@@ -1467,15 +1587,14 @@ function renderS1Cards(channels) {
 }
 
 function initPulseChart() {
-  const ctx = document.getElementById('chart-pulse').getContext('2d');
   const d = DATA.revenue;
   const bgColors = d.monthly.map((_, i) => i === 7 ? 'rgba(205,160,76,0.7)' : 'rgba(52,152,219,0.6)');
-  pulseChart = new Chart(ctx, {
+  pulseChart = createChart('chart-pulse', {
     type: 'bar',
     data: {
       labels: d.monthLabels,
       datasets: [{
-        label: 'Выручка',
+        label: '\u0412\u044b\u0440\u0443\u0447\u043a\u0430',
         data: d.monthly,
         backgroundColor: bgColors,
         borderRadius: 6,
@@ -1495,7 +1614,7 @@ function initPulseChart() {
           cornerRadius: 8,
           padding: 12,
           callbacks: {
-            label: function(ctx) { return ctx.parsed.y + ' млн \u20bd'; }
+            label: function(ctx) { return ctx.parsed.y + ' \u043c\u043b\u043d \u20bd'; }
           }
         }
       },
@@ -1503,8 +1622,8 @@ function initPulseChart() {
         y: {
           beginAtZero: true,
           ticks: {
-            callback: v => v + ' млн',
-            font: { family: 'Georgia', size: 11 },
+            callback: v => v + ' \u043c\u043b\u043d',
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a'
           },
           grid: { color: 'rgba(205,160,76,0.08)', drawBorder: false }
@@ -1512,13 +1631,14 @@ function initPulseChart() {
         x: {
           grid: { display: false },
           ticks: {
-            font: { family: 'Georgia', size: 11 },
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a'
           }
         }
       }
     }
   });
+  SCREENS.pulse.charts.push(pulseChart);
 }
 
 function updatePulseChart(future) {
@@ -1527,7 +1647,7 @@ function updatePulseChart(future) {
   if (future) {
     const bgColors = d.monthly.map((_, i) => (i === 6 || i === 7) ? 'rgba(205,160,76,0.7)' : 'rgba(52,152,219,0.6)');
     pulseChart.data.datasets = [{
-      label: 'Выручка',
+      label: '\u0412\u044b\u0440\u0443\u0447\u043a\u0430',
       data: d.monthly,
       backgroundColor: bgColors,
       borderRadius: 6,
@@ -1535,7 +1655,7 @@ function updatePulseChart(future) {
       borderWidth: 0,
       order: 2
     }, {
-      label: 'Онлайн рост',
+      label: '\u041e\u043d\u043b\u0430\u0439\u043d \u0440\u043e\u0441\u0442',
       data: [2, 2.5, 3, 3.5, 4, 5, 6, 8, 7, 7.5, 6, 7],
       type: 'line',
       borderColor: 'rgba(39,174,96,0.7)',
@@ -1553,18 +1673,18 @@ function updatePulseChart(future) {
         position: 'right',
         beginAtZero: true,
         ticks: {
-          callback: v => v + ' млн',
+          callback: v => v + ' \u043c\u043b\u043d',
           color: '#27ae60',
-          font: { family: 'Georgia', size: 11 }
+          font: { family: 'Georgia', size: CHART_FONT }
         },
         grid: { display: false },
-        title: { display: true, text: 'Онлайн', color: '#27ae60', font: { family: 'Georgia', size: 11 } }
+        title: { display: true, text: '\u041e\u043d\u043b\u0430\u0439\u043d', color: '#27ae60', font: { family: 'Georgia', size: CHART_FONT } }
       };
     }
   } else {
     const bgColors = d.monthly.map((_, i) => i === 7 ? 'rgba(205,160,76,0.7)' : 'rgba(52,152,219,0.6)');
     pulseChart.data.datasets = [{
-      label: 'Выручка',
+      label: '\u0412\u044b\u0440\u0443\u0447\u043a\u0430',
       data: d.monthly,
       backgroundColor: bgColors,
       borderRadius: 6,
@@ -1590,21 +1710,21 @@ function toggleScreen1() {
   lFuture.classList.toggle('active-label', screen1Future);
 
   if (screen1Future) {
-    animateNumber(bigNum, 737, 880, 1200, 'МЛН \u20bd/ГОД');
+    animateNumber(bigNum, 737, 880, 1200, '\u041c\u041b\u041d \u20bd/\u0413\u041e\u0414');
     delta.classList.add('show');
     renderS1Cards(DATA.revenue.channels.future);
     insight.style.opacity = '0';
     setTimeout(() => {
-      insight.textContent = '7 каналов продаж. Собственные сайты \u2014 главный источник прибыли. Бизнес не зависит от одной торговой точки.';
+      insight.textContent = '7 \u043a\u0430\u043d\u0430\u043b\u043e\u0432 \u043f\u0440\u043e\u0434\u0430\u0436. \u0421\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0435 \u0441\u0430\u0439\u0442\u044b \u2014 \u0433\u043b\u0430\u0432\u043d\u044b\u0439 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a \u043f\u0440\u0438\u0431\u044b\u043b\u0438. \u0411\u0438\u0437\u043d\u0435\u0441 \u043d\u0435 \u0437\u0430\u0432\u0438\u0441\u0438\u0442 \u043e\u0442 \u043e\u0434\u043d\u043e\u0439 \u0442\u043e\u0440\u0433\u043e\u0432\u043e\u0439 \u0442\u043e\u0447\u043a\u0438.';
       insight.style.opacity = '1';
     }, 200);
   } else {
-    animateNumber(bigNum, 880, 737, 1200, 'МЛН \u20bd/ГОД');
+    animateNumber(bigNum, 880, 737, 1200, '\u041c\u041b\u041d \u20bd/\u0413\u041e\u0414');
     delta.classList.remove('show');
     renderS1Cards(DATA.revenue.channels.today);
     insight.style.opacity = '0';
     setTimeout(() => {
-      insight.textContent = '96 из 100 покупателей в интернете покупают у конкурентов';
+      insight.textContent = '96 \u0438\u0437 100 \u043f\u043e\u043a\u0443\u043f\u0430\u0442\u0435\u043b\u0435\u0439 \u0432 \u0438\u043d\u0442\u0435\u0440\u043d\u0435\u0442\u0435 \u043f\u043e\u043a\u0443\u043f\u0430\u044e\u0442 \u0443 \u043a\u043e\u043d\u043a\u0443\u0440\u0435\u043d\u0442\u043e\u0432';
       insight.style.opacity = '1';
     }, 200);
   }
@@ -1624,16 +1744,16 @@ function renderS2Table(future) {
   if (future) {
     const onlineRow = document.createElement('tr');
     onlineRow.className = 'store-online';
-    onlineRow.innerHTML = '<td><strong>Онлайн-каналы</strong></td><td>\u2014</td><td>6.7 млн</td><td>0</td><td class="pos">+6.7 млн</td><td>\u2014</td><td><span class="status-dot status-green"></span></td>';
+    onlineRow.innerHTML = '<td><strong>\u041e\u043d\u043b\u0430\u0439\u043d-\u043a\u0430\u043d\u0430\u043b\u044b</strong></td><td>\u2014</td><td>6.7 \u043c\u043b\u043d</td><td>0</td><td class="pos">+6.7 \u043c\u043b\u043d</td><td>\u2014</td><td><span class="status-dot status-green"></span></td>';
     tbody.appendChild(onlineRow);
     totalRev += 6.7;
 
     stores = stores.map(s => {
-      if (s.name === 'ЦДМ Лубянка') {
-        return { ...s, margin: 0.3, status: 'yellow', note: '% от оборота' };
+      if (s.name === '\u0426\u0414\u041c \u041b\u0443\u0431\u044f\u043d\u043a\u0430') {
+        return { ...s, margin: 0.3, status: 'yellow', note: '% \u043e\u0442 \u043e\u0431\u043e\u0440\u043e\u0442\u0430' };
       }
       if (s.name === 'Dubai Mall') {
-        return { ...s, revenue: 1.8, margin: 0.3, status: 'yellow', note: 'онлайн подключён' };
+        return { ...s, revenue: 1.8, margin: 0.3, status: 'yellow', note: '\u043e\u043d\u043b\u0430\u0439\u043d \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0451\u043d' };
       }
       return s;
     });
@@ -1652,10 +1772,10 @@ function renderS2Table(future) {
     const marginStr = s.margin < 0 ? s.margin.toFixed(1) : '+' + s.margin.toFixed(1);
     tr.innerHTML = '<td>' + s.name + (s.note ? '<span class="store-note">' + s.note + '</span>' : '') + '</td>' +
       '<td style="color:#b8a88a;font-size:0.75rem">' + s.city + '</td>' +
-      '<td>' + s.revenue.toFixed(1) + ' млн</td>' +
-      '<td>' + s.rent.toFixed(2) + ' млн</td>' +
-      '<td class="' + marginClass + '">' + marginStr + ' млн</td>' +
-      '<td>' + (s.sqm ? s.sqm + ' тыс' : '\u2014') + '</td>' +
+      '<td>' + s.revenue.toFixed(1) + ' \u043c\u043b\u043d</td>' +
+      '<td>' + s.rent.toFixed(2) + ' \u043c\u043b\u043d</td>' +
+      '<td class="' + marginClass + '">' + marginStr + ' \u043c\u043b\u043d</td>' +
+      '<td>' + (s.sqm ? s.sqm + ' \u0442\u044b\u0441' : '\u2014') + '</td>' +
       '<td><span class="status-dot status-' + s.status + '"></span></td>';
     tbody.appendChild(tr);
   });
@@ -1672,10 +1792,10 @@ function renderS2Table(future) {
   const sumTr = document.createElement('tr');
   sumTr.className = 'summary-row';
   const rentYearly = future ? (DATA.stores.totalRent - 18) : DATA.stores.totalRent;
-  sumTr.innerHTML = '<td colspan="2">ИТОГО</td>' +
-    '<td>' + (totalRev * 12).toFixed(0) + ' млн/год</td>' +
-    '<td>' + (rentYearly).toFixed(1) + ' млн/год</td>' +
-    '<td colspan="2">' + (future ? 'Аренда снижена на ~18 млн/год' : 'Точек в плюсе: ' + greenCount + ' | В минусе: ' + redCount) + '</td>' +
+  sumTr.innerHTML = '<td colspan="2">\u0418\u0422\u041e\u0413\u041e</td>' +
+    '<td>' + (totalRev * 12).toFixed(0) + ' \u043c\u043b\u043d/\u0433\u043e\u0434</td>' +
+    '<td>' + (rentYearly).toFixed(1) + ' \u043c\u043b\u043d/\u0433\u043e\u0434</td>' +
+    '<td colspan="2">' + (future ? '\u0410\u0440\u0435\u043d\u0434\u0430 \u0441\u043d\u0438\u0436\u0435\u043d\u0430 \u043d\u0430 ~18 \u043c\u043b\u043d/\u0433\u043e\u0434' : '\u0422\u043e\u0447\u0435\u043a \u0432 \u043f\u043b\u044e\u0441\u0435: ' + greenCount + ' | \u0412 \u043c\u0438\u043d\u0443\u0441\u0435: ' + redCount) + '</td>' +
     '<td></td>';
   tbody.appendChild(sumTr);
 }
@@ -1707,7 +1827,7 @@ function renderS3() {
     div.innerHTML = '<div class="seg-name" style="color:' + seg.color + '">' + seg.name + '</div>' +
       '<div class="seg-desc">' + seg.desc + '</div>' +
       '<div class="seg-count" style="color:' + seg.color + '">' + seg.count.toLocaleString('ru') + '</div>' +
-      '<div class="seg-detail">' + (seg.share !== '\u2014' ? 'Доля выручки: ' + seg.share + ' | Ср. чек: ' + seg.check : (isText ? seg.check : seg.check)) + '</div>';
+      '<div class="seg-detail">' + (seg.share !== '\u2014' ? '\u0414\u043e\u043b\u044f \u0432\u044b\u0440\u0443\u0447\u043a\u0438: ' + seg.share + ' | \u0421\u0440. \u0447\u0435\u043a: ' + seg.check : (isText ? seg.check : seg.check)) + '</div>';
     wrap.appendChild(div);
   });
 
@@ -1736,24 +1856,23 @@ function renderS4Zones() {
     div.className = 'zone-card ' + colorClass;
     div.innerHTML = '<div class="zone-name">' + z.name + '</div>' +
       '<div class="zone-desc">' + z.desc + '</div>' +
-      '<div class="zone-units">' + z.units.toLocaleString('ru') + ' ед.</div>' +
-      '<div class="zone-value">~' + z.value + ' млн \u20bd</div>' +
+      '<div class="zone-units">' + z.units.toLocaleString('ru') + ' \u0435\u0434.</div>' +
+      '<div class="zone-value">~' + z.value + ' \u043c\u043b\u043d \u20bd</div>' +
       '<div class="zone-label">' + z.label + '</div>';
     wrap.appendChild(div);
   });
 }
 
 function initBrandsChart() {
-  const ctx = document.getElementById('chart-brands').getContext('2d');
   const brands = DATA.inventory.brands;
-  brandsChart = new Chart(ctx, {
+  brandsChart = createChart('chart-brands', {
     type: 'bar',
     data: {
       labels: brands.map(b => b.name),
       datasets: [
-        { label: 'Свежий (до 60 д.)', data: brands.map(b => b.green), backgroundColor: 'rgba(39,174,96,0.65)', borderRadius: 4, borderWidth: 0 },
-        { label: 'Залежался (60-90 д.)', data: brands.map(b => b.yellow), backgroundColor: 'rgba(243,156,18,0.65)', borderRadius: 4, borderWidth: 0 },
-        { label: 'Мёртвый сток (90+ д.)', data: brands.map(b => b.red), backgroundColor: 'rgba(231,76,60,0.65)', borderRadius: 4, borderWidth: 0 }
+        { label: '\u0421\u0432\u0435\u0436\u0438\u0439 (\u0434\u043e 60 \u0434.)', data: brands.map(b => b.green), backgroundColor: 'rgba(39,174,96,0.65)', borderRadius: 4, borderWidth: 0 },
+        { label: '\u0417\u0430\u043b\u0435\u0436\u0430\u043b\u0441\u044f (60-90 \u0434.)', data: brands.map(b => b.yellow), backgroundColor: 'rgba(243,156,18,0.65)', borderRadius: 4, borderWidth: 0 },
+        { label: '\u041c\u0451\u0440\u0442\u0432\u044b\u0439 \u0441\u0442\u043e\u043a (90+ \u0434.)', data: brands.map(b => b.red), backgroundColor: 'rgba(231,76,60,0.65)', borderRadius: 4, borderWidth: 0 }
       ]
     },
     options: {
@@ -1764,9 +1883,9 @@ function initBrandsChart() {
         legend: {
           position: 'top',
           labels: {
-            font: { family: 'Georgia', size: 11 },
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a',
-            padding: 16,
+            padding: CHART_LEGEND_PADDING,
             boxWidth: 12
           }
         },
@@ -1776,7 +1895,7 @@ function initBrandsChart() {
           bodyFont: { family: 'Georgia', size: 12 },
           cornerRadius: 8,
           callbacks: {
-            label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.x.toLocaleString('ru') + ' ед.'; }
+            label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.x.toLocaleString('ru') + ' \u0435\u0434.'; }
           }
         }
       },
@@ -1784,8 +1903,8 @@ function initBrandsChart() {
         x: {
           stacked: true,
           ticks: {
-            callback: v => (v/1000).toFixed(0) + ' тыс',
-            font: { family: 'Georgia', size: 11 },
+            callback: v => (v/1000).toFixed(0) + ' \u0442\u044b\u0441',
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a'
           },
           grid: { color: 'rgba(205,160,76,0.08)', drawBorder: false }
@@ -1794,28 +1913,28 @@ function initBrandsChart() {
           stacked: true,
           grid: { display: false },
           ticks: {
-            font: { family: 'Georgia', size: 11 },
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a'
           }
         }
       }
     }
   });
+  SCREENS.inventory.charts.push(brandsChart);
 }
 
 /* ==================================================================
    SCREEN 5: MARKETING
    ================================================================== */
 function initMarketingCharts() {
-  const ctxComp = document.getElementById('chart-competitors').getContext('2d');
   const comp = DATA.marketing.competitors;
-  const compColors = comp.map(c => c.name === 'Вы' ? 'rgba(231,76,60,0.65)' : (c.isNorm ? 'rgba(243,156,18,0.65)' : 'rgba(52,152,219,0.6)'));
-  competitorsChart = new Chart(ctxComp, {
+  const compColors = comp.map(c => c.name === '\u0412\u044b' ? 'rgba(231,76,60,0.65)' : (c.isNorm ? 'rgba(243,156,18,0.65)' : 'rgba(52,152,219,0.6)'));
+  competitorsChart = createChart('chart-competitors', {
     type: 'bar',
     data: {
       labels: comp.map(c => c.name + ' (' + c.pct + ')'),
       datasets: [{
-        label: 'Бюджет, млн \u20bd',
+        label: '\u0411\u044e\u0434\u0436\u0435\u0442, \u043c\u043b\u043d \u20bd',
         data: comp.map(c => c.value),
         backgroundColor: compColors,
         borderRadius: 6,
@@ -1835,7 +1954,7 @@ function initMarketingCharts() {
           bodyFont: { family: 'Georgia', size: 12 },
           cornerRadius: 8,
           callbacks: {
-            label: ctx => ctx.parsed.x + ' млн \u20bd' + (comp[ctx.dataIndex].estimated ? ' (оценка)' : '')
+            label: ctx => ctx.parsed.x + ' \u043c\u043b\u043d \u20bd' + (comp[ctx.dataIndex].estimated ? ' (\u043e\u0446\u0435\u043d\u043a\u0430)' : '')
           }
         }
       },
@@ -1843,8 +1962,8 @@ function initMarketingCharts() {
         x: {
           beginAtZero: true,
           ticks: {
-            callback: v => v + ' млн',
-            font: { family: 'Georgia', size: 11 },
+            callback: v => v + ' \u043c\u043b\u043d',
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a'
           },
           grid: { color: 'rgba(205,160,76,0.08)', drawBorder: false }
@@ -1852,20 +1971,21 @@ function initMarketingCharts() {
         y: {
           grid: { display: false },
           ticks: {
-            font: { family: 'Georgia', size: 11 },
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a'
           }
         }
       }
     }
   });
+  SCREENS.marketing.charts.push(competitorsChart);
 
   const roiTbody = document.getElementById('s5-roi-tbody');
   roiTbody.innerHTML = '';
   DATA.marketing.channels.forEach(ch => {
     const tr = document.createElement('tr');
-    const isSms = ch.name.includes('СМС');
-    const isBest = ch.name === 'Блогеры';
+    const isSms = ch.name.includes('\u0421\u041c\u0421');
+    const isBest = ch.name === '\u0411\u043b\u043e\u0433\u0435\u0440\u044b';
     if (isSms) tr.className = 'sms-row';
     if (isBest) tr.className = 'best-row';
 
@@ -1878,8 +1998,8 @@ function initMarketingCharts() {
     if (ch.color === '#f39c12') verdictClass = 'verdict-yellow';
 
     tr.innerHTML = '<td' + (isSms ? ' class="ch-name"' : '') + '>' + ch.name + '</td>' +
-      '<td>' + ch.spent + ' тыс \u20bd</td>' +
-      '<td>' + (ch.revenue > 0 ? (ch.revenue / 1000).toFixed(1) + ' млн \u20bd' : '\u2014') + '</td>' +
+      '<td>' + ch.spent + ' \u0442\u044b\u0441 \u20bd</td>' +
+      '<td>' + (ch.revenue > 0 ? (ch.revenue / 1000).toFixed(1) + ' \u043c\u043b\u043d \u20bd' : '\u2014') + '</td>' +
       '<td style="color:' + roiColor + ';font-weight:600">' + (ch.roi !== null ? ch.roi.toFixed(1) + 'x' : '\u2014') + '</td>' +
       '<td><span class="verdict-badge ' + verdictClass + '">' + ch.verdict + '</span></td>';
     roiTbody.appendChild(tr);
@@ -1889,8 +2009,7 @@ function initMarketingCharts() {
   const nowData = DATA.marketing.channels.map(c => c.spent);
   const nowColors = ['rgba(52,152,219,0.7)', 'rgba(39,174,96,0.7)', 'rgba(46,204,113,0.7)', 'rgba(155,89,182,0.7)', 'rgba(230,126,34,0.7)', 'rgba(231,76,60,0.7)', 'rgba(149,165,166,0.7)'];
 
-  const ctxNow = document.getElementById('chart-now').getContext('2d');
-  doughnutNow = new Chart(ctxNow, {
+  doughnutNow = createChart('chart-now', {
     type: 'doughnut',
     data: {
       labels: nowLabels,
@@ -1904,9 +2023,9 @@ function initMarketingCharts() {
         legend: {
           position: 'bottom',
           labels: {
-            font: { family: 'Georgia', size: 11 },
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a',
-            padding: 10,
+            padding: CHART_LEGEND_PADDING,
             boxWidth: 12
           }
         },
@@ -1915,11 +2034,12 @@ function initMarketingCharts() {
           titleFont: { family: 'Georgia', size: 12 },
           bodyFont: { family: 'Georgia', size: 12 },
           cornerRadius: 8,
-          callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' тыс \u20bd' }
+          callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' \u0442\u044b\u0441 \u20bd' }
         }
       }
     }
   });
+  SCREENS.marketing.charts.push(doughnutNow);
 
   const proposedData = [
     800 + 150,
@@ -1930,11 +2050,10 @@ function initMarketingCharts() {
     0,
     420
   ];
-  const proposedLabels = nowLabels.map((l, i) => i === 5 ? 'СМС (убрано)' : l);
+  const proposedLabels = nowLabels.map((l, i) => i === 5 ? '\u0421\u041c\u0421 (\u0443\u0431\u0440\u0430\u043d\u043e)' : l);
   const proposedColors = ['rgba(52,152,219,0.7)', 'rgba(39,174,96,0.7)', 'rgba(46,204,113,0.7)', 'rgba(155,89,182,0.7)', 'rgba(230,126,34,0.7)', 'rgba(189,195,199,0.5)', 'rgba(149,165,166,0.7)'];
 
-  const ctxProp = document.getElementById('chart-proposed').getContext('2d');
-  doughnutProposed = new Chart(ctxProp, {
+  doughnutProposed = createChart('chart-proposed', {
     type: 'doughnut',
     data: {
       labels: proposedLabels,
@@ -1948,9 +2067,9 @@ function initMarketingCharts() {
         legend: {
           position: 'bottom',
           labels: {
-            font: { family: 'Georgia', size: 11 },
+            font: { family: 'Georgia', size: CHART_FONT },
             color: '#b8a88a',
-            padding: 10,
+            padding: CHART_LEGEND_PADDING,
             boxWidth: 12
           }
         },
@@ -1959,35 +2078,56 @@ function initMarketingCharts() {
           titleFont: { family: 'Georgia', size: 12 },
           bodyFont: { family: 'Georgia', size: 12 },
           cornerRadius: 8,
-          callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' тыс \u20bd' }
+          callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' \u0442\u044b\u0441 \u20bd' }
         }
       }
     }
   });
+  SCREENS.marketing.charts.push(doughnutProposed);
 }
+
+/* ==================================================================
+   REGISTER SCREEN INIT FUNCTIONS
+   ================================================================== */
+SCREENS.pulse.init = function() {
+  renderS1Cards(DATA.revenue.channels.today);
+  initPulseChart();
+  const bigNum = document.getElementById('s1-big-number');
+  animateNumber(bigNum, 0, 737, 1500, '\u041c\u041b\u041d \u20bd/\u0413\u041e\u0414');
+};
+
+SCREENS.stores.init = function() {
+  renderS2Table(false);
+};
+
+SCREENS.customers.init = function() {
+  renderS3();
+};
+
+SCREENS.inventory.init = function() {
+  renderS4Zones();
+  initBrandsChart();
+};
+
+SCREENS.marketing.init = function() {
+  initMarketingCharts();
+};
 
 /* ==================================================================
    INIT ON LOAD
    ================================================================== */
 document.addEventListener('DOMContentLoaded', function() {
-  // Screen 1
-  renderS1Cards(DATA.revenue.channels.today);
-  initPulseChart();
+  // Only render screen 0 (pulse) on load; everything else is lazy
+  SCREENS.pulse.init();
+  SCREENS.pulse.rendered = true;
 
-  // Animate big number on load
-  const bigNum = document.getElementById('s1-big-number');
-  animateNumber(bigNum, 0, 737, 1500, 'МЛН \u20bd/ГОД');
+  // Screens 2 and 3 (stores and customers) have no charts, render them eagerly
+  // since their data is lightweight
+  SCREENS.stores.init();
+  SCREENS.stores.rendered = true;
 
-  // Screen 2
-  renderS2Table(false);
-
-  // Screen 3
-  renderS3();
-
-  // Screen 4
-  renderS4Zones();
-
-  // Screen 5 charts are lazy-loaded on navigation
+  SCREENS.customers.init();
+  SCREENS.customers.rendered = true;
 });
 </script>
 
