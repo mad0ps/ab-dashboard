@@ -281,24 +281,8 @@ body {
   white-space: nowrap;
   border-left: 2px solid transparent;
 }
-/* Hover chevron indicator */
-.nav-item::after {
-  content: '';
-  position: absolute;
-  right: 14px;
-  width: 5px; height: 5px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(-45deg);
-  opacity: 0;
-  transition: opacity 180ms, transform 180ms var(--ease-out);
-}
-.nav-item:hover::after {
-  opacity: .5;
-  animation: chevronSlideIn 200ms var(--ease-out) forwards;
-}
-.nav-item.active::after { display: none; }
-.sidebar.collapsed .nav-item::after { display: none; }
+/* No chevron ::after — reserved for tooltip in collapsed mode */
+.nav-item::after { content: none; }
 
 .nav-item:hover { color: var(--n200); background: rgba(255,255,255,.04); }
 .nav-item.active {
@@ -360,6 +344,11 @@ body {
   font-family: var(--f-body);
   letter-spacing: 0;
   text-transform: none;
+  /* Reset any inherited ::after properties */
+  width: auto;
+  height: auto;
+  border: none;
+  animation: none;
 }
 .sidebar.collapsed .nav-item:hover::after {
   opacity: 1;
@@ -387,6 +376,7 @@ body {
   border-top: 1px solid rgba(255,255,255,.08);
   padding: 12px;
   flex-shrink: 0;
+  overflow: visible;
 }
 .sidebar-toggle {
   display: flex; align-items: center; justify-content: center;
@@ -427,6 +417,17 @@ body {
 .sidebar.collapsed .sidebar-user .user-info { opacity: 0; }
 .sidebar-user .user-name { font-size: 13px; color: var(--n200); font-weight: 500; }
 .sidebar-user .user-role { font-size: 10px; color: var(--n500); }
+
+/* Collapsed sidebar: center avatar, hide text */
+.sidebar.collapsed .sidebar-user {
+  justify-content: center;
+  padding: 12px 0;
+  overflow: visible;
+}
+.sidebar.collapsed .sidebar-user .user-avatar {
+  margin: 0;
+  flex-shrink: 0;
+}
 
 /* Sidebar updated timestamp */
 .sidebar-updated {
@@ -712,12 +713,7 @@ body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed); }
   animation: sectionFadeIn 500ms var(--ease-out) forwards;
   animation-delay: 400ms;
 }
-/* Orders + AI row: 800ms delay */
-.row-2col.row-orders {
-  opacity: 0;
-  animation: sectionFadeIn 500ms var(--ease-out) forwards;
-  animation-delay: 800ms;
-}
+/* Orders row delay handled by .row-orders-full */
 
 .card {
   background: var(--card-bg);
@@ -835,10 +831,11 @@ table tbody tr {
   cursor: pointer;
   border-left: 2px solid transparent;
 }
-/* Alternate row backgrounds */
-table tbody tr:nth-child(even) { background: var(--table-row-alt); }
+/* Alternate row backgrounds — skip detail rows */
+table tbody tr:nth-child(even):not(.order-detail) { background: var(--table-row-alt); }
 /* Hover: gold left border slides in */
-table tbody tr:hover { background: var(--table-row-hover); border-left-color: var(--brand-gold); }
+table tbody tr:not(.order-detail):hover { background: var(--table-row-hover); border-left-color: var(--brand-gold); }
+table tbody tr.order-detail:hover { background: var(--n50); }
 table tbody tr:last-child { border-bottom: none; }
 table tbody td {
   padding: 12px 14px;
@@ -928,6 +925,219 @@ table tbody td.amount {
   transition: color 150ms;
 }
 .insight-link:hover { color: var(--brand-gold); }
+
+/* ============================================================
+   FULL-WIDTH ORDERS ROW
+   ============================================================ */
+.row-orders-full {
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: sectionFadeIn 500ms var(--ease-out) forwards;
+  animation-delay: 800ms;
+}
+
+/* ============================================================
+   ORDER DETAIL ROWS
+   ============================================================ */
+.order-detail {
+  background: var(--n50) !important;
+  border-left: 3px solid var(--brand-gold) !important;
+}
+.order-detail td {
+  padding: 0 !important;
+}
+.order-detail-content {
+  padding: 16px 20px 16px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  animation: orderDetailSlide 200ms var(--ease-out);
+}
+@keyframes orderDetailSlide {
+  from { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; }
+  to { opacity: 1; max-height: 300px; }
+}
+.detail-section {
+  line-height: 1.6;
+}
+.detail-section strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.detail-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+}
+.detail-section ul li {
+  padding: 2px 0;
+  padding-left: 16px;
+  position: relative;
+}
+.detail-section ul li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--brand-gold);
+}
+[data-theme="dark"] .order-detail {
+  background: #1a1a1e !important;
+}
+
+/* ============================================================
+   STATUS BADGE TOOLTIPS
+   ============================================================ */
+.status-tooltip {
+  position: relative;
+  cursor: help;
+}
+.status-tooltip::after {
+  content: attr(data-status-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  background: #292524;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+.status-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  right: 12px;
+  border: 5px solid transparent;
+  border-top-color: #292524;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms;
+  z-index: 100;
+}
+.status-tooltip:hover::after,
+.status-tooltip:hover::before {
+  opacity: 1;
+}
+
+/* ============================================================
+   AI ADVISOR BUTTON & PANEL
+   ============================================================ */
+.ai-advisor-btn {
+  position: relative;
+  width: 34px; height: 34px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  background: var(--card-bg);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 150ms;
+  color: var(--text-secondary);
+}
+.ai-advisor-btn:hover { border-color: var(--brand-gold); box-shadow: var(--shadow-xs); color: var(--brand-gold); }
+.ai-advisor-btn svg { width: 18px; height: 18px; }
+.ai-badge {
+  position: absolute;
+  top: -5px; right: -5px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: #fff;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+  animation: aiBadgePulse 2s ease-in-out infinite;
+}
+@keyframes aiBadgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+}
+
+.ai-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 49;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms;
+}
+.ai-panel-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ai-panel {
+  position: fixed;
+  right: 0; top: 0; bottom: 0;
+  width: 380px;
+  background: var(--card-bg);
+  border-left: 1px solid var(--card-border);
+  box-shadow: -8px 0 24px rgba(0,0,0,0.1);
+  z-index: 50;
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 300ms var(--ease-out);
+}
+.ai-panel.open {
+  transform: translateX(0);
+}
+.ai-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--card-border);
+  flex-shrink: 0;
+}
+.ai-panel-header h3 {
+  font-family: var(--f-display);
+  font-size: 18px;
+  color: var(--text-primary);
+  margin: 0;
+}
+.ai-panel-count {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.ai-panel-close {
+  width: 32px; height: 32px;
+  border: none;
+  background: var(--separator);
+  border-radius: var(--r-md);
+  font-size: 20px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 150ms;
+  line-height: 1;
+}
+.ai-panel-close:hover {
+  background: var(--n300);
+  color: var(--text-primary);
+}
+.ai-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+@media (max-width: 768px) {
+  .ai-panel { width: 100%; }
+}
 
 /* ============================================================
    PLACEHOLDER SCREENS
@@ -1025,6 +1235,7 @@ table tbody td.amount {
   .sidebar.collapsed .nav-dot { display: flex; }
   .sidebar.collapsed .nav-item { justify-content: flex-start; padding: 9px 20px; }
   .sidebar.collapsed .nav-item .nav-icon { transform: none; }
+  .sidebar.collapsed .nav-item::after { content: none !important; }
 
   .sidebar-overlay.active {
     /* Cover full viewport including safe areas */
@@ -1245,6 +1456,16 @@ table tbody td.amount {
         <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
+      <button class="ai-advisor-btn" onclick="toggleAIPanel()" title="AI-Советник">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8">
+          <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.57-3.25 3.92"/>
+          <path d="M8.24 4.47A4 4 0 0 1 12 2"/>
+          <path d="M12 8v2"/>
+          <path d="M12 14h.01"/>
+          <rect x="3" y="14" width="18" height="8" rx="2"/>
+        </svg>
+        <span class="ai-badge">3</span>
+      </button>
       <div class="topbar-avatar">ЕЛ</div>
     </div>
   </header>
@@ -1456,8 +1677,8 @@ table tbody td.amount {
         </div>
       </div>
 
-      <!-- ROW: Orders Table + AI Insights -->
-      <div class="row-2col row-orders">
+      <!-- ROW: Orders Table (full width — AI moved to slide-out panel) -->
+      <div class="row-orders-full">
         <!-- Recent Orders -->
         <div class="card">
           <div class="card-title">
@@ -1478,101 +1699,155 @@ table tbody td.amount {
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4521</td>
                   <td class="mono">23.03</td>
                   <td>Иванова А.Н.</td>
                   <td class="amount">49 200 &#8381;</td>
                   <td><span class="badge badge-purple">WB</span></td>
-                  <td style="text-align:right"><span class="badge badge-green">Оплачен</span></td>
+                  <td style="text-align:right"><span class="badge badge-green status-tooltip" title="Оплата прошла успешно через Cloudpayments" data-status-tip="Оплата прошла успешно через Cloudpayments">Оплачен</span></td>
                 </tr>
-                <tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Пальто демисезонное р.146 — 32 400&#8381;</li><li>Шарф кашемировый — 8 900&#8381;</li><li>Берет шерстяной — 7 900&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> WB пункт выдачи, г. Москва, ТЦ Метрополис</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> WB-9847231</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> Постоянный клиент, 5-я покупка</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4520</td>
                   <td class="mono">23.03</td>
                   <td>Петров К.В.</td>
                   <td class="amount">12 400 &#8381;</td>
                   <td><span class="badge badge-dark-blue">Ozon</span></td>
-                  <td style="text-align:right"><span class="badge badge-blue">В пути</span></td>
+                  <td style="text-align:right"><span class="badge badge-blue status-tooltip" title="Отправлен СДЭК, ожидается доставка 25 марта" data-status-tip="Отправлен СДЭК, ожидается доставка 25 марта">В пути</span></td>
                 </tr>
-                <tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Куртка зимняя р.140 — 8 900&#8381;</li><li>Брюки школьные р.134 — 3 500&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> СДЭК, г. Санкт-Петербург, Невский пр. 78, кв. 23</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> SDEK-2847561</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> Подарок на день рождения</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4519</td>
                   <td class="mono">22.03</td>
                   <td>Сидорова М.А.</td>
                   <td class="amount">8 750 &#8381;</td>
                   <td><span class="badge badge-green">Сайт</span></td>
-                  <td style="text-align:right"><span class="badge badge-gold">Новый</span></td>
+                  <td style="text-align:right"><span class="badge badge-gold status-tooltip" title="Ожидает подтверждения менеджером" data-status-tip="Ожидает подтверждения менеджером">Новый</span></td>
                 </tr>
-                <tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Платье нарядное р.128 — 5 400&#8381;</li><li>Колготки 2шт — 3 350&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> Курьер, г. Москва, ул. Тверская 15, кв. 8</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> ожидает обработки</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> Просьба позвонить перед доставкой</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4518</td>
                   <td class="mono">22.03</td>
                   <td>Al-Rashid F.</td>
                   <td class="amount">87 500 &#8381;</td>
                   <td><span class="badge badge-gold">Dubai</span></td>
-                  <td style="text-align:right"><span class="badge badge-green">Оплачен</span></td>
+                  <td style="text-align:right"><span class="badge badge-green status-tooltip" title="Оплата прошла успешно через Cloudpayments" data-status-tip="Оплата прошла успешно через Cloudpayments">Оплачен</span></td>
                 </tr>
-                <tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Костюм-тройка Premium р.152 — 45 000&#8381;</li><li>Рубашка хлопок р.152 — 12 500&#8381;</li><li>Туфли кожаные р.37 — 18 000&#8381;</li><li>Бабочка шёлковая — 12 000&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> Dubai Mall, бутик BORELLI, самовывоз</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> DXB-00284</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> VIP-клиент, свадьба племянника</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4517</td>
                   <td class="mono">22.03</td>
                   <td>Козлов П.Д.</td>
                   <td class="amount">5 200 &#8381;</td>
                   <td><span class="badge badge-purple">WB</span></td>
-                  <td style="text-align:right"><span class="badge badge-red">Возврат</span></td>
+                  <td style="text-align:right"><span class="badge badge-red status-tooltip" title="Причина: не подошёл размер. Возврат оформлен 20 марта" data-status-tip="Причина: не подошёл размер. Возврат оформлен 20 марта">Возврат</span></td>
                 </tr>
-                <tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Джинсы детские р.122 — 5 200&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> WB пункт выдачи, г. Казань</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> WB-9844102</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> Возврат — размер оказался маленьким, рекомендовать р.128</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4516</td>
                   <td class="mono">21.03</td>
                   <td>Михайлова Е.С.</td>
                   <td class="amount">34 600 &#8381;</td>
                   <td><span class="badge badge-green">Сайт</span></td>
-                  <td style="text-align:right"><span class="badge badge-green">Оплачен</span></td>
+                  <td style="text-align:right"><span class="badge badge-green status-tooltip" title="Оплата прошла успешно через Cloudpayments" data-status-tip="Оплата прошла успешно через Cloudpayments">Оплачен</span></td>
                 </tr>
-                <tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Комбинезон зимний р.116 — 18 900&#8381;</li><li>Шапка+шарф комплект — 8 200&#8381;</li><li>Варежки мембранные — 4 500&#8381;</li><li>Термобельё р.116 — 3 000&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> Курьер, г. Москва, Ленинградский пр. 80, кв. 112</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> BORELLI-S-4516</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> Оформлена подписка на рассылку</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4515</td>
                   <td class="mono">21.03</td>
                   <td>Волкова Н.П.</td>
                   <td class="amount">15 800 &#8381;</td>
                   <td><span class="badge badge-dark-blue">Ozon</span></td>
-                  <td style="text-align:right"><span class="badge badge-blue">В пути</span></td>
+                  <td style="text-align:right"><span class="badge badge-blue status-tooltip" title="Отправлен СДЭК, ожидается доставка 25 марта" data-status-tip="Отправлен СДЭК, ожидается доставка 25 марта">В пути</span></td>
                 </tr>
-                <tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Школьный сарафан р.140 — 6 800&#8381;</li><li>Блузка белая р.140 — 4 200&#8381;</li><li>Кардиган школьный р.140 — 4 800&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> Ozon пункт выдачи, г. Новосибирск</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> OZON-77482910</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> Школьная форма, нужна до 1 апреля</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleOrderDetail(this)" style="cursor:pointer">
                   <td class="mono">#4514</td>
                   <td class="mono">21.03</td>
                   <td>Новикова Д.Р.</td>
                   <td class="amount">22 100 &#8381;</td>
                   <td><span class="badge badge-purple">WB</span></td>
-                  <td style="text-align:right"><span class="badge badge-gold">Новый</span></td>
+                  <td style="text-align:right"><span class="badge badge-gold status-tooltip" title="Ожидает подтверждения менеджером" data-status-tip="Ожидает подтверждения менеджером">Новый</span></td>
+                </tr>
+                <tr class="order-detail" style="display:none">
+                  <td colspan="6">
+                    <div class="order-detail-content">
+                      <div class="detail-section"><strong>Товары:</strong><ul><li>Ветровка мембранная р.134 — 12 900&#8381;</li><li>Кроссовки детские р.33 — 9 200&#8381;</li></ul></div>
+                      <div class="detail-section"><strong>Доставка:</strong> WB пункт выдачи, г. Екатеринбург, ТЦ Гринвич</div>
+                      <div class="detail-section"><strong>Трекинг:</strong> ожидает обработки</div>
+                      <div class="detail-section"><strong>Комментарий:</strong> Первый заказ клиента</div>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="table-footer">
             <a href="#" onclick="switchScreen('orders', document.querySelector('[data-screen=orders]'));return false;">Все заказы &rarr;</a>
-          </div>
-        </div>
-
-        <!-- AI Insights -->
-        <div class="card">
-          <div class="card-title">
-            <svg style="width:20px;height:20px;stroke:var(--brand-gold);fill:none;stroke-width:1.8" viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.57-3.25 3.92"/><path d="M8.24 4.47A4 4 0 0 1 12 2"/><path d="M12 8v2"/><path d="M12 14h.01"/><rect x="3" y="14" width="18" height="8" rx="2"/><path d="M7 14v-2a5 5 0 0 1 10 0v2"/></svg>
-            AI-Советник
-          </div>
-          <div class="card-subtitle">3 рекомендации на основе данных</div>
-          <div class="insight-stack">
-            <div class="insight-card urgent">
-              <div class="insight-tag">&#x1F534; Срочно</div>
-              <div class="insight-text">Поднимите цены на WB до 8 000 &#8381; — каждая продажа при 5 000 &#8381; приносит убыток 1 370 &#8381;. Точка безубыточности: 7 700 &#8381;.</div>
-              <a class="insight-link" href="#" onclick="switchScreen('channels', document.querySelector('[data-screen=channels]'));return false;">Подробнее &rarr;</a>
-            </div>
-            <div class="insight-card important">
-              <div class="insight-tag">&#x1F7E1; Важно</div>
-              <div class="insight-text">Школьный сезон через 4 месяца — пик продаж +37%. Подготовьте коллекцию из 9 капсул и увеличьте запасы на WB к июлю.</div>
-              <a class="insight-link" href="#" onclick="switchScreen('warehouse', document.querySelector('[data-screen=warehouse]'));return false;">Подробнее &rarr;</a>
-            </div>
-            <div class="insight-card idea">
-              <div class="insight-tag">&#x1F535; Идея</div>
-              <div class="insight-text">1 240 клиентов готовы к покупке — дети выросли из прошлой коллекции. Одна персонализированная рассылка = потенциал 6.2M &#8381; выручки.</div>
-              <a class="insight-link" href="#" onclick="switchScreen('clients', document.querySelector('[data-screen=clients]'));return false;">Подробнее &rarr;</a>
-            </div>
           </div>
         </div>
       </div>
@@ -1644,6 +1919,37 @@ table tbody td.amount {
     </div>
   </div><!-- /content -->
 </div><!-- /main -->
+
+<!-- AI Advisor Slide-out Panel -->
+<div class="ai-panel-overlay" id="aiPanelOverlay" onclick="toggleAIPanel()"></div>
+<div class="ai-panel" id="aiPanel">
+  <div class="ai-panel-header">
+    <div>
+      <h3>AI-Советник</h3>
+      <span class="ai-panel-count">3 рекомендации</span>
+    </div>
+    <button onclick="toggleAIPanel()" class="ai-panel-close">&times;</button>
+  </div>
+  <div class="ai-panel-body">
+    <div class="insight-stack">
+      <div class="insight-card urgent">
+        <div class="insight-tag">&#x1F534; Срочно</div>
+        <div class="insight-text">Поднимите цены на WB до 8 000 &#8381; — каждая продажа при 5 000 &#8381; приносит убыток 1 370 &#8381;. Точка безубыточности: 7 700 &#8381;.</div>
+        <a class="insight-link" href="#" onclick="switchScreen('channels', document.querySelector('[data-screen=channels]'));toggleAIPanel();return false;">Подробнее &rarr;</a>
+      </div>
+      <div class="insight-card important">
+        <div class="insight-tag">&#x1F7E1; Важно</div>
+        <div class="insight-text">Школьный сезон через 4 месяца — пик продаж +37%. Подготовьте коллекцию из 9 капсул и увеличьте запасы на WB к июлю.</div>
+        <a class="insight-link" href="#" onclick="switchScreen('warehouse', document.querySelector('[data-screen=warehouse]'));toggleAIPanel();return false;">Подробнее &rarr;</a>
+      </div>
+      <div class="insight-card idea">
+        <div class="insight-tag">&#x1F535; Идея</div>
+        <div class="insight-text">1 240 клиентов готовы к покупке — дети выросли из прошлой коллекции. Одна персонализированная рассылка = потенциал 6.2M &#8381; выручки.</div>
+        <a class="insight-link" href="#" onclick="switchScreen('clients', document.querySelector('[data-screen=clients]'));toggleAIPanel();return false;">Подробнее &rarr;</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ============================================================
      MOBILE BOTTOM BAR
@@ -1736,10 +2042,101 @@ table tbody td.amount {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  /* ── Period data ── */
+  const periodData = {
+    '24ч': { revenue: '2.1M', orders: '47', check: '44 700', clients: '12',
+              revTrend: '+5.2%', ordTrend: '+3.1%', chkTrend: '+1.8%', cliTrend: '+8.3%',
+              revUp: true, ordUp: true, chkUp: true, cliUp: true,
+              revPrev: '2.0M', ordPrev: '46', chkPrev: '43 900', cliPrev: '11',
+              chartData: [1.8, 2.0, 1.9, 2.1, 2.3, 2.0, 1.8, 2.1, 2.4, 2.2, 2.0, 2.1] },
+    '7д':  { revenue: '14.8M', orders: '312', check: '47 400', clients: '89',
+              revTrend: '+8.7%', ordTrend: '+6.2%', chkTrend: '+2.1%', cliTrend: '-1.5%',
+              revUp: true, ordUp: true, chkUp: true, cliUp: false,
+              revPrev: '13.6M', ordPrev: '294', chkPrev: '46 400', cliPrev: '90',
+              chartData: [12.1, 13.5, 14.2, 13.8, 15.1, 14.5, 14.8] },
+    '15д': { revenue: '30.2M', orders: '634', check: '47 600', clients: '156',
+              revTrend: '+10.1%', ordTrend: '+7.8%', chkTrend: '+2.9%', cliTrend: '-0.8%',
+              revUp: true, ordUp: true, chkUp: true, cliUp: false,
+              revPrev: '27.4M', ordPrev: '588', chkPrev: '46 200', cliPrev: '157',
+              chartData: [1.8, 2.0, 1.9, 2.3, 2.1, 2.4, 2.2, 1.9, 2.0, 2.3, 2.1, 2.5, 2.2, 2.0, 2.1] },
+    '30д': { revenue: '61.4M', orders: '1 247', check: '49 200', clients: '312',
+              revTrend: '+12.3%', ordTrend: '+8.1%', chkTrend: '+3.4%', cliTrend: '-2.1%',
+              revUp: true, ordUp: true, chkUp: true, cliUp: false,
+              revPrev: '54.7M', ordPrev: '1 153', chkPrev: '47 600', cliPrev: '319',
+              chartData: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54] },
+    '90д': { revenue: '184.2M', orders: '3 741', check: '49 200', clients: '847',
+              revTrend: '+14.5%', ordTrend: '+11.2%', chkTrend: '+4.1%', cliTrend: '+1.2%',
+              revUp: true, ordUp: true, chkUp: true, cliUp: true,
+              revPrev: '160.9M', ordPrev: '3 364', chkPrev: '47 300', cliPrev: '837',
+              chartData: [55, 58, 62, 54, 52, 55, 68, 137.5, 58, 59, 41, 54] },
+    'Год': { revenue: '737M', orders: '15 024', check: '49 100', clients: '3 200',
+              revTrend: '+9.8%', ordTrend: '+7.3%', chkTrend: '+2.8%', cliTrend: '+5.4%',
+              revUp: true, ordUp: true, chkUp: true, cliUp: true,
+              revPrev: '671M', ordPrev: '14 002', chkPrev: '47 800', cliPrev: '3 036',
+              chartData: [43, 50, 65, 54, 52, 55, 68, 137.5, 58, 59, 41, 54] }
+  };
+
+  function animateValue(el, newText) {
+    el.style.transition = 'opacity 150ms';
+    el.style.opacity = '0';
+    setTimeout(function() {
+      el.textContent = newText;
+      el.style.opacity = '1';
+    }, 150);
+  }
+
+  function updateDashboardData(periodKey) {
+    var d = periodData[periodKey];
+    if (!d) return;
+
+    var kpiCards = document.querySelectorAll('.kpi-card');
+    if (kpiCards.length < 4) return;
+
+    // Revenue
+    var revValue = kpiCards[0].querySelector('.kpi-value');
+    var revTrend = kpiCards[0].querySelector('.kpi-trend');
+    var revPrev = kpiCards[0].querySelector('.kpi-prev');
+    animateValue(revValue, d.revenue + ' \u20BD');
+    revTrend.className = 'kpi-trend ' + (d.revUp ? 'up' : 'down');
+    revTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.revUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.revTrend;
+    if (revPrev) revPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>\u20BD' + d.revPrev + '</span>';
+
+    // Orders
+    var ordValue = kpiCards[1].querySelector('.kpi-value');
+    var ordTrend = kpiCards[1].querySelector('.kpi-trend');
+    var ordPrev = kpiCards[1].querySelector('.kpi-prev');
+    animateValue(ordValue, d.orders);
+    ordTrend.className = 'kpi-trend ' + (d.ordUp ? 'up' : 'down');
+    ordTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.ordUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.ordTrend;
+    if (ordPrev) ordPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.ordPrev + '</span>';
+
+    // Average check
+    var chkValue = kpiCards[2].querySelector('.kpi-value');
+    var chkTrend = kpiCards[2].querySelector('.kpi-trend');
+    var chkPrev = kpiCards[2].querySelector('.kpi-prev');
+    animateValue(chkValue, d.check + ' \u20BD');
+    chkTrend.className = 'kpi-trend ' + (d.chkUp ? 'up' : 'down');
+    chkTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.chkUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.chkTrend;
+    if (chkPrev) chkPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.chkPrev + '\u20BD</span>';
+
+    // New clients
+    var cliValue = kpiCards[3].querySelector('.kpi-value');
+    var cliTrend = kpiCards[3].querySelector('.kpi-trend');
+    var cliPrev = kpiCards[3].querySelector('.kpi-prev');
+    animateValue(cliValue, d.clients);
+    cliTrend.className = 'kpi-trend ' + (d.cliUp ? 'up' : 'down');
+    cliTrend.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="' + (d.cliUp ? '23 6 13.5 15.5 8.5 10.5 1 18' : '23 18 13.5 8.5 8.5 13.5 1 6') + '"/></svg>' + d.cliTrend;
+    if (cliPrev) cliPrev.innerHTML = '\u043F\u0440\u0435\u0434. \u043F\u0435\u0440\u0438\u043E\u0434: <span>' + d.cliPrev + '</span>';
+
+    // Update Chart.js
+    updateRevenueChart(d.chartData);
+  }
+
   /* ── Period selector ── */
   window.setPeriod = function(el) {
     document.querySelectorAll('.period-pill').forEach(p => p.classList.remove('active'));
     el.classList.add('active');
+    updateDashboardData(el.textContent.trim());
   };
 
   /* ── Sidebar toggle (desktop) ── */
@@ -1809,6 +2206,28 @@ table tbody td.amount {
   }
 
   /* ── Revenue Chart (Chart.js) ── */
+  var revenueChartInstance = null;
+
+  function updateRevenueChart(newData) {
+    if (!revenueChartInstance) return;
+    var chart = revenueChartInstance;
+    // Generate labels based on data length
+    var labels;
+    if (newData.length <= 7) {
+      labels = ['\u041F\u043D', '\u0412\u0442', '\u0421\u0440', '\u0427\u0442', '\u041F\u0442', '\u0421\u0431', '\u0412\u0441'].slice(0, newData.length);
+    } else if (newData.length <= 15) {
+      labels = newData.map(function(_, i) { return (i + 1) + '\u0434'; });
+    } else {
+      labels = ['\u042F\u043D\u0432', '\u0424\u0435\u0432', '\u041C\u0430\u0440', '\u0410\u043F\u0440', '\u041C\u0430\u0439', '\u0418\u044E\u043D', '\u0418\u044E\u043B', '\u0410\u0432\u0433', '\u0421\u0435\u043D', '\u041E\u043A\u0442', '\u041D\u043E\u044F', '\u0414\u0435\u043A'];
+    }
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = newData;
+    // Recalculate y-axis max
+    var maxVal = Math.max.apply(null, newData);
+    chart.options.scales.y.max = Math.ceil(maxVal * 1.3 / 10) * 10;
+    chart.update('active');
+  }
+
   function initRevenueChart() {
     const ctx = document.getElementById('revenueChart');
     if (!ctx) return;
@@ -1825,7 +2244,7 @@ table tbody td.amount {
     gradient.addColorStop(0.5, 'rgba(139, 92, 246, 0.05)');
     gradient.addColorStop(1, 'rgba(139, 92, 246, 0)');
 
-    new Chart(ctx, {
+    revenueChartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels: months,
@@ -1864,7 +2283,7 @@ table tbody td.amount {
               label: function(item) {
                 const v = item.raw;
                 let label = v.toFixed(1) + 'M \u20BD';
-                if (item.dataIndex === 7) label += '  \u2190 \u0428\u043A\u043E\u043B\u044C\u043D\u044B\u0439 \u0441\u0435\u0437\u043E\u043D';
+                if (item.dataIndex === 7 && revenueChartInstance.data.labels.length === 12) label += '  \u2190 \u0428\u043A\u043E\u043B\u044C\u043D\u044B\u0439 \u0441\u0435\u0437\u043E\u043D';
                 return label;
               }
             }
@@ -1930,6 +2349,33 @@ table tbody td.amount {
     }
     // Default is light (set in HTML)
   }
+
+  /* ── AI Panel toggle ── */
+  window.toggleAIPanel = function() {
+    var panel = document.getElementById('aiPanel');
+    var overlay = document.getElementById('aiPanelOverlay');
+    var isOpen = panel.classList.contains('open');
+    if (isOpen) {
+      panel.classList.remove('open');
+      overlay.classList.remove('active');
+    } else {
+      panel.classList.add('open');
+      overlay.classList.add('active');
+    }
+  };
+
+  /* ── Order detail toggle ── */
+  window.toggleOrderDetail = function(tr) {
+    var detail = tr.nextElementSibling;
+    if (detail && detail.classList.contains('order-detail')) {
+      // Close all other open details
+      document.querySelectorAll('.order-detail').forEach(function(d) {
+        if (d !== detail) d.style.display = 'none';
+      });
+      // Toggle this one
+      detail.style.display = detail.style.display === 'none' ? 'table-row' : 'none';
+    }
+  };
 
   /* ── Init ── */
   initTheme();
