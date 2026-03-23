@@ -6432,11 +6432,13 @@ table tbody td.amount {
 
   function getActiveNotifications() {
     var dismissed = getNotifDismissed();
-    return NOTIFICATIONS.filter(function(n) {
-      // Critical notifications CANNOT be dismissed — always shown
+    var result = NOTIFICATIONS.filter(function(n) {
       if (n.type === 'critical') return true;
       return dismissed.indexOf(n.id) === -1;
     });
+    // Always return sorted: critical first
+    result.sort(function(a, b) { return (NOTIF_PRIORITY[a.type] || 99) - (NOTIF_PRIORITY[b.type] || 99); });
+    return result;
   }
 
   function updateNotifBadge() {
