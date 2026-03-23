@@ -1162,6 +1162,386 @@ table tbody td.amount {
 }
 .placeholder-desc { font-size: 14px; color: var(--text-muted); max-width: 320px; }
 
+/* ============================================================
+   STORES SCREEN
+   ============================================================ */
+#screen-stores {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0;
+  min-height: auto;
+}
+#screen-stores.active { display: block; opacity: 1; transform: none; }
+
+.stores-wrapper {
+  padding: 24px 0;
+  animation: cardIn 400ms var(--ease-out) forwards;
+}
+.stores-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stores-kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stores-kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.stores-kpi-value {
+  font-family: var(--f-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stores-kpi-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  font-family: var(--f-body);
+}
+.stores-kpi-badge.red {
+  background: var(--danger-light);
+  color: var(--danger);
+  border: 1px solid var(--danger-muted);
+}
+
+/* Filter bar */
+.stores-filter-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.stores-filter-bar select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  padding: 8px 32px 8px 12px;
+  font-family: var(--f-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  min-width: 140px;
+  transition: border-color 150ms;
+}
+.stores-filter-bar select:hover {
+  border-color: var(--n300);
+}
+.stores-filter-bar select:focus {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 1px;
+}
+.stores-filter-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  margin-right: -4px;
+}
+.stores-count-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-left: auto;
+  font-family: var(--f-mono);
+}
+
+/* Store list */
+.store-list-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* Column headers (desktop only) */
+.store-list-header {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1.2fr 0.8fr 0.8fr;
+  gap: 0;
+  padding: 10px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.store-list-header span {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.store-list-header span:last-child {
+  text-align: right;
+}
+
+/* Store row */
+.store-row {
+  border-bottom: 1px solid var(--separator);
+  cursor: pointer;
+  transition: background 120ms;
+  border-left: 3px solid transparent;
+}
+.store-row:last-child {
+  border-bottom: none;
+}
+.store-row:hover {
+  background: var(--table-row-hover);
+}
+.store-row[data-status="green"] { border-left-color: var(--success); }
+.store-row[data-status="yellow"] { border-left-color: var(--warning); }
+.store-row[data-status="red"] { border-left-color: var(--danger); }
+
+/* Row header (collapsed view) */
+.store-row-header {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1.2fr 0.8fr 0.8fr;
+  gap: 0;
+  padding: 14px 20px;
+  align-items: center;
+}
+.store-row-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.store-row-name .name {
+  font-family: var(--f-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.store-row-name .city {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.store-row-cell {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.store-row-cell.margin-negative {
+  color: var(--danger);
+}
+.store-row-cell.status-cell {
+  text-align: center;
+}
+.store-row-cell.trend-cell {
+  text-align: right;
+  font-weight: 600;
+}
+.store-row-cell.trend-cell.up { color: var(--success); }
+.store-row-cell.trend-cell.down { color: var(--danger); }
+.store-row-cell.trend-cell.flat { color: var(--text-muted); }
+
+/* Mobile-only elements (hidden on desktop) */
+.store-row-label {
+  display: none;
+}
+.store-row-mobile-metrics {
+  display: none;
+}
+.mobile-status {
+  display: none;
+}
+
+/* Expanded detail */
+.store-row-detail {
+  display: none;
+  padding: 0 20px 16px 20px;
+  animation: storeDetailSlide 200ms var(--ease-out);
+}
+.store-row.expanded .store-row-detail {
+  display: block;
+}
+@keyframes storeDetailSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.store-detail-inner {
+  padding: 16px 20px;
+  background: var(--n50);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--brand-gold);
+}
+.store-detail-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.store-detail-metrics span {
+  white-space: nowrap;
+}
+.store-detail-metrics strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.store-detail-separator {
+  color: var(--text-muted);
+  margin: 0 2px;
+}
+.store-detail-row {
+  margin-bottom: 8px;
+}
+.store-detail-row:last-child {
+  margin-bottom: 0;
+}
+.store-recommendation {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--card-bg);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.store-recommendation strong {
+  color: var(--brand-gold);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.store-detail-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--brand-gold-hover);
+  text-decoration: none;
+  transition: color 150ms;
+  float: right;
+}
+.store-detail-link:hover {
+  color: var(--brand-gold);
+}
+.store-no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+[data-theme="dark"] .store-detail-inner {
+  background: #1a1a1e;
+}
+[data-theme="dark"] .store-recommendation {
+  background: var(--n100);
+}
+
+/* Stores mobile */
+@media (max-width: 768px) {
+  .stores-kpi-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stores-kpi-value { font-size: 18px; }
+  .stores-filter-bar { gap: 8px; }
+  .stores-filter-bar select { min-width: 0; flex: 1; font-size: 12px; padding: 7px 28px 7px 10px; }
+  .stores-filter-label { display: none; }
+  .stores-count-label { display: none; }
+
+  /* Hide column headers on mobile */
+  .store-list-header { display: none; }
+
+  /* Switch row to block layout */
+  .store-row-header {
+    display: block;
+    padding: 14px 16px;
+  }
+  .store-row-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+  .store-row-name .city {
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mobile-status {
+    display: inline;
+    margin-left: 4px;
+  }
+  .store-row-cell {
+    display: none;
+  }
+  /* Show mobile stacked metrics */
+  .store-row-mobile-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .store-row-mobile-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .store-row-label {
+    display: inline;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .store-row-mobile-value {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .store-row-mobile-value.up { color: var(--success); }
+  .store-row-mobile-value.down { color: var(--danger); }
+  .store-row-mobile-value.flat { color: var(--text-muted); }
+
+  .store-row-detail { padding: 0 16px 14px 16px; }
+  .store-detail-inner { padding: 14px 16px; }
+  .store-detail-metrics { gap: 4px 16px; font-size: 12px; }
+}
+@media (max-width: 380px) {
+  .stores-kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stores-kpi-card { padding: 12px 14px; }
+  .stores-kpi-value { font-size: 16px; }
+  .stores-kpi-label { font-size: 11px; }
+}
+
 /* Overview screen */
 .screen-overview { display: block; }
 .screen-overview.hidden { display: none; }
@@ -1858,9 +2238,66 @@ table tbody td.amount {
          PLACEHOLDER SCREENS
          ============================================================ -->
     <div class="placeholder-screen" id="screen-stores">
-      <div class="placeholder-icon">&#x1F3EA;</div>
-      <div class="placeholder-title">Магазины</div>
-      <div class="placeholder-desc">Этот раздел в разработке. 19 торговых точек — скоро здесь появится полная аналитика по каждому магазину.</div>
+      <div class="stores-wrapper">
+        <!-- KPI summary -->
+        <div class="stores-kpi-row">
+          <div class="stores-kpi-card">
+            <div class="stores-kpi-label">Всего магазинов</div>
+            <div class="stores-kpi-value">19</div>
+          </div>
+          <div class="stores-kpi-card">
+            <div class="stores-kpi-label">Общая выручка</div>
+            <div class="stores-kpi-value">426M &#8381;/год</div>
+          </div>
+          <div class="stores-kpi-card">
+            <div class="stores-kpi-label">Средняя маржа</div>
+            <div class="stores-kpi-value">28%</div>
+          </div>
+          <div class="stores-kpi-card">
+            <div class="stores-kpi-label">Убыточных</div>
+            <div class="stores-kpi-value">2 <span class="stores-kpi-badge red">убыток</span></div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="stores-filter-bar">
+          <span class="stores-filter-label">Фильтры:</span>
+          <select id="storeCityFilter" onchange="filterStores()">
+            <option value="all">Все города</option>
+            <option value="Москва">Москва</option>
+            <option value="Санкт-Петербург">Санкт-Петербург</option>
+            <option value="Сочи">Сочи</option>
+            <option value="Краснодар">Краснодар</option>
+            <option value="Дубай">Дубай</option>
+            <option value="other">Другие</option>
+          </select>
+          <select id="storeStatusFilter" onchange="filterStores()">
+            <option value="all">Все статусы</option>
+            <option value="green">Прибыльный</option>
+            <option value="yellow">Низкая маржа</option>
+            <option value="red">Убыточный</option>
+          </select>
+          <select id="storeSort" onchange="filterStores()">
+            <option value="revenue">По выручке &#8595;</option>
+            <option value="margin">По марже &#8595;</option>
+            <option value="city">По городу</option>
+          </select>
+          <span class="stores-count-label" id="storesCountLabel">19 из 19</span>
+        </div>
+
+        <!-- Store list -->
+        <div class="store-list-container">
+          <div class="store-list-header">
+            <span>Магазин</span>
+            <span>Выручка</span>
+            <span>Аренда</span>
+            <span>Маржа</span>
+            <span>Статус</span>
+            <span>Тренд</span>
+          </div>
+          <div id="storeCardsContainer"></div>
+        </div>
+      </div>
     </div>
     <div class="placeholder-screen" id="screen-finance">
       <div class="placeholder-icon">&#x1F4B0;</div>
@@ -2377,6 +2814,154 @@ table tbody td.amount {
     }
   };
 
+  /* ── Stores Screen ── */
+  var storesData = [
+    { name: 'ТРЦ Европейский', city: 'Москва', revenue: 5.2, rent: 1.84, margin: 1.1, marginPct: 42, sqm: 80, revsqm: 34, staff: 4, fot: 450, opened: 2018, status: 'green', trend: '+5%', best: 'Август (8.2M)', worst: 'Ноябрь (2.8M)', rec: 'Усилить рекламу перед школьным сезоном' },
+    { name: 'ТРЦ Океания', city: 'Москва', revenue: 2.9, rent: 0.72, margin: 0.8, marginPct: 52, sqm: 65, revsqm: 19, staff: 3, fot: 350, opened: 2019, status: 'green', trend: '+3%', best: 'Август (4.5M)', worst: 'Январь (1.8M)', rec: 'Стабильная точка, поддерживать уровень' },
+    { name: 'ТРЦ Саларис', city: 'Москва', revenue: 2.5, rent: 0.40, margin: 0.7, marginPct: 56, sqm: 55, revsqm: 17, staff: 3, fot: 330, opened: 2021, status: 'green', trend: '+8%', best: 'Август (4.1M)', worst: 'Ноябрь (1.5M)', rec: 'Лучшее соотношение аренда/выручка в сети' },
+    { name: 'ТРЦ Афимолл', city: 'Москва', revenue: 2.8, rent: 0.46, margin: 0.9, marginPct: 50, sqm: 60, revsqm: 22, staff: 3, fot: 360, opened: 2020, status: 'green', trend: '+4%', best: 'Сентябрь (4.8M)', worst: 'Июнь (1.7M)', rec: 'Хороший трафик бизнес-аудитории' },
+    { name: 'ТРК Вегас', city: 'Москва', revenue: 2.2, rent: 0.43, margin: 0.5, marginPct: 38, sqm: 70, revsqm: 15, staff: 3, fot: 340, opened: 2019, status: 'green', trend: '+2%', best: 'Август (3.6M)', worst: 'Февраль (1.4M)', rec: 'Рассмотреть сокращение площади' },
+    { name: 'ТРЦ Ривьера', city: 'Москва', revenue: 1.8, rent: 0.15, margin: 0.5, marginPct: 60, sqm: 40, revsqm: 12, staff: 2, fot: 250, opened: 2022, status: 'green', trend: '+6%', best: 'Август (3.0M)', worst: 'Январь (1.1M)', rec: 'Низкая аренда — высокая маржинальность' },
+    { name: 'ТРЦ Галерея', city: 'Санкт-Петербург', revenue: 2.4, rent: 0.55, margin: 0.6, marginPct: 44, sqm: 70, revsqm: 16, staff: 3, fot: 360, opened: 2018, status: 'green', trend: '+1%', best: 'Сентябрь (3.8M)', worst: 'Май (1.5M)', rec: 'Основная точка в СПб, рассмотреть вторую' },
+    { name: 'МЦ Красная Площадь', city: 'Сочи', revenue: 2.1, rent: 0.77, margin: 0.4, marginPct: 30, sqm: 55, revsqm: 14, staff: 3, fot: 320, opened: 2019, status: 'yellow', trend: '-1%', best: 'Август (4.2M)', worst: 'Январь (0.9M)', rec: 'Сильная сезонность — усилить летний маркетинг' },
+    { name: 'ТЦ Аэробус', city: 'Москва', revenue: 0.8, rent: 0.17, margin: 0.1, marginPct: 18, sqm: 35, revsqm: 5, staff: 2, fot: 220, opened: 2020, status: 'yellow', trend: '-3%', best: 'Август (1.4M)', worst: 'Февраль (0.4M)', rec: 'Низкий трафик. Рассмотреть закрытие или переформатирование' },
+    { name: 'ТЦ Красный Кит', city: 'Мытищи', revenue: 1.2, rent: 0.34, margin: 0.2, marginPct: 24, sqm: 50, revsqm: 8, staff: 2, fot: 260, opened: 2018, status: 'yellow', trend: '-2%', best: 'Август (2.0M)', worst: 'Январь (0.7M)', rec: 'Пересмотреть условия аренды' },
+    { name: 'ТРЦ РИО', city: 'Москва', revenue: 1.0, rent: 0.30, margin: 0.1, marginPct: 16, sqm: 45, revsqm: 7, staff: 2, fot: 240, opened: 2019, status: 'yellow', trend: '-4%', best: 'Август (1.8M)', worst: 'Март (0.5M)', rec: 'Убыточен 4 месяца в году. Обсудить переход на % от оборота' },
+    { name: 'МЦ Красная Площадь', city: 'Краснодар', revenue: 1.5, rent: 0.45, margin: 0.3, marginPct: 32, sqm: 50, revsqm: 10, staff: 2, fot: 280, opened: 2020, status: 'yellow', trend: '+1%', best: 'Сентябрь (2.4M)', worst: 'Июнь (0.9M)', rec: 'Стабильная точка с потенциалом роста' },
+    { name: 'ТЦ', city: 'Ростов-на-Дону', revenue: 1.1, rent: 0.35, margin: 0.15, marginPct: 20, sqm: 45, revsqm: 7, staff: 2, fot: 240, opened: 2021, status: 'yellow', trend: '0%', best: 'Август (1.9M)', worst: 'Февраль (0.6M)', rec: 'Пилотный регион — оценить через 6 месяцев' },
+    { name: 'ТЦ', city: 'Иркутск', revenue: 0.9, rent: 0.30, margin: 0.1, marginPct: 15, sqm: 40, revsqm: 6, staff: 2, fot: 220, opened: 2022, status: 'yellow', trend: '-5%', best: 'Сентябрь (1.5M)', worst: 'Апрель (0.5M)', rec: 'Самая удалённая точка. Рассмотреть переформатирование в пункт выдачи' },
+    { name: 'Аутлет Внуково', city: 'Москва', revenue: 1.3, rent: 0.41, margin: 0.2, marginPct: 25, sqm: 60, revsqm: 9, staff: 2, fot: 260, opened: 2019, status: 'yellow', trend: '+2%', best: 'Август (2.2M)', worst: 'Январь (0.8M)', rec: 'Аутлет формат — увеличить долю распродаж' },
+    { name: 'Аутлет Белая Дача', city: 'Москва', revenue: 1.1, rent: 0.35, margin: 0.15, marginPct: 20, sqm: 55, revsqm: 7, staff: 2, fot: 250, opened: 2020, status: 'yellow', trend: '+1%', best: 'Август (1.8M)', worst: 'Март (0.6M)', rec: 'Использовать для ликвидации остатков' },
+    { name: 'ЦДМ Лубянка', city: 'Москва', revenue: 3.8, rent: 1.87, margin: -0.2, marginPct: -5, sqm: 90, revsqm: 25, staff: 4, fot: 480, opened: 2017, status: 'red', trend: '-8%', best: 'Август (6.1M)', worst: 'Февраль (2.0M)', rec: 'Убыточен. Пересмотреть аренду на % от оборота или закрыть' },
+    { name: 'Бутик', city: 'Санкт-Петербург', revenue: 0.7, rent: 0.25, margin: 0.05, marginPct: 10, sqm: 30, revsqm: 5, staff: 2, fot: 200, opened: 2021, status: 'yellow', trend: '-1%', best: 'Сентябрь (1.2M)', worst: 'Май (0.4M)', rec: 'Мини-формат. Рассмотреть объединение с Галереей' },
+    { name: 'Dubai Mall', city: 'Дубай, ОАЭ', revenue: 0.1, rent: 1.15, margin: -1.1, marginPct: -1100, sqm: 60, revsqm: 2, staff: 3, fot: 380, opened: 2023, status: 'red', trend: '-', best: '\u2014', worst: '\u2014', rec: 'Убыток ~1.1M/мес. Переформатировать в контент-студию + шоурум для онлайн-заказов GCC' }
+  ];
+
+  function getStatusLabel(status) {
+    if (status === 'green') return 'Прибыльный';
+    if (status === 'yellow') return 'Низкая маржа';
+    return 'Убыточный';
+  }
+
+  function getStatusIcon(status) {
+    if (status === 'green') return '\uD83D\uDFE2';
+    if (status === 'yellow') return '\uD83D\uDFE1';
+    return '\uD83D\uDD34';
+  }
+
+  function getTrendClass(trend) {
+    if (!trend || trend === '-' || trend === '0%') return 'flat';
+    return trend.startsWith('+') ? 'up' : 'down';
+  }
+
+  function getTrendArrow(trend) {
+    if (!trend || trend === '-' || trend === '0%') return '';
+    return trend.startsWith('+') ? '\u2191 ' : '\u2193 ';
+  }
+
+  function getMarginBarColor(status, marginPct) {
+    if (status === 'red' || marginPct < 0) return 'var(--danger)';
+    if (status === 'yellow' || marginPct < 25) return 'var(--warning)';
+    return 'var(--success)';
+  }
+
+  function buildStoreRow(store) {
+    var trendCls = getTrendClass(store.trend);
+    var trendArrow = getTrendArrow(store.trend);
+    var marginSign = store.margin >= 0 ? '+' : '';
+    var marginPctDisplay = store.marginPct > -100 ? ' (' + store.marginPct + '%)' : '';
+
+    return '<div class="store-row" data-status="' + store.status + '" onclick="toggleStoreDetail(this)">' +
+      '<div class="store-row-header">' +
+        // Desktop columns
+        '<div class="store-row-name">' +
+          '<span class="name">\uD83D\uDCCD ' + store.name + '</span>' +
+          '<span class="city">' + store.city + ' <span class="mobile-status">' + getStatusIcon(store.status) + '</span></span>' +
+        '</div>' +
+        '<span class="store-row-cell">' + store.revenue + 'M/\u043C\u0435\u0441</span>' +
+        '<span class="store-row-cell">' + store.rent + 'M</span>' +
+        '<span class="store-row-cell' + (store.margin < 0 ? ' margin-negative' : '') + '">' + marginSign + store.margin + 'M' + marginPctDisplay + '</span>' +
+        '<span class="store-row-cell status-cell">' + getStatusIcon(store.status) + '</span>' +
+        '<span class="store-row-cell trend-cell ' + trendCls + '">' + trendArrow + store.trend + '</span>' +
+        // Mobile stacked metrics (hidden on desktop via CSS)
+        '<div class="store-row-mobile-metrics">' +
+          '<div class="store-row-mobile-line"><span class="store-row-label">\u0412\u044B\u0440\u0443\u0447\u043A\u0430</span><span class="store-row-mobile-value">' + store.revenue + 'M/\u043C\u0435\u0441</span></div>' +
+          '<div class="store-row-mobile-line"><span class="store-row-label">\u0410\u0440\u0435\u043D\u0434\u0430</span><span class="store-row-mobile-value">' + store.rent + 'M</span></div>' +
+          '<div class="store-row-mobile-line"><span class="store-row-label">\u041C\u0430\u0440\u0436\u0430</span><span class="store-row-mobile-value' + (store.margin < 0 ? ' down' : '') + '">' + marginSign + store.margin + 'M' + marginPctDisplay + '</span></div>' +
+          '<div class="store-row-mobile-line"><span class="store-row-label">\u0422\u0440\u0435\u043D\u0434</span><span class="store-row-mobile-value ' + trendCls + '">' + trendArrow + store.trend + ' \u0433/\u0433</span></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="store-row-detail">' +
+        '<div class="store-detail-inner">' +
+          '<div class="store-detail-row store-detail-metrics">' +
+            '<span>\u041F\u043B\u043E\u0449\u0430\u0434\u044C: <strong>' + store.sqm + ' \u043C\u00B2</strong></span>' +
+            '<span class="store-detail-separator">\u00B7</span>' +
+            '<span>\u0412\u044B\u0440./\u043C\u00B2: <strong>' + store.revsqm + 'K</strong></span>' +
+            '<span class="store-detail-separator">\u00B7</span>' +
+            '<span>\u0421\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0438: <strong>' + store.staff + '</strong></span>' +
+            '<span class="store-detail-separator">\u00B7</span>' +
+            '<span>\u0424\u041E\u0422: <strong>' + store.fot + 'K</strong></span>' +
+          '</div>' +
+          '<div class="store-detail-row store-detail-metrics">' +
+            '<span>\u041E\u0442\u043A\u0440\u044B\u0442: <strong>' + store.opened + '</strong></span>' +
+            '<span class="store-detail-separator">\u00B7</span>' +
+            '<span>\u041B\u0443\u0447\u0448\u0438\u0439: <strong>' + store.best + '</strong></span>' +
+            '<span class="store-detail-separator">\u00B7</span>' +
+            '<span>\u0425\u0443\u0434\u0448\u0438\u0439: <strong>' + store.worst + '</strong></span>' +
+          '</div>' +
+          '<div class="store-recommendation"><strong>\uD83D\uDCA1 \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0430\u0446\u0438\u044F:</strong> <span>' + store.rec + '</span></div>' +
+          '<a href="#" class="store-detail-link" onclick="event.stopPropagation();return false;">\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u0435\u0435 \u2192</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderStoreCards(list) {
+    var container = document.getElementById('storeCardsContainer');
+    if (!container) return;
+    if (list.length === 0) {
+      container.innerHTML = '<div class="store-no-results">Нет магазинов, соответствующих фильтрам</div>';
+    } else {
+      container.innerHTML = list.map(buildStoreRow).join('');
+    }
+    var label = document.getElementById('storesCountLabel');
+    if (label) label.textContent = list.length + ' из ' + storesData.length;
+  }
+
+  window.filterStores = function() {
+    var cityFilter = document.getElementById('storeCityFilter').value;
+    var statusFilter = document.getElementById('storeStatusFilter').value;
+    var sortBy = document.getElementById('storeSort').value;
+
+    var filtered = storesData.slice();
+
+    if (cityFilter !== 'all') {
+      if (cityFilter === 'other') {
+        var mainCities = ['Москва', 'Санкт-Петербург', 'Сочи', 'Краснодар', 'Дубай'];
+        filtered = filtered.filter(function(s) {
+          return !mainCities.some(function(c) { return s.city.indexOf(c) !== -1; });
+        });
+      } else {
+        filtered = filtered.filter(function(s) { return s.city.indexOf(cityFilter) !== -1; });
+      }
+    }
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(function(s) { return s.status === statusFilter; });
+    }
+
+    if (sortBy === 'revenue') filtered.sort(function(a, b) { return b.revenue - a.revenue; });
+    if (sortBy === 'margin') filtered.sort(function(a, b) { return b.marginPct - a.marginPct; });
+    if (sortBy === 'city') filtered.sort(function(a, b) { return a.city.localeCompare(b.city); });
+
+    renderStoreCards(filtered);
+  };
+
+  window.toggleStoreDetail = function(row) {
+    var wasExpanded = row.classList.contains('expanded');
+    document.querySelectorAll('.store-row.expanded').forEach(function(c) { c.classList.remove('expanded'); });
+    if (!wasExpanded) row.classList.add('expanded');
+  };
+
   /* ── Init ── */
   initTheme();
 
@@ -2385,6 +2970,7 @@ table tbody td.amount {
     animateChannelBars();
     initRevenueChart();
     handleSearchHint();
+    renderStoreCards(storesData);
   });
 
   /* ── Resize handler ── */
