@@ -2856,6 +2856,14 @@ table tbody td.amount {
       <span class="nav-label">Международные</span>
       <span class="nav-badge">3</span>
     </a>
+    <a class="nav-item" data-screen="staff" data-tooltip="Сотрудники" onclick="switchScreen('staff', this)">
+      <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <span class="nav-label">Сотрудники</span>
+    </a>
+    <a class="nav-item" data-screen="infrastructure" data-tooltip="Инфраструктура" onclick="switchScreen('infrastructure', this)">
+      <div class="nav-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/><line x1="10" y1="6" x2="18" y2="6"/><line x1="10" y1="18" x2="18" y2="18"/></svg></div>
+      <span class="nav-label">Инфраструктура</span>
+    </a>
 
     <div class="nav-section">&middot; Стратегия</div>
     <a class="nav-item" data-screen="competitors" data-tooltip="Конкуренты" onclick="switchScreen('competitors', this)">
@@ -3729,6 +3737,16 @@ table tbody td.amount {
       <div class="placeholder-title">Международные</div>
       <div class="placeholder-desc">Этот раздел в разработке. Dubai Mall, Noon, Amazon.ae — аналитика по международным каналам.</div>
     </div>
+    <div class="placeholder-screen" id="screen-staff">
+      <div class="placeholder-icon">&#x1F465;</div>
+      <div class="placeholder-title">Сотрудники</div>
+      <div class="placeholder-desc">Команда, KPI, начисление зарплат. Группировка по магазинам, департаментам, городам.</div>
+    </div>
+    <div class="placeholder-screen" id="screen-infrastructure">
+      <div class="placeholder-icon">&#x1F5A5;</div>
+      <div class="placeholder-title">Инфраструктура</div>
+      <div class="placeholder-desc">Серверы, безопасность, обновления, SSL-сертификаты. Мониторинг и аудит систем.</div>
+    </div>
     <div class="placeholder-screen" id="screen-competitors">
       <div class="placeholder-icon">&#x1F3AF;</div>
       <div class="placeholder-title">Конкуренты</div>
@@ -3815,6 +3833,8 @@ table tbody td.amount {
     'subscriptions': ['Подписка', 'Программа лояльности'],
     'warehouse': ['Склад', 'Остатки и закупки'],
     'international': ['Международные', 'Dubai, Noon, Amazon'],
+    'staff': ['Сотрудники', 'Команда, KPI, зарплаты'],
+    'infrastructure': ['Инфраструктура', 'Серверы, безопасность, мониторинг'],
     'competitors': ['Конкуренты', 'Сравнительная аналитика'],
     'ai-advisor': ['AI-Советник', 'Рекомендации на основе данных']
   };
